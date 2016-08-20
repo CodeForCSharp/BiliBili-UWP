@@ -815,7 +815,7 @@
                                             <FlipView x:Name="fvLeft" Opacity="0.5" IsEnabled="False">
                                                 <FlipView.ItemTemplate>
                                                     <DataTemplate>
-                                                        <Image Source="{Binding image}" Height="200" Width="640"/>
+                                                        <Image Source="{Binding Image}" Height="200" Width="640"/>
                                                     </DataTemplate>
                                                 </FlipView.ItemTemplate>
                                             </FlipView>
@@ -825,7 +825,7 @@
                                                 <FlipView.ItemTemplate>
                                                     <DataTemplate>
                                                         <Grid>
-                                                            <Image Source="{Binding image}"  Height="200"/>
+                                                            <Image Source="{Binding Image}"  Height="200"/>
                                                             <HyperlinkButton Click="HyperlinkButton_Click_1">
                                                                 <Grid Width="640" Height="200" >
                                                                     <TextBlock/>
@@ -850,7 +850,7 @@
                                             <FlipView x:Name="fvRight" Opacity="0.3" IsEnabled="False">
                                                 <FlipView.ItemTemplate>
                                                     <DataTemplate>
-                                                        <Image Source="{Binding image}" Height="200" Width="640"/>
+                                                        <Image Source="{Binding Image}" Height="200" Width="640"/>
                                                     </DataTemplate>
                                                 </FlipView.ItemTemplate>
                                             </FlipView>

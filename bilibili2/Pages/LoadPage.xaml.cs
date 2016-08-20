@@ -94,7 +94,7 @@ namespace bilibili2
                 new DownloadManage().GetDownOk();
                 if (!CheckNetworkHelper.CheckNetwork())
                 {
-                    new MessageDialog("请检查网络连接！").ShowAsync();
+                    await new MessageDialog("请检查网络连接！").ShowAsync();
                 }
             }
             catch (Exception)

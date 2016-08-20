@@ -209,7 +209,7 @@ namespace bilibili2.Pages
             bor_Width.Width = Width / 3;
         }
         private SettingHelper settings = new SettingHelper();
-        private async void grid_E_ItemClick(object sender, ItemClickEventArgs e)
+        private void grid_E_ItemClick(object sender, ItemClickEventArgs e)
         {
             if (cb_IsPlay.IsChecked.Value)
             {
