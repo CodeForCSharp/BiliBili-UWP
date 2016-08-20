@@ -123,7 +123,7 @@ namespace bilibili2.Class
                 StorageFile fileWrite2 = await DowFolder.CreateFileAsync(downModel.Guid + ".bili", CreationCollisionOption.OpenIfExists);
                 await FileIO.WriteTextAsync(fileWrite2, WebUtility.UrlEncode(PartFolder.Path));
                 DownDanMu(downModel.mid, PartFolder);
-                downloadOp.StartAsync();
+                await downloadOp.StartAsync();
             }
             catch (Exception ex)
             {

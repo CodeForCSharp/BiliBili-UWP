@@ -12,15 +12,12 @@ using Windows.UI.Xaml.Media;
 namespace bilibili2
 {
     //Banner
-    public class BannerModel
+    public class BannerViewModel
     {
-        public int results { get; set; }
-        public object data { get; set; }
-        public string title { get; set; }
-        public int type { get; set; }
-        public string image { get; set; }
-        public string value { get; set; }
-
+        public string Title { get; set; }
+        public int Type { get; set; }
+        public string Image { get; set; }
+        public string Value { get; set; }
     }
     //视频详细信息
     public class VideoInfoModel
