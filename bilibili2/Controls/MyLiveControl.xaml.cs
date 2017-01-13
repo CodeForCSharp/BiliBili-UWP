@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using bilibili2.Model;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,215 +24,90 @@ namespace bilibili2.Controls
         public MyLiveControl()
         {
             this.InitializeComponent();
+            gridList = new List<GridView> { gridview_Hot, gridview_MZ, gridview_HH, gridview_YZ, gridview_SH, gridview_DJ, gridview_WL, gridview_JJ, gridview_FY };
         }
         public delegate void PlayHandler(string aid);
         public event PlayHandler PlayEvent;
         public event PlayHandler ErrorEvent;
         public bool isLoaded= false;
+        private List<GridView> gridList;
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (this.ActualWidth <= 500)
             {
                 ViewBox2_num.Width = ActualWidth / 2 - 15;
                 double d = ((ViewBox2_num.Width + 12) / 1.15) * 2;
-                gridview_Hot.Height = d;
-                gridview_DJ.Height = d;
-                gridview_FY.Height = d;
-                gridview_HH.Height = d;
-                gridview_JJ.Height = d;
-                gridview_MZ.Height = d;
-                gridview_SH.Height = d;
-                gridview_WL.Height = d;
-                gridview_YZ.Height = d;
+                GridSizeChange(d);
                 //PageCount = 4;
+            }
+            else if (this.ActualWidth <= 800)
+            {
+                ViewBox2_num.Width = ActualWidth / 3 - 15;
+                double d = ((ViewBox2_num.Width + 12) / 1.15) * 2;
+                GridSizeChange(d);
             }
             else
             {
-                if (this.ActualWidth <= 800)
-                {
-                    ViewBox2_num.Width = ActualWidth / 3 - 15;
-                    double d = ((ViewBox2_num.Width + 12) / 1.15) * 2;
-                    gridview_Hot.Height = d;
-                    gridview_DJ.Height = d;
-                    gridview_FY.Height = d;
-                    gridview_HH.Height = d;
-                    gridview_JJ.Height = d;
-                    gridview_MZ.Height = d;
-                    gridview_SH.Height = d;
-                    gridview_WL.Height = d;
-                    gridview_YZ.Height = d;
-                }
-                else
-                {
-                    int i = Convert.ToInt32(ActualWidth / 200);
-                    ViewBox2_num.Width = ActualWidth / i - 15;
-                    double d = ((ViewBox2_num.Width + 12) / 1.15);
-                    gridview_Hot.Height = d;
-                    gridview_DJ.Height = d;
-                    gridview_FY.Height = d;
-                    gridview_HH.Height = d;
-                    gridview_JJ.Height = d;
-                    gridview_MZ.Height = d;
-                    gridview_SH.Height = d;
-                    gridview_WL.Height = d;
-                    gridview_YZ.Height = d;
-                }
+                int i = Convert.ToInt32(ActualWidth / 200);
+                ViewBox2_num.Width = ActualWidth / i - 15;
+                double d = ((ViewBox2_num.Width + 12) / 1.15);
+                GridSizeChange(d);
             }
         }
-
+        private void GridSizeChange(double d)
+        {
+            gridList.ForEach(grid => { grid.Height = d; });
+        }
+        private void GridClear()
+        {
+            gridList.ForEach(grid => { grid.Items.Clear(); });
+        }
         public async void GetLiveInfo()
         {
             try
             {
                 pr_Load.Visibility = Visibility.Visible;
-                gridview_Hot.Items.Clear();
-                gridview_DJ.Items.Clear();
-                gridview_FY.Items.Clear();
-                gridview_HH.Items.Clear();
-                gridview_JJ.Items.Clear();
-                gridview_MZ.Items.Clear();
-                gridview_SH.Items.Clear();
-                gridview_WL.Items.Clear();
-                gridview_YZ.Items.Clear();
+                GridClear();
                 WebClientClass wc = new WebClientClass();
-                string url = string.Format("http://live.bilibili.com/AppIndex/home?_device=wp&_ulv=10000&access_key={0}&appkey={1}&build=411005&platform=android&scale=xxhdpi", ApiHelper.access_key, ApiHelper._appKey);
+                //&access_key={0}
+                string url = $"http://live.bilibili.com/AppIndex/home?_device=wp&_ulv=10000&appkey={ApiHelper._appKey}&build=411005&platform=android&scale=xxhdpi";
                 url += "&sign=" + ApiHelper.GetSign(url);
                 string results = await wc.GetResults(new Uri(url));
                 HomeLiveModel model = JsonConvert.DeserializeObject<HomeLiveModel>(results);
-                if (model.code == 0)
+                if (model.Code == 0)
                 {
-                    HomeLiveModel dataModel = JsonConvert.DeserializeObject<HomeLiveModel>(model.data.ToString());
-                    List<HomeLiveModel> partModel = JsonConvert.DeserializeObject<List<HomeLiveModel>>(dataModel.partitions.ToString());
-                    foreach (HomeLiveModel item in partModel)
+                    var nameList = new List<string> { "手机直播", "唱见舞见", "绘画专区", "御宅文化", "手游直播", "单机联机", "网络游戏", "电子竞技", "放映厅" };
+                    foreach (var item in model.Data.Partitions)
                     {
-                        HomeLiveModel partitionModel = JsonConvert.DeserializeObject<HomeLiveModel>(item.partition.ToString());
-                        List<HomeLiveModel> livesModel = JsonConvert.DeserializeObject<List<HomeLiveModel>>(item.lives.ToString());
-                        switch (partitionModel.name)
+                        var index = nameList.FindIndex(s => s == item.Partition.Name);
+                        if (index == -1) continue; 
+                        var lives = item.Lives.Select(live => new LiveItemViewModel
                         {
-                            case "热门直播":
-                                for (int i = 0; i < 12; i++)
-                                {
-                                    HomeLiveModel ownerModel = JsonConvert.DeserializeObject<HomeLiveModel>(livesModel[i].owner.ToString());
-                                    HomeLiveModel coverModel = JsonConvert.DeserializeObject<HomeLiveModel>(livesModel[i].cover.ToString());
-                                    livesModel[i].src = coverModel.src;
-                                    livesModel[i].name = ownerModel.name;
-                                    livesModel[i].mid = ownerModel.mid;
-                                    livesModel[i].face = ownerModel.face;
-                                    gridview_Hot.Items.Add(livesModel[i]);
-                                }
-                                break;
-                            case "萌宅推荐":
-                                for (int i = 0; i < livesModel.Count - 1; i++)
-                                {
-                                    HomeLiveModel ownerModel = JsonConvert.DeserializeObject<HomeLiveModel>(livesModel[i].owner.ToString());
-                                    HomeLiveModel coverModel = JsonConvert.DeserializeObject<HomeLiveModel>(livesModel[i].cover.ToString());
-                                    livesModel[i].src = coverModel.src;
-                                    livesModel[i].name = ownerModel.name;
-                                    livesModel[i].mid = ownerModel.mid;
-                                    livesModel[i].face = ownerModel.face;
-                                    gridview_MZ.Items.Add(livesModel[i]);
-                                }
-                                break;
-                            case "绘画专区":
-                                for (int i = 0; i < livesModel.Count-1; i++)
-                                {
-                                    HomeLiveModel ownerModel = JsonConvert.DeserializeObject<HomeLiveModel>(livesModel[i].owner.ToString());
-                                    HomeLiveModel coverModel = JsonConvert.DeserializeObject<HomeLiveModel>(livesModel[i].cover.ToString());
-                                    livesModel[i].src = coverModel.src;
-                                    livesModel[i].name = ownerModel.name;
-                                    livesModel[i].mid = ownerModel.mid;
-                                    livesModel[i].face = ownerModel.face;
-                                    gridview_HH.Items.Add(livesModel[i]);
-                                }
-                                break;
-                            case "御宅文化":
-                                for (int i = 0; i < 12; i++)
-                                {
-                                    HomeLiveModel ownerModel = JsonConvert.DeserializeObject<HomeLiveModel>(livesModel[i].owner.ToString());
-                                    HomeLiveModel coverModel = JsonConvert.DeserializeObject<HomeLiveModel>(livesModel[i].cover.ToString());
-                                    livesModel[i].src = coverModel.src;
-                                    livesModel[i].name = ownerModel.name;
-                                    livesModel[i].mid = ownerModel.mid;
-                                    livesModel[i].face = ownerModel.face;
-                                    gridview_YZ.Items.Add(livesModel[i]);
-                                }
-                                break;
-                            case "生活娱乐":
-                                for (int i = 0; i < 12; i++)
-                                {
-                                    HomeLiveModel ownerModel = JsonConvert.DeserializeObject<HomeLiveModel>(livesModel[i].owner.ToString());
-                                    HomeLiveModel coverModel = JsonConvert.DeserializeObject<HomeLiveModel>(livesModel[i].cover.ToString());
-                                    livesModel[i].src = coverModel.src;
-                                    livesModel[i].name = ownerModel.name;
-                                    livesModel[i].mid = ownerModel.mid;
-                                    livesModel[i].face = ownerModel.face;
-                                    gridview_SH.Items.Add(livesModel[i]);
-                                }
-                                break;
-                            case "单机联机":
-                                for (int i = 0; i < 12; i++)
-                                {
-                                    HomeLiveModel ownerModel = JsonConvert.DeserializeObject<HomeLiveModel>(livesModel[i].owner.ToString());
-                                    HomeLiveModel coverModel = JsonConvert.DeserializeObject<HomeLiveModel>(livesModel[i].cover.ToString());
-                                    livesModel[i].src = coverModel.src;
-                                    livesModel[i].name = ownerModel.name;
-                                    livesModel[i].mid = ownerModel.mid;
-                                    livesModel[i].face = ownerModel.face;
-                                    gridview_DJ.Items.Add(livesModel[i]);
-                                }
-                                break;
-                            case "网络游戏":
-                                for (int i = 0; i < 12; i++)
-                                {
-                                    HomeLiveModel ownerModel = JsonConvert.DeserializeObject<HomeLiveModel>(livesModel[i].owner.ToString());
-                                    HomeLiveModel coverModel = JsonConvert.DeserializeObject<HomeLiveModel>(livesModel[i].cover.ToString());
-                                    livesModel[i].src = coverModel.src;
-                                    livesModel[i].name = ownerModel.name;
-                                    livesModel[i].mid = ownerModel.mid;
-                                    livesModel[i].face = ownerModel.face;
-                                    gridview_WL.Items.Add(livesModel[i]);
-                                }
-                                break;
-                            case "电子竞技":
-                                for (int i = 0; i < 12; i++)
-                                {
-                                    HomeLiveModel ownerModel = JsonConvert.DeserializeObject<HomeLiveModel>(livesModel[i].owner.ToString());
-                                    HomeLiveModel coverModel = JsonConvert.DeserializeObject<HomeLiveModel>(livesModel[i].cover.ToString());
-                                    livesModel[i].src = coverModel.src;
-                                    livesModel[i].name = ownerModel.name;
-                                    livesModel[i].mid = ownerModel.mid;
-                                    livesModel[i].face = ownerModel.face;
-                                    gridview_JJ.Items.Add(livesModel[i]);
-                                }
-                                break;
-                            case "放映厅":
-                                for (int i = 0; i < 12; i++)
-                                {
-                                    HomeLiveModel ownerModel = JsonConvert.DeserializeObject<HomeLiveModel>(livesModel[i].owner.ToString());
-                                    HomeLiveModel coverModel = JsonConvert.DeserializeObject<HomeLiveModel>(livesModel[i].cover.ToString());
-                                    livesModel[i].src = coverModel.src;
-                                    livesModel[i].name = ownerModel.name;
-                                    livesModel[i].mid = ownerModel.mid;
-                                    livesModel[i].face = ownerModel.face;
-                                    gridview_FY.Items.Add(livesModel[i]);
-                                }
-                                break;
-                            default:
-                                break;
+                            Face = live.Owner.Face,
+                            Name = live.Owner.Name,
+                            Mid = live.Owner.Mid,
+                            Src = live.Cover.Src,
+                            RoomId = live.RoomId.ToString(),
+                            Online = live.Online,
+                            Title = live.Title
+                        });
+                        foreach(var live in lives)
+                        {
+                            gridList[index].Items.Add(live);
                         }
                     }
                     isLoaded = true;
                 }
                 else
                 {
-                    ErrorEvent("读取直播失败" + model.message);
+                    ErrorEvent("读取直播失败" + model.Message);
                     isLoaded = false;
                 }
-        }
+            }
             catch (Exception ex)
             {
                 ErrorEvent("读取直播失败" + ex.Message);
-        isLoaded = false;
+                isLoaded = false;
             }
             finally
             {
@@ -241,7 +117,7 @@ namespace bilibili2.Controls
 
         private void gridview_Hot_ItemClick(object sender, ItemClickEventArgs e)
         {
-            PlayEvent((e.ClickedItem as HomeLiveModel).room_id);
+            PlayEvent((e.ClickedItem as LiveItemViewModel).RoomId);
         }
 
     }

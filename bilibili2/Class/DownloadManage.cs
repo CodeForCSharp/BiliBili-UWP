@@ -88,8 +88,10 @@ namespace bilibili2.Class
         {
             try
             {
-                BackgroundDownloader downloader = new BackgroundDownloader();
-                downloader.TransferGroup = DownModel.group;
+                BackgroundDownloader downloader = new BackgroundDownloader()
+                {
+                    TransferGroup = DownModel.group
+                };
                 if (setting.SettingContains("UseWifi"))
                 {
                     if ((bool)setting.GetSettingValue("UseWifi"))

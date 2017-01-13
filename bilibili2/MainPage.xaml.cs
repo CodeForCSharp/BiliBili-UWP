@@ -2093,11 +2093,18 @@ namespace bilibili2
                 string url = string.Format("http://live.bilibili.com/AppIndex/home?_device=wp&_ulv=10000&access_key={0}&appkey={1}&build=411005&platform=android&scale=xxhdpi", ApiHelper.access_key, ApiHelper._appKey);
                 url += "&sign=" + ApiHelper.GetSign(url);
                 string results = await wc.GetResults(new Uri(url));
-                HomeLiveModel model = JsonConvert.DeserializeObject<HomeLiveModel>(results);
-                if (model.code == 0)
+                var model = JsonConvert.DeserializeObject<HomeLiveModel>(results);
+                if (model.Code == 0)
                 {
-                    HomeLiveModel dataModel = JsonConvert.DeserializeObject<HomeLiveModel>(model.data.ToString());
-                    List<HomeLiveModel> bannerModel = JsonConvert.DeserializeObject<List<HomeLiveModel>>(dataModel.banner.ToString());
+                    var bannerModel = model.Data.Banner.Select(item => new LiveBannerViewModel
+                    {
+                         Img=item.Img,
+                         Link=item.Link,
+                         Remark=item.Remark,
+                         Title=item.Title
+                    });
+                    //HomeLiveViewModel dataModel = JsonConvert.DeserializeObject<HomeLiveViewModel>(model.Data.ToString());
+                    //List<HomeLiveViewModel> bannerModel = JsonConvert.DeserializeObject<List<HomeLiveViewModel>>(dataModel.Banner.ToString());
                     home_flipView_Live.ItemsSource = bannerModel;
                     fvLeft_Live.ItemsSource = bannerModel;
                     fvRight_Live.ItemsSource = bannerModel;
@@ -2117,7 +2124,7 @@ namespace bilibili2
         //直播Banner点击
         private void btn_Banner_Live_Click(object sender, RoutedEventArgs e)
         {
-            string ban = Regex.Match((home_flipView_Live.SelectedItem as HomeLiveModel).link, @"^bilibili://live/(.*?)$").Groups[1].Value;
+            string ban = Regex.Match((home_flipView_Live.SelectedItem as LiveBannerViewModel).Link, @"^bilibili://live/(.*?)$").Groups[1].Value;
             if (ban.Length != 0)
             {
                 infoFrame.Navigate(typeof(LiveInfoPage), ban);

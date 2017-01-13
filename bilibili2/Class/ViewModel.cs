@@ -1006,32 +1006,48 @@ namespace bilibili2
 
         public object backup_url { get; set; }//视频备份地址
     }
-
-    public class HomeLiveModel
+    public class LiveBannerViewModel
     {
-        public int code { get; set; }
-        public string message { get; set; }
-
-        public object data { get; set; }
-        public object banner { get; set; }
-        public string title { get; set; }
-        public string img { get; set; }
-        public string remark { get; set; }
-        public string link { get; set; }
-        public object partitions { get; set; }
-        public object partition { get; set; }
-        public string name { get; set; }
-        public int id { get; set; }
-        public object lives { get; set; }
-        public object owner { get; set; }
-        public string face { get; set; }
-        public string mid { get; set; }
-        public object cover { get; set; }
-        public string src { get; set; }
-        //public string title { get; set; }
-        public long online { get; set; }
-        public string room_id { get; set; }
+        public string Title { get; set; }
+        public string Img { get; set; }
+        public string Remark { get; set; }
+        public string Link { get; set; }
     }
+    public class LiveItemViewModel
+    {
+        public string Src { get; set; }
+        public string Face { get; set; }
+        public int Mid { get; set; }
+        public string Name { get; set; }
+        public string RoomId { get; set; }
+        public long Online { get; set; }
+        public string Title { get; set; }
+    }
+    //public class HomeLiveViewModel
+    //{
+    //    //public int Code { get; set; }
+    //    //public string Message { get; set; }
+
+    //    //public object Data { get; set; }
+    //    public List<LiveBannerViewModel> Banner { get; set; }
+    //    //public string Title { get; set; }
+    //    //public string Img { get; set; }
+    //    //public string Remark { get; set; }
+    //    //public string Link { get; set; }
+    //    public object Partitions { get; set; }
+    //    public object Partition { get; set; }
+    //    public string Name { get; set; }
+    //    public int Id { get; set; }
+    //    public object Lives { get; set; }
+    //    public object Owner { get; set; }
+    //    public string Face { get; set; }
+    //    public string Mid { get; set; }
+    //    public object Cover { get; set; }
+    //    public string Src { get; set; }
+    //    //public string title { get; set; }
+    //    public long Online { get; set; }
+    //    public string RoomId { get; set; }
+    //}
 
     public class MessageModel
     {

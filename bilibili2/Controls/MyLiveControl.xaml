@@ -30,18 +30,18 @@
                             <ColumnDefinition Width="48"></ColumnDefinition>
                             <ColumnDefinition></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <Image Source="{Binding src}" Width="200" VerticalAlignment="Top" Height="125" Grid.ColumnSpan="2"></Image>
+                        <Image Source="{Binding Src}" Width="200" VerticalAlignment="Top" Height="125" Grid.ColumnSpan="2"></Image>
                         <Ellipse Width="44" Height="44" VerticalAlignment="Bottom" HorizontalAlignment="Left" Grid.RowSpan="2" Margin="2">
                             <Ellipse.Fill>
-                                <ImageBrush ImageSource="{Binding face}"></ImageBrush>
+                                <ImageBrush ImageSource="{Binding Face}"></ImageBrush>
                             </Ellipse.Fill>
                         </Ellipse>
-                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding title}"  TextTrimming="CharacterEllipsis" Margin="5,0"></TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Title}"  TextTrimming="CharacterEllipsis" Margin="5,0"></TextBlock>
                         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="2">
                             <Image  Source="ms-appx:///Assets/MiniIcon/up.png" Width="16" Height="16" HorizontalAlignment="Left" Margin="5,2,0,0"></Image>
-                            <TextBlock FontSize="12" VerticalAlignment="Center" Foreground="Gray" Text="{Binding name}"></TextBlock>
+                            <TextBlock FontSize="12" VerticalAlignment="Center" Foreground="Gray" Text="{Binding Name}"></TextBlock>
                             <Image  Source="ms-appx:///Assets/Icon/Play.png" Width="16" Height="16" HorizontalAlignment="Left" Margin="5,2,0,0"></Image>
-                            <TextBlock FontSize="12" VerticalAlignment="Center" Foreground="Gray" Text="{Binding online}"></TextBlock>
+                            <TextBlock FontSize="12" VerticalAlignment="Center" Foreground="Gray" Text="{Binding Online}"></TextBlock>
                         </StackPanel>
                     </Grid>
                 </Viewbox>
