@@ -127,6 +127,7 @@
       <DependentUpon>MessageShow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\BannerModel.cs" />
+    <Compile Include="Model\HomeAVModel.cs" />
     <Compile Include="Model\HomeLiveModel.cs" />
     <Compile Include="Pages\AllLivePage.xaml.cs">
       <DependentUpon>AllLivePage.xaml</DependentUpon>
@@ -540,11 +541,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="WindowsMobile, Version=10.0.10240.0">
+    <SDKReference Include="WindowsMobile, Version=10.0.10586.0">
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

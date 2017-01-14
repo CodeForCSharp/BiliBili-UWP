@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -1023,32 +1024,28 @@ namespace bilibili2
         public long Online { get; set; }
         public string Title { get; set; }
     }
-    //public class HomeLiveViewModel
-    //{
-    //    //public int Code { get; set; }
-    //    //public string Message { get; set; }
-
-    //    //public object Data { get; set; }
-    //    public List<LiveBannerViewModel> Banner { get; set; }
-    //    //public string Title { get; set; }
-    //    //public string Img { get; set; }
-    //    //public string Remark { get; set; }
-    //    //public string Link { get; set; }
-    //    public object Partitions { get; set; }
-    //    public object Partition { get; set; }
-    //    public string Name { get; set; }
-    //    public int Id { get; set; }
-    //    public object Lives { get; set; }
-    //    public object Owner { get; set; }
-    //    public string Face { get; set; }
-    //    public string Mid { get; set; }
-    //    public object Cover { get; set; }
-    //    public string Src { get; set; }
-    //    //public string title { get; set; }
-    //    public long Online { get; set; }
-    //    public string RoomId { get; set; }
-    //}
-
+    public class LivePartitionViewModel
+    {
+        public string Name { get; set; }
+        public string Icon { get; set; }
+        public List<LiveItemViewModel> Lives { get; set; }
+    }
+    public class AVPartitionViewModel
+    {
+        public int Order { get; set; }
+        public int Uid { get; set; }
+        public string Name { get; set; }
+        public string Icon { get; set; }
+        public ObservableCollection<AVItemViewModel> AVs { get; set; }
+    }
+    public class AVItemViewModel
+    {
+        public string Pic { get; set; }
+        public string Play { get; set; }
+        public int VideoReview { get; set; }
+        public string Title { get; set; }
+        public string Aid { get; set; }
+    }
     public class MessageModel
     {
         public int code { get; set; }
