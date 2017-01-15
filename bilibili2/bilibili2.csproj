@@ -112,6 +112,8 @@
     <Compile Include="Class\SqlHelper.cs" />
     <Compile Include="Class\UserClass.cs" />
     <Compile Include="Class\WebClientClass.cs" />
+    <Compile Include="Controls\AdaptiveGridView.cs" />
+    <Compile Include="Controls\AdaptiveGridView.Properties.cs" />
     <Compile Include="Controls\LoadControl.xaml.cs">
       <DependentUpon>LoadControl.xaml</DependentUpon>
     </Compile>
@@ -129,6 +131,7 @@
     <Compile Include="Model\BannerModel.cs" />
     <Compile Include="Model\HomeAVModel.cs" />
     <Compile Include="Model\HomeLiveModel.cs" />
+    <Compile Include="Model\LiveAreasModel.cs" />
     <Compile Include="Pages\AllLivePage.xaml.cs">
       <DependentUpon>AllLivePage.xaml</DependentUpon>
     </Compile>

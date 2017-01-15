@@ -44,24 +44,23 @@ namespace bilibili2.Controls
                 HomeLiveModel model = JsonConvert.DeserializeObject<HomeLiveModel>(results);
                 if (model.Code == 0)
                 {
-                    var partition = model.Data.Partitions.Select(item => new LivePartitionViewModel
+                    foreach(var item in model.Data.Partitions)
                     {
-                        Icon = item.Partition.SubIcon.Src,
-                        Name = item.Partition.Name,
-                        Lives = item.Lives.Select(live => new LiveItemViewModel
+                        Partitions.Add(new LivePartitionViewModel
                         {
-                            Face = live.Owner.Face,
-                            Name = live.Owner.Name,
-                            Mid = live.Owner.Mid,
-                            Src = live.Cover.Src,
-                            RoomId = live.RoomId.ToString(),
-                            Online = live.Online,
-                            Title = live.Title
-                        }).ToList()
-                    });
-                    foreach(var item in partition)
-                    {
-                        Partitions.Add(item);
+                            Icon = item.Partition.SubIcon.Src,
+                            Name = item.Partition.Name,
+                            Lives = item.Lives.Select(live => new LiveItemViewModel
+                            {
+                                Face = live.Owner.Face,
+                                Name = live.Owner.Name,
+                                Mid = live.Owner.Mid,
+                                Src = live.Cover.Src,
+                                RoomId = live.RoomId.ToString(),
+                                Online = live.Online,
+                                Title = live.Title
+                            }).ToList()
+                        });
                     }
                     isLoaded = true;
                 }

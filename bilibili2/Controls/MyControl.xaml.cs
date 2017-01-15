@@ -58,17 +58,16 @@ namespace bilibili2
                     var model = JsonConvert.DeserializeObject<HomeAVModel>(result);
                     if(model.Code==0)
                     {
-                        var avs = model.List.Select(av => new AVItemViewModel
+                        foreach(var av in model.List)
                         {
-                            Pic = av.Pic,
-                            Play = av.Play,
-                            Title = av.Title,
-                            VideoReview = av.VideoReview,
-                            Aid = av.Aid
-                        });
-                        foreach(var av in avs)
-                        {
-                            item.AVs.Add(av);
+                            item.AVs.Add(new AVItemViewModel
+                            {
+                                Pic = av.Pic,
+                                Play = av.Play,
+                                Title = av.Title,
+                                VideoReview = av.VideoReview,
+                                Aid = av.Aid
+                            });
                         }
                     }
                 }
@@ -105,18 +104,17 @@ namespace bilibili2
                 var model = JsonConvert.DeserializeObject<HomeAVModel>(result);
                 if (model.Code == 0)
                 {
-                    var avs = model.List.Select(av => new AVItemViewModel
-                    {
-                        Pic = av.Pic,
-                        Play = av.Play,
-                        Title = av.Title,
-                        VideoReview = av.VideoReview,
-                        Aid = av.Aid
-                    });
                     partition.AVs.Clear();
-                    foreach (var av in avs)
+                    foreach (var av in model.List)
                     {
-                        partition.AVs.Add(av);
+                        partition.AVs.Add(new AVItemViewModel
+                        {
+                            Pic = av.Pic,
+                            Play = av.Play,
+                            Title = av.Title,
+                            VideoReview = av.VideoReview,
+                            Aid = av.Aid
+                        });
                     }
                 }
             }

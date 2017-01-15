@@ -233,7 +233,7 @@ namespace bilibili2
             get
             {
                 DateTime dtStart = new DateTime(1970, 1, 1);
-                long lTime = long.Parse(pubdate + "0000000");
+                long lTime = long.Parse(pubdate.Replace(".0","") + "0000000");
                 //long lTime = long.Parse(textBox1.Text);
                 TimeSpan toNow = new TimeSpan(lTime);
 
@@ -1045,6 +1045,12 @@ namespace bilibili2
         public int VideoReview { get; set; }
         public string Title { get; set; }
         public string Aid { get; set; }
+    }
+    public class LiveAreasViewModel
+    {
+        public string Icon { get; set; }
+        public string Name { get; set; }
+        public int Id { get; set; }
     }
     public class MessageModel
     {

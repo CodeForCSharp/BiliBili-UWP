@@ -282,7 +282,7 @@ namespace bilibili2
         // pivot改变
         private async void pivot_Home_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            UpdateUI();
+            //UpdateUI();
             switch (pivot_Home.SelectedIndex)
             {
                 case 0:

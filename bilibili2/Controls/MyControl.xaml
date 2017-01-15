@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:localControl="using:bilibili2.Controls"
     xmlns:model ="using:bilibili2"
     mc:Ignorable="d"
     d:DesignHeight="500"
@@ -84,7 +85,7 @@
                                 >
                                 <SymbolIcon Symbol="Refresh"/>
                             </HyperlinkButton>
-                            <controls:AdaptiveGridView
+                            <localControl:AdaptiveGridView
                                 Margin="5"
                                 DesiredWidth="210"
                                 ItemHeight="200"
@@ -94,8 +95,8 @@
                                 RelativePanel.AlignLeftWithPanel="True"
                                 RelativePanel.AlignRightWithPanel="True"
                                 ScrollViewer.VerticalScrollMode="Disabled"
-                                ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                                ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                 ScrollViewer.HorizontalScrollMode="Disabled"
                                 ItemsSource="{x:Bind AVs}"
                                 ItemTemplate="{StaticResource HomeItemTemplate}"

@@ -5,6 +5,7 @@
     xmlns:local="using:bilibili2.Controls"
     xmlns:model="using:bilibili2"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:localControl="using:bilibili2.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -41,43 +42,42 @@
             </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
-        <StackPanel Grid.Row="2" Grid.ColumnSpan="3">
-            <ProgressBar x:Name="pr_Load" Visibility="Collapsed"  Background="{x:Null}" IsIndeterminate="True"></ProgressBar>
-            <Border x:Name="ViewBox2_num" Background="#00808080" Width="200" Height="1" VerticalAlignment="Top"></Border>
-            <ListView
+    <StackPanel>
+        <ProgressBar x:Name="pr_Load" Visibility="Collapsed"  Background="{x:Null}" IsIndeterminate="True"></ProgressBar>
+        <Border x:Name="ViewBox2_num" Background="#00808080" Width="200" Height="1" VerticalAlignment="Top"></Border>
+        <ListView
                 SelectionMode="None"
                 ItemsSource="{x:Bind Partitions}">
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                    </Style>
-                </ListView.ItemContainerStyle>
-                <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="model:LivePartitionViewModel">
-                        <RelativePanel>
-                            <Image
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="model:LivePartitionViewModel">
+                    <RelativePanel>
+                        <Image
                                 Margin="5"
                                 RelativePanel.AlignTopWithPanel="True"
                                 RelativePanel.AlignLeftWithPanel="True"
                                 Name="IconPanel"
                                 Height="25"
                                 Width="25">
-                                <Image.Source>
-                                    <BitmapImage
+                            <Image.Source>
+                                <BitmapImage
                                         DecodePixelHeight="25"
                                         DecodePixelWidth="25"
                                         UriSource="{x:Bind Icon}"/>
-                                </Image.Source>
-                            </Image>
-                            <TextBlock
+                            </Image.Source>
+                        </Image>
+                        <TextBlock
                                 RelativePanel.RightOf="IconPanel"
                                 RelativePanel.AlignTopWithPanel="True"
                                 FontSize="16"
                                 Text="{x:Bind Name}"
                                 Margin="5"
                                 />
-                            <controls:AdaptiveGridView
+                        <localControl:AdaptiveGridView
                                 Margin="5"
                                 DesiredWidth="210"
                                 ItemHeight="175"
@@ -86,20 +86,19 @@
                                 RelativePanel.Below="IconPanel"
                                 RelativePanel.AlignLeftWithPanel="True"
                                 RelativePanel.AlignRightWithPanel="True"
-                                ScrollViewer.VerticalScrollMode="Disabled"
-                                ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                                ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                                 ScrollViewer.HorizontalScrollMode="Disabled"
+                                ScrollViewer.VerticalScrollMode="Disabled"
+                                ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                 ItemsSource="{x:Bind Lives}"
                                 ItemTemplate="{StaticResource GridItem}"
                                 BorderBrush="{ThemeResource Bili-Background}"
                                 ItemClick="gridview_Hot_ItemClick"
                                 />
-                        </RelativePanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackPanel>
-    </Grid>
+                    </RelativePanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackPanel>
 </UserControl>
 <!--Background="{ThemeResource Bili-List-Background}"-->
