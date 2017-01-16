@@ -168,6 +168,9 @@
     <Compile Include="Pages\HistoryPage.xaml.cs">
       <DependentUpon>HistoryPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\LiveAreaPage.xaml.cs">
+      <DependentUpon>LiveAreaPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\LiveInfoPage.xaml.cs">
       <DependentUpon>LiveInfoPage.xaml</DependentUpon>
     </Compile>
@@ -270,6 +273,7 @@
     <Content Include="Assets\Icon\DY.png" />
     <Content Include="Assets\Icon\ic_info_danmakus2.png" />
     <Content Include="Assets\Icon\ic_info_views2.png" />
+    <Content Include="Assets\Icon\ic_watching.png" />
     <Content Include="Assets\Icon\Play.png" />
     <Content Include="Assets\Icon\Time.png" />
     <Content Include="Assets\Icon\Type.png" />
@@ -397,6 +401,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\HistoryPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\LiveAreaPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

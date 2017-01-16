@@ -1,0 +1,111 @@
+﻿<Page
+    x:Class="bilibili2.Pages.LiveAreaPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:bilibili2.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:localControl="using:bilibili2.Controls"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:model="using:bilibili2"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <SolidColorBrush x:Name="bg" x:Key="BG" Color="#FFDF85A0" />
+    </Page.Resources>
+    <RelativePanel Background="WhiteSmoke">
+        <AppBarButton 
+            x:Name="BtnBack"
+                      Icon="Back"
+                      Width="48" 
+                      Height="48"
+                      Foreground="White"
+            RelativePanel.AlignTopWithPanel="True"
+            RelativePanel.AlignLeftWithPanel="True"
+            Click="Btn_back_Click"
+            Background="{StaticResource BG}"/>
+        <StackPanel
+            Height="48"
+            RelativePanel.AlignTopWithPanel="True"
+            RelativePanel.RightOf="BtnBack"
+            RelativePanel.LeftOf="Refresh"
+            Orientation="Horizontal"
+            Background="{StaticResource BG}">
+            <TextBlock
+                VerticalAlignment="Center"
+                Text="全部直播"
+                Margin="5 0" 
+                FontSize="16" 
+                x:Name="TopTxtHeader"
+                Foreground="White"         
+                />
+        </StackPanel>
+        <AppBarButton 
+            Name="Refresh"
+            Foreground="White" 
+            ToolTipService.ToolTip="刷新" 
+            Width="48" 
+            Height="48"
+            Icon="Refresh"
+            RelativePanel.AlignRightWithPanel="True"
+            RelativePanel.AlignTopWithPanel="True"
+            Background="{StaticResource BG}"/>
+        <ProgressBar
+            x:Name="PrLoad"
+            VerticalAlignment="Top" 
+            Background="{x:Null}"
+            Foreground="White"
+            IsIndeterminate="True"
+            RelativePanel.Below="BtnBack"
+            RelativePanel.AlignLeftWithPanel="True"
+            RelativePanel.AlignRightWithPanel="True"/>
+        <localControl:AdaptiveGridView
+            RelativePanel.Below="PrLoad"
+            RelativePanel.AlignLeftWithPanel="True"
+            RelativePanel.AlignRightWithPanel="True"
+            OneRowModeEnabled="True"
+            >
+            <localControl:AdaptiveGridView.ItemTemplate>
+                <DataTemplate>
+                    <Border>
+                        <TextBlock
+                            Text="{x:Bind }"/>
+                    </Border>
+                </DataTemplate>
+            </localControl:AdaptiveGridView.ItemTemplate>
+        </localControl:AdaptiveGridView>
+        <localControl:AdaptiveGridView>
+            <localControl:AdaptiveGridView.ItemTemplate>
+                <DataTemplate x:DataType="model:LiveItemViewModel">
+                    <RelativePanel>
+                        <controls:ImageEx
+                            Name="CoverPanel"
+                            RelativePanel.AlignTopWithPanel="True"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"
+                            Source="{x:Bind Src}"/>
+                        <TextBlock
+                            Name="TitlePanel"
+                            RelativePanel.Below="CoverPanel"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"/>
+                        <TextBlock
+                            Name="NamePanel"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.Below="TitlePanel"
+                            RelativePanel.AlignBottomWithPanel="True"/>
+                        <Image
+                            RelativePanel.LeftOf="NumPanel"
+                            Source="ms-appx:///Assets/Icon/ic_watching.png"
+                            Height="15"
+                            Width="22"/>
+                        <TextBlock
+                            Name="NumPanel"
+                            RelativePanel.AlignRightWithPanel="True"
+                            RelativePanel.AlignBottomWithPanel="True"
+                            RelativePanel.Below="TitlePanel"/>
+                    </RelativePanel>
+                </DataTemplate>
+            </localControl:AdaptiveGridView.ItemTemplate>
+        </localControl:AdaptiveGridView>
+    </RelativePanel>
+</Page>
