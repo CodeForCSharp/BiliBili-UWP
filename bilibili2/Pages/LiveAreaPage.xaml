@@ -8,7 +8,8 @@
     xmlns:localControl="using:bilibili2.Controls"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:model="using:bilibili2"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Tag="">
     <Page.Resources>
         <SolidColorBrush x:Name="bg" x:Key="BG" Color="#FFDF85A0" />
     </Page.Resources>
@@ -21,8 +22,8 @@
                       Foreground="White"
             RelativePanel.AlignTopWithPanel="True"
             RelativePanel.AlignLeftWithPanel="True"
-            Click="Btn_back_Click"
-            Background="{StaticResource BG}"/>
+            Background="{StaticResource BG}"
+            Click="BtnBack_Click"/>
         <StackPanel
             Height="48"
             RelativePanel.AlignTopWithPanel="True"
@@ -32,7 +33,6 @@
             Background="{StaticResource BG}">
             <TextBlock
                 VerticalAlignment="Center"
-                Text="全部直播"
                 Margin="5 0" 
                 FontSize="16" 
                 x:Name="TopTxtHeader"
@@ -58,54 +58,109 @@
             RelativePanel.Below="BtnBack"
             RelativePanel.AlignLeftWithPanel="True"
             RelativePanel.AlignRightWithPanel="True"/>
-        <localControl:AdaptiveGridView
+        <ListView
+            x:Name="TagPanel"
             RelativePanel.Below="PrLoad"
             RelativePanel.AlignLeftWithPanel="True"
             RelativePanel.AlignRightWithPanel="True"
-            OneRowModeEnabled="True"
+            SelectionChanged="TagPanel_SelectionChanged"
+            ItemsSource="{x:Bind Tags}"
+            ScrollViewer.HorizontalScrollMode="Auto"
+            ScrollViewer.VerticalScrollMode="Disabled"
+            VerticalAlignment="Top"
             >
-            <localControl:AdaptiveGridView.ItemTemplate>
-                <DataTemplate>
-                    <Border>
-                        <TextBlock
-                            Text="{x:Bind }"/>
-                    </Border>
-                </DataTemplate>
-            </localControl:AdaptiveGridView.ItemTemplate>
-        </localControl:AdaptiveGridView>
-        <localControl:AdaptiveGridView>
-            <localControl:AdaptiveGridView.ItemTemplate>
-                <DataTemplate x:DataType="model:LiveItemViewModel">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsStackPanel 
+                        Orientation="Horizontal"
+                        ScrollViewer.HorizontalScrollMode="Enabled"
+                        ScrollViewer.VerticalScrollMode="Disabled"/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter  Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListViewItem">
+                                <ListViewItemPresenter
+                                    SelectedPressedBackground="{StaticResource BG}"
+                                     SelectedBackground="White"
+                                    SelectedForeground="{StaticResource BG}"
+                                    SelectedBorderThickness="1"
+                                    />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="model:LiveTagViewModel">
                     <RelativePanel>
+                        <TextBlock
+                            FontSize="14"
+                            Text="{x:Bind Name}"
+                            RelativePanel.AlignHorizontalCenterWithPanel="True"
+                            RelativePanel.AlignVerticalCenterWithPanel="True"/>
+                    </RelativePanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <controls:AdaptiveGridView
+            x:Name="LivesPanel"
+            ItemHeight="220"
+            DesiredWidth="250"
+            RelativePanel.Below="TagPanel"
+            ItemsSource="{x:Bind Lives}"
+            RelativePanel.AlignLeftWithPanel="True"
+            RelativePanel.AlignRightWithPanel="True"
+            RelativePanel.AlignBottomWithPanel="True"
+            IsItemClickEnabled="True"
+            ItemClick="LivesPanel_ItemClick">
+            <controls:AdaptiveGridView.ItemTemplate>
+                <DataTemplate x:DataType="model:LiveItemViewModel">
+                    <RelativePanel MaxWidth="250">
                         <controls:ImageEx
                             Name="CoverPanel"
                             RelativePanel.AlignTopWithPanel="True"
                             RelativePanel.AlignLeftWithPanel="True"
                             RelativePanel.AlignRightWithPanel="True"
-                            Source="{x:Bind Src}"/>
+                            Source="{x:Bind Src}"
+                            Margin="5"/>
                         <TextBlock
                             Name="TitlePanel"
                             RelativePanel.Below="CoverPanel"
                             RelativePanel.AlignLeftWithPanel="True"
-                            RelativePanel.AlignRightWithPanel="True"/>
+                            RelativePanel.AlignRightWithPanel="True"
+                            RelativePanel.Above="NamePanel"
+                            Text="{x:Bind Title}"
+                            TextWrapping="Wrap"
+                            Margin="5"/>
                         <TextBlock
+                            FontSize="12"
+                            Margin="5"
                             Name="NamePanel"
                             RelativePanel.AlignLeftWithPanel="True"
-                            RelativePanel.Below="TitlePanel"
-                            RelativePanel.AlignBottomWithPanel="True"/>
+                            RelativePanel.AlignBottomWithPanel="True"
+                            Text="{x:Bind Name}"
+                            Foreground="Gray"/>
                         <Image
+                            Margin="0,5"
+                            RelativePanel.AlignBottomWithPanel="True"
                             RelativePanel.LeftOf="NumPanel"
                             Source="ms-appx:///Assets/Icon/ic_watching.png"
                             Height="15"
                             Width="22"/>
                         <TextBlock
+                            FontSize="13"
+                            Margin="5"
+                            Foreground="Gray"
                             Name="NumPanel"
                             RelativePanel.AlignRightWithPanel="True"
                             RelativePanel.AlignBottomWithPanel="True"
-                            RelativePanel.Below="TitlePanel"/>
+                            Text="{x:Bind Online}"/>
                     </RelativePanel>
                 </DataTemplate>
-            </localControl:AdaptiveGridView.ItemTemplate>
-        </localControl:AdaptiveGridView>
+            </controls:AdaptiveGridView.ItemTemplate>
+        </controls:AdaptiveGridView>
     </RelativePanel>
 </Page>

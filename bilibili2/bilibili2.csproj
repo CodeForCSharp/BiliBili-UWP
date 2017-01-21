@@ -107,6 +107,7 @@
     <Compile Include="Class\CheckNetworkHelper.cs" />
     <Compile Include="Class\DownloadManage.cs" />
     <Compile Include="Class\GetSilverHelper.cs" />
+    <Compile Include="Class\IncrementalLoadingCollection.cs" />
     <Compile Include="Class\MD5.cs" />
     <Compile Include="Class\SettingHelper.cs" />
     <Compile Include="Class\SqlHelper.cs" />

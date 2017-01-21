@@ -1052,6 +1052,10 @@ namespace bilibili2
         public string Name { get; set; }
         public int Id { get; set; }
     }
+    public class LiveTagViewModel
+    {
+        public string Name { get; set; }
+    }
     public class MessageModel
     {
         public int code { get; set; }

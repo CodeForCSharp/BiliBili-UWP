@@ -67,5 +67,13 @@ namespace bilibili2.Pages
             }
             PrLoad.Visibility = Visibility.Collapsed;
         }
+
+        private void AdaptiveGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            if (e.ClickedItem is LiveAreasViewModel model)
+            {
+                Frame.Navigate(typeof(LiveAreaPage), Tuple.Create(model.Id, model.Name));
+            }
+        }
     }
 }

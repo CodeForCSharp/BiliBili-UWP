@@ -2090,7 +2090,7 @@ namespace bilibili2
             try
             {
                 wc = new WebClientClass();
-                string url = string.Format("http://live.bilibili.com/AppIndex/home?_device=wp&_ulv=10000&access_key={0}&appkey={1}&build=411005&platform=android&scale=xxhdpi", ApiHelper.access_key, ApiHelper._appKey);
+                string url = string.Format("http://live.bilibili.com/AppIndex/home?_device=android&_ulv=10000&access_key={0}&appkey={1}&build=411005&platform=android&scale=xxhdpi", ApiHelper.access_key, ApiHelper._appKey);
                 url += "&sign=" + ApiHelper.GetSign(url);
                 string results = await wc.GetResults(new Uri(url));
                 var model = JsonConvert.DeserializeObject<HomeLiveModel>(results);
@@ -2098,13 +2098,11 @@ namespace bilibili2
                 {
                     var bannerModel = model.Data.Banner.Select(item => new LiveBannerViewModel
                     {
-                         Img=item.Img,
-                         Link=item.Link,
-                         Remark=item.Remark,
-                         Title=item.Title
+                        Img = item.Img,
+                        Link = item.Link,
+                        Remark = item.Remark,
+                        Title = item.Title
                     });
-                    //HomeLiveViewModel dataModel = JsonConvert.DeserializeObject<HomeLiveViewModel>(model.Data.ToString());
-                    //List<HomeLiveViewModel> bannerModel = JsonConvert.DeserializeObject<List<HomeLiveViewModel>>(dataModel.Banner.ToString());
                     home_flipView_Live.ItemsSource = bannerModel;
                     fvLeft_Live.ItemsSource = bannerModel;
                     fvRight_Live.ItemsSource = bannerModel;

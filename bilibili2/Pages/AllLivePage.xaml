@@ -73,7 +73,9 @@
             ScrollViewer.HorizontalScrollMode="Disabled"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             ScrollViewer.VerticalScrollBarVisibility="Disabled"
-            ItemsSource="{x:Bind Areas}">
+            ItemsSource="{x:Bind Areas}"
+            IsItemClickEnabled="True"
+            ItemClick="AdaptiveGridView_ItemClick">
             <localControl:AdaptiveGridView.ItemTemplate>
                 <DataTemplate x:DataType="model:LiveAreasViewModel">
                     <StackPanel>

@@ -15,30 +15,47 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <DataTemplate x:Key="GridItem" x:DataType="model:LiveItemViewModel">
-                <Grid MaxWidth="200" >
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="125"></RowDefinition>
-                        <RowDefinition Height="24"></RowDefinition>
-                        <RowDefinition Height="24"></RowDefinition>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="48"></ColumnDefinition>
-                        <ColumnDefinition></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <Image Source="{x:Bind Src}" Width="200" VerticalAlignment="Top" Height="125" Grid.ColumnSpan="2"></Image>
-                    <Ellipse Width="44" Height="44" VerticalAlignment="Bottom" HorizontalAlignment="Left" Grid.RowSpan="2" Margin="2">
-                        <Ellipse.Fill>
-                            <ImageBrush ImageSource="{x:Bind Face}"></ImageBrush>
-                        </Ellipse.Fill>
-                    </Ellipse>
-                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{x:Bind Title}"  TextTrimming="CharacterEllipsis" Margin="5,0"></TextBlock>
-                    <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="2">
-                        <Image  Source="ms-appx:///Assets/MiniIcon/up.png" Width="16" Height="16" HorizontalAlignment="Left" Margin="5,2,0,0"></Image>
-                        <TextBlock FontSize="12" VerticalAlignment="Center" Foreground="Gray" Text="{x:Bind Name}"></TextBlock>
-                        <Image  Source="ms-appx:///Assets/Icon/Play.png" Width="16" Height="16" HorizontalAlignment="Left" Margin="5,2,0,0"></Image>
-                        <TextBlock FontSize="12" VerticalAlignment="Center" Foreground="Gray" Text="{x:Bind Online}"></TextBlock>
-                    </StackPanel>
-                </Grid>
+                <RelativePanel MaxWidth="250">
+                    <controls:ImageEx
+                            Name="CoverPanel"
+                            RelativePanel.AlignTopWithPanel="True"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"
+                            Source="{x:Bind Src}"
+                            Margin="5"/>
+                    <TextBlock
+                            Name="TitlePanel"
+                            RelativePanel.Below="CoverPanel"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"
+                            RelativePanel.Above="NamePanel"
+                            Text="{x:Bind Title}"
+                            TextWrapping="Wrap"
+                            Margin="5"/>
+                    <TextBlock
+                            FontSize="12"
+                            Margin="5"
+                            Name="NamePanel"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignBottomWithPanel="True"
+                            Text="{x:Bind Name}"
+                            Foreground="Gray"/>
+                    <Image
+                            Margin="0,5"
+                            RelativePanel.AlignBottomWithPanel="True"
+                            RelativePanel.LeftOf="NumPanel"
+                            Source="ms-appx:///Assets/Icon/ic_watching.png"
+                            Height="15"
+                            Width="22"/>
+                    <TextBlock
+                            FontSize="13"
+                            Margin="5"
+                            Foreground="Gray"
+                            Name="NumPanel"
+                            RelativePanel.AlignRightWithPanel="True"
+                            RelativePanel.AlignBottomWithPanel="True"
+                            Text="{x:Bind Online}"/>
+                </RelativePanel>
             </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -46,8 +63,11 @@
         <ProgressBar x:Name="pr_Load" Visibility="Collapsed"  Background="{x:Null}" IsIndeterminate="True"></ProgressBar>
         <Border x:Name="ViewBox2_num" Background="#00808080" Width="200" Height="1" VerticalAlignment="Top"></Border>
         <ListView
+            Name="HomeLivePanel"
+            IsItemClickEnabled="True"
                 SelectionMode="None"
-                ItemsSource="{x:Bind Partitions}">
+                ItemsSource="{x:Bind Partitions}"
+            ItemClick="HomeLivePanel_ItemClick">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
