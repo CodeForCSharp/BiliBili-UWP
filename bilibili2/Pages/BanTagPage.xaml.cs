@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -28,13 +29,68 @@ namespace bilibili2.Pages
     {
         public delegate void GoBackHandler();
         public event GoBackHandler BackEvent;
+        ObservableCollection<BanTagItemViewModel> Tags { get; } = new ObservableCollection<BanTagItemViewModel>();
         public BanTagPage()
         {
             this.InitializeComponent();
-             NavigationCacheMode = NavigationCacheMode.Enabled;
+            NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
-        private void btn_back_Click(object sender, RoutedEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
+            if (e.NavigationMode == NavigationMode.New)
+            {
+                GetTagInfo();
+            }
+        }
+
+        //索引
+        public async void GetTagInfo()
+        {
+            try
+            {
+                PrLoadBan.Visibility = Visibility.Visible;
+                WebClientClass wc = new WebClientClass();
+                string url = $"http://bangumi.bilibili.com/api/tags?_device=wp&_ulv=10000&appkey=422fd9d7289a1dd9&build=411005&page={1}&pagesize=60&platform=android&ts={ApiHelper.GetTimeSpen}000";
+                url += $"&sign={ApiHelper.GetSign(url)}";
+                string results = await wc.GetResults(new Uri(url));
+                var model = JObject.Parse(results);
+                if (model["code"].Value<int>() == 0)
+                {
+                    var vms = model["result"].Select(token => new BanTagItemViewModel
+                    {
+                        Cover = token["cover"].Value<string>(),
+                        TagId = token["tag_id"].Value<string>(),
+                        TagName = token["tag_name"].Value<string>()
+                    });
+                    foreach(var vm in vms)
+                    {
+                        Tags.Add(vm);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                messShow.Show("读取索引信息失败！\r\n" + ex.Message, 3000);
+
+            }
+            finally
+            {
+                PrLoadBan.Visibility = Visibility.Collapsed;
+                // IsLoading = false;
+            }
+        }
+
+        private void AdaptiveGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            if (e.ClickedItem is BanTagItemViewModel model)
+            {
+                Frame.Navigate(typeof(BanByTagPage), new string[] { model.TagId, model.TagName });
+            }
+        }
+
+        private void BtnBack_Click(object sender, RoutedEventArgs e)
         {
             if (this.Frame.CanGoBack)
             {
@@ -45,48 +101,5 @@ namespace bilibili2.Pages
                 BackEvent();
             }
         }
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
-            if (e.NavigationMode== NavigationMode.New )
-            {
-                GetTagInfo();
-            }
-            
-        }
-
-        //索引
-        public async void GetTagInfo()
-        {
-            try
-            {
-                pr_Load_Ban.Visibility =Visibility.Visible;
-                WebClientClass wc = new WebClientClass();
-                string uri = "http://bangumi.bilibili.com/api/tags?_device=wp&_ulv=10000&appkey=422fd9d7289a1dd9&build=411005&page=" + 1 + "&pagesize=60&platform=android&ts=" + ApiHelper.GetTimeSpen + "000";
-                string sign = ApiHelper.GetSign(uri);
-                uri += "&sign=" + sign;
-                string results = await wc.GetResults(new Uri(uri));
-                JObject jo = JObject.Parse(results);
-                List<TagModel> list = JsonConvert.DeserializeObject<List<TagModel>>(jo["result"].ToString());
-                gridview_List.ItemsSource = list;
-            }
-            catch (Exception ex)
-            {
-                messShow.Show("读取索引信息失败！\r\n" + ex.Message, 3000);
-                
-            }
-            finally
-            {
-                pr_Load_Ban.Visibility = Visibility.Collapsed;
-                // IsLoading = false;
-            }
-        }
-
-        //索引点击
-        private void gridview_List_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            this.Frame.Navigate(typeof(BanByTagPage), new string[] { (e.ClickedItem as TagModel).tag_id.ToString(), (e.ClickedItem as TagModel).tag_name });
-        }
-
     }
 }

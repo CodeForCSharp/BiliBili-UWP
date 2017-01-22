@@ -8,54 +8,78 @@
     x:Class="bilibili2.Pages.BanTagPage"
     mc:Ignorable="d"
     Tag="番剧索引"
+    xmlns:localControl="using:bilibili2.Controls"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:model="using:bilibili2"
     >
     <Page.Resources>
         <SolidColorBrush x:Name="bg" x:Key="BG" Color="#FFDF85A0" />
     </Page.Resources>
-    <Grid Background="{ThemeResource Bili-Background}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="48"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Grid Background="{StaticResource BG}" Grid.Row="0" Height="48" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="48"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
-            <AppBarButton x:Name="btn_back" Click="btn_back_Click" Icon="Back" Width="48" Height="48" Foreground="White"/>
-            <TextBlock  Text="番剧索引" Margin="5 0" FontSize="16" x:Name="top_txt_Header" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" />
-        </Grid>
-        <ScrollViewer VerticalScrollBarVisibility="Auto"  Grid.Row="1">
-            <GridView x:Name="gridview_List" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Center" SelectionMode="None" ItemClick="gridview_List_ItemClick" IsItemClickEnabled="True" >
-                <GridView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition />
-                                <RowDefinition Height="auto"/>
-                            </Grid.RowDefinitions>
-                            <Image Source="{Binding cover}" Width="100"/>
-                            <Grid  Grid.Row="1" Height="36">
-                                <TextBlock Width="100"  VerticalAlignment="Center"  Margin="2 0" Text="{Binding tag_name}" TextAlignment="Center" TextWrapping="Wrap" FontSize="14" Foreground="Gray"/>
-                            </Grid>
-                        </Grid>
-                    </DataTemplate>
-                </GridView.ItemTemplate>
-                <GridView.ItemContainerStyle>
-                    <Style TargetType="GridViewItem">
-                        <Setter Property="Background" Value="{ThemeResource Bili-List-Background}"/>
-                        <Setter Property="BorderBrush" Value="{ThemeResource Bili-Background}"/>
-                        <Setter Property="BorderThickness" Value="1"/>
-                        <Setter Property="Margin" Value="5"/>
-                    </Style>
-                </GridView.ItemContainerStyle>
-            </GridView>
-        </ScrollViewer>
-      
-        <ProgressBar x:Name="pr_Load_Ban" IsIndeterminate="True" Background="{x:Null}" VerticalAlignment="Top" Foreground="White"/>
-
-        <bilibili2:MessageShow x:Name="messShow" Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="10"/>
-
-    </Grid>
+    <RelativePanel Background="{ThemeResource Bili-Background}">
+        <AppBarButton
+            RelativePanel.AlignTopWithPanel="True"
+            RelativePanel.AlignLeftWithPanel="True"
+            Background="{StaticResource BG}"
+            x:Name="BtnBack"
+            Icon="Back"
+            Width="48"
+            Height="48"
+            Foreground="White"
+            Click="BtnBack_Click"/>
+        <RelativePanel
+            Height="48"
+            RelativePanel.AlignTopWithPanel="True"
+            RelativePanel.AlignRightWithPanel="True"
+            RelativePanel.RightOf="BtnBack"
+            Background="{StaticResource BG}">
+            <TextBlock 
+                RelativePanel.AlignVerticalCenterWithPanel="True"
+            Text="索引"
+            FontSize="16"
+            x:Name="TopTxtHeader"
+            Foreground="White" />
+        </RelativePanel>
+        <ProgressBar
+            RelativePanel.Below="BtnBack"
+            RelativePanel.AlignLeftWithPanel="True"
+            RelativePanel.AlignRightWithPanel="True"
+            x:Name="PrLoadBan" 
+            IsIndeterminate="True"
+            Background="{x:Null}" 
+            Foreground="White"/>
+        <localControl:AdaptiveGridView
+            RelativePanel.Below="PrLoadBan"
+            RelativePanel.AlignLeftWithPanel="True"
+            RelativePanel.AlignRightWithPanel="True"
+            RelativePanel.AlignBottomWithPanel="True"
+            ItemsSource="{x:Bind Tags}"
+            IsItemClickEnabled="True"
+            ItemClick="AdaptiveGridView_ItemClick"
+            StretchContentForSingleRow="False"
+            DesiredWidth="170"
+            ItemHeight="180">
+            <localControl:AdaptiveGridView.ItemTemplate>
+                <DataTemplate x:DataType="model:BanTagItemViewModel">
+                    <RelativePanel>
+                        <controls:ImageEx
+                            x:Name="CoverPanel"
+                            RelativePanel.AlignHorizontalCenterWithPanel="True"
+                        Height="150"
+                        Width="150"
+                        Source="{x:Bind Cover}"/>
+                        <TextBlock
+                            Margin="5"
+                            RelativePanel.Below="CoverPanel"
+                            RelativePanel.AlignHorizontalCenterWithPanel="True"
+                            Text="{x:Bind TagName}"/>
+                    </RelativePanel>
+                </DataTemplate>
+            </localControl:AdaptiveGridView.ItemTemplate>
+        </localControl:AdaptiveGridView>
+        <bilibili2:MessageShow
+            RelativePanel.AlignHorizontalCenterWithPanel="True"
+            RelativePanel.AlignBottomWithPanel="True"
+            x:Name="messShow"
+            Margin="10"/>
+    </RelativePanel>
 </Page>

@@ -1741,17 +1741,17 @@ namespace bilibili2
         //索引表点击
         private void Ban_btn_Tag_Click(object sender, RoutedEventArgs e)
         {
-            if (this.ActualWidth > 500)
-            {
-                B_Timeline.Visibility = Visibility.Collapsed;
-                gridview_List.Visibility = Visibility.Visible;
-                sp_Bangumi.IsPaneOpen = true;
-                GetTagInfo();
-            }
-            else
-            {
+            //if (this.ActualWidth > 500)
+            //{
+            //    B_Timeline.Visibility = Visibility.Collapsed;
+            //    gridview_List.Visibility = Visibility.Visible;
+            //    sp_Bangumi.IsPaneOpen = true;
+            //    GetTagInfo();
+            //}
+            //else
+            //{
                 infoFrame.Navigate(typeof(BanTagPage));
-            }
+            //}
         }
         //追番点击
         private void user_GridView_Bangumi_ItemClick(object sender, ItemClickEventArgs e)

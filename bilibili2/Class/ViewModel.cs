@@ -1073,6 +1073,13 @@ namespace bilibili2
         public string PubDate { get; set; }
         public string EpIndex { get; set; }
     }
+
+    public class BanTagItemViewModel
+    {
+        public string Cover { get; set; }
+        public string TagId { get; set; }
+        public string TagName { get; set; }
+    }
     public class MessageModel
     {
         public int code { get; set; }

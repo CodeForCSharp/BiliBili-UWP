@@ -281,6 +281,8 @@
     <Content Include="Assets\Icon\bangumi_timeline_weekday_0.png" />
     <Content Include="Assets\Icon\DM.png" />
     <Content Include="Assets\Icon\DY.png" />
+    <Content Include="Assets\Icon\ic_header_indicator_rank.png" />
+    <Content Include="Assets\Icon\ic_header_movie_all.png" />
     <Content Include="Assets\Icon\ic_info_danmakus2.png" />
     <Content Include="Assets\Icon\ic_info_views2.png" />
     <Content Include="Assets\Icon\ic_watching.png" />
