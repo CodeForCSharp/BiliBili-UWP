@@ -105,6 +105,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Class\CheckNetworkHelper.cs" />
+    <Compile Include="Class\Converter.cs" />
     <Compile Include="Class\DownloadManage.cs" />
     <Compile Include="Class\GetSilverHelper.cs" />
     <Compile Include="Class\IncrementalLoadingCollection.cs" />
@@ -270,6 +271,14 @@
     <Content Include="Assets\BadgeLogo.scale-200.png" />
     <Content Include="Assets\bg1.png" />
     <Content Include="Assets\bili_img_4180877.jpg" />
+    <Content Include="Assets\Icon\bangumi_timeline_clock.png" />
+    <Content Include="Assets\Icon\bangumi_timeline_weekday_1.png" />
+    <Content Include="Assets\Icon\bangumi_timeline_weekday_2.png" />
+    <Content Include="Assets\Icon\bangumi_timeline_weekday_3.png" />
+    <Content Include="Assets\Icon\bangumi_timeline_weekday_4.png" />
+    <Content Include="Assets\Icon\bangumi_timeline_weekday_5.png" />
+    <Content Include="Assets\Icon\bangumi_timeline_weekday_6.png" />
+    <Content Include="Assets\Icon\bangumi_timeline_weekday_0.png" />
     <Content Include="Assets\Icon\DM.png" />
     <Content Include="Assets\Icon\DY.png" />
     <Content Include="Assets\Icon\ic_info_danmakus2.png" />

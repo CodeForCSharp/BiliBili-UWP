@@ -1056,6 +1056,23 @@ namespace bilibili2
     {
         public string Name { get; set; }
     }
+
+    public class BanTimeLinePartitionViewModel
+    {
+        public string WeekIconPath { get; set; }
+        public string Week { get; set; }
+        public string PubDate { get; set; }
+        public List<BanTimeLineItemViewModel> BanTimeItems { get; set; }
+    }
+    public class BanTimeLineItemViewModel
+    {
+        public string Cover { get; set; }
+        public string Title { get; set; }
+        public int SeasonId { get; set; }
+        public string Ontime { get; set; }
+        public string PubDate { get; set; }
+        public string EpIndex { get; set; }
+    }
     public class MessageModel
     {
         public int code { get; set; }

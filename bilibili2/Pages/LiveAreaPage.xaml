@@ -105,7 +105,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <controls:AdaptiveGridView
+        <localControl:AdaptiveGridView
             x:Name="LivesPanel"
             ItemHeight="220"
             DesiredWidth="250"
@@ -115,8 +115,9 @@
             RelativePanel.AlignRightWithPanel="True"
             RelativePanel.AlignBottomWithPanel="True"
             IsItemClickEnabled="True"
-            ItemClick="LivesPanel_ItemClick">
-            <controls:AdaptiveGridView.ItemTemplate>
+            ItemClick="LivesPanel_ItemClick"
+            StretchContentForSingleRow="False">
+            <localControl:AdaptiveGridView.ItemTemplate>
                 <DataTemplate x:DataType="model:LiveItemViewModel">
                     <RelativePanel MaxWidth="250">
                         <controls:ImageEx
@@ -160,7 +161,7 @@
                             Text="{x:Bind Online}"/>
                     </RelativePanel>
                 </DataTemplate>
-            </controls:AdaptiveGridView.ItemTemplate>
-        </controls:AdaptiveGridView>
+            </localControl:AdaptiveGridView.ItemTemplate>
+        </localControl:AdaptiveGridView>
     </RelativePanel>
 </Page>

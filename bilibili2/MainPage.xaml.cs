@@ -1721,17 +1721,17 @@ namespace bilibili2
         //番剧时间表点击
         private void Ban_btn_Timeline_Click(object sender, RoutedEventArgs e)
         {
-            if (this.ActualWidth > 500)
-            {
-                B_Timeline.Visibility = Visibility.Visible;
-                gridview_List.Visibility = Visibility.Collapsed;
-                sp_Bangumi.IsPaneOpen = true;
-                GetBangumiTimeLine();
-            }
-            else
-            {
+            //if (this.ActualWidth > 500)
+            //{
+            //    B_Timeline.Visibility = Visibility.Visible;
+            //    gridview_List.Visibility = Visibility.Collapsed;
+            //    sp_Bangumi.IsPaneOpen = true;
+            //    GetBangumiTimeLine();
+            //}
+            //else
+            //{
                 infoFrame.Navigate(typeof(BanTimelinePage));
-            }
+            //}
         }
         //索引点击
         private void gridview_List_ItemClick(object sender, ItemClickEventArgs e)

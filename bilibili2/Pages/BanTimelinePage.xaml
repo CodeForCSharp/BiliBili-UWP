@@ -7,107 +7,146 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Tag="番剧更新时间表"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:localControl="using:bilibili2.Controls"
+    xmlns:model="using:bilibili2"
     >
     <Page.Resources>
-        <SolidColorBrush x:Name="bg" x:Key="BG" />
+        <SolidColorBrush x:Name="bg" x:Key="BG" Color="#FFDF85A0" />
     </Page.Resources>
-    <Grid Background="{ThemeResource Bili-Background}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="48"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Grid x:Name="top_Grid" Background="{StaticResource BG}" Grid.Row="0" Height="48" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="48"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
-            <AppBarButton x:Name="btn_back" Click="btn_back_Click" Icon="Back" Width="48" Height="48" Foreground="White"/>
-            <TextBlock  Text="番剧更新时间表" Margin="5 0" FontSize="16" x:Name="top_txt_Header" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" />
-        </Grid>
-        <ScrollViewer Grid.Row="1" x:Name="B_Timeline" VerticalScrollBarVisibility="Auto" >
-            <StackPanel Margin="10 0">
-                <StackPanel.Resources>
-                    <DataTemplate x:Key="time_List">
-                        <Grid>
-                            <TextBlock Text="{Binding title}"></TextBlock>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                <TextBlock  Text="更新"   Foreground="Gray" ></TextBlock>
-                                <TextBlock  Text="{Binding bgmcount}"   Foreground="Gray" ></TextBlock>
-                                <TextBlock  Text="话"   Foreground="Gray" ></TextBlock>
-                            </StackPanel>
-                        </Grid>
-                    </DataTemplate>
-                    <Style x:Key="time_List_Style" TargetType="ListViewItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
-                    </Style>
-                </StackPanel.Resources>
-                <Grid  Margin="0 5">
-                    <StackPanel Orientation="Horizontal" >
-                        <Border Background="{StaticResource BG}" Width="10"  Height="24"  Margin="5,0"></Border>
-                        <TextBlock x:Name="week_0" Text="周二" Foreground="{StaticResource BG}" FontSize="18" VerticalAlignment="Center" ></TextBlock>
-                    </StackPanel>
-                    <TextBlock  x:Name="date_0" Text="今天" HorizontalAlignment="Right" Foreground="{StaticResource BG}" FontSize="18" VerticalAlignment="Center" Margin="5 0"></TextBlock>
-                </Grid>
-                <ListView x:Name="list_0" ScrollViewer.VerticalScrollMode="Disabled" SelectionMode="None" IsItemClickEnabled="True" ItemClick="list_0_ItemClick" ItemTemplate="{StaticResource time_List}" ItemContainerStyle="{StaticResource time_List_Style}" ></ListView>
-                <Grid  Margin="0 5">
-                    <StackPanel Orientation="Horizontal">
-                        <Border Background="Gray" Width="10"  Height="24"  Margin="5,0"></Border>
-                        <TextBlock x:Name="week_1" Text="周二" Foreground="{ThemeResource Bili-FontColor}" FontSize="18" VerticalAlignment="Center" ></TextBlock>
-                    </StackPanel>
-                    <TextBlock  x:Name="date_1" Text="昨天" HorizontalAlignment="Right" Foreground="{ThemeResource Bili-FontColor}" FontSize="18" VerticalAlignment="Center" Margin="5 0"></TextBlock>
-                </Grid>
-                <ListView x:Name="list_1" ScrollViewer.VerticalScrollMode="Disabled"  SelectionMode="None" IsItemClickEnabled="True" ItemClick="list_0_ItemClick" ItemTemplate="{StaticResource time_List}" ItemContainerStyle="{StaticResource time_List_Style}" ></ListView>
-                <Grid  Margin="0 5">
-                    <StackPanel Orientation="Horizontal">
-                        <Border Background="Gray" Width="10"  Height="24"  Margin="5,0"></Border>
-                        <TextBlock x:Name="week_2" Text="周二" Foreground="{ThemeResource Bili-FontColor}" FontSize="18" VerticalAlignment="Center" ></TextBlock>
-                    </StackPanel>
-                    <TextBlock  x:Name="date_2" Text="今天" HorizontalAlignment="Right" Foreground="{ThemeResource Bili-FontColor}" FontSize="18" VerticalAlignment="Center" Margin="5 0"></TextBlock>
-                </Grid>
-                <ListView x:Name="list_2" ScrollViewer.VerticalScrollMode="Disabled"  SelectionMode="None" IsItemClickEnabled="True" ItemClick="list_0_ItemClick" ItemTemplate="{StaticResource time_List}" ItemContainerStyle="{StaticResource time_List_Style}" ></ListView>
-                <Grid  Margin="0 5">
-                    <StackPanel Orientation="Horizontal">
-                        <Border Background="Gray" Width="10"  Height="24"  Margin="5,0"></Border>
-                        <TextBlock x:Name="week_3" Text="周二" Foreground="{ThemeResource Bili-FontColor}" FontSize="18" VerticalAlignment="Center" ></TextBlock>
-                    </StackPanel>
-                    <TextBlock  x:Name="date_3" Text="今天" HorizontalAlignment="Right" Foreground="{ThemeResource Bili-FontColor}" FontSize="18" VerticalAlignment="Center" Margin="5 0"></TextBlock>
-                </Grid>
-                <ListView x:Name="list_3" ScrollViewer.VerticalScrollMode="Disabled"  SelectionMode="None" IsItemClickEnabled="True" ItemClick="list_0_ItemClick" ItemTemplate="{StaticResource time_List}" ItemContainerStyle="{StaticResource time_List_Style}" ></ListView>
-                <Grid  Margin="0 5">
-                    <StackPanel Orientation="Horizontal">
-                        <Border Background="Gray" Width="10"  Height="24"  Margin="5,0"></Border>
-                        <TextBlock x:Name="week_4" Text="周二" Foreground="{ThemeResource Bili-FontColor}" FontSize="18" VerticalAlignment="Center" ></TextBlock>
-                    </StackPanel>
-                    <TextBlock  x:Name="date_4" Text="今天" HorizontalAlignment="Right" Foreground="{ThemeResource Bili-FontColor}" FontSize="18" VerticalAlignment="Center" Margin="5 0"></TextBlock>
-                </Grid>
-                <ListView x:Name="list_4" ScrollViewer.VerticalScrollMode="Disabled"  SelectionMode="None" IsItemClickEnabled="True" ItemClick="list_0_ItemClick" ItemTemplate="{StaticResource time_List}" ItemContainerStyle="{StaticResource time_List_Style}" ></ListView>
-                <Grid  Margin="0 5">
-                    <StackPanel Orientation="Horizontal">
-                        <Border Background="Gray" Width="10"  Height="24"  Margin="5,0"></Border>
-                        <TextBlock x:Name="week_5" Text="周二" Foreground="{ThemeResource Bili-FontColor}" FontSize="18" VerticalAlignment="Center" ></TextBlock>
-                    </StackPanel>
-                    <TextBlock  x:Name="date_5" Text="今天" HorizontalAlignment="Right" Foreground="{ThemeResource Bili-FontColor}" FontSize="18" VerticalAlignment="Center" Margin="5 0"></TextBlock>
-                </Grid>
-                <ListView x:Name="list_5" ScrollViewer.VerticalScrollMode="Disabled"  SelectionMode="None" IsItemClickEnabled="True" ItemClick="list_0_ItemClick" ItemTemplate="{StaticResource time_List}" ItemContainerStyle="{StaticResource time_List_Style}" ></ListView>
-                <Grid  Margin="0 5">
-                    <StackPanel Orientation="Horizontal">
-                        <Border Background="Gray" Width="10"  Height="24"  Margin="5,0"></Border>
-                        <TextBlock x:Name="week_6" Text="周二" Foreground="{ThemeResource Bili-FontColor}" FontSize="18" VerticalAlignment="Center" ></TextBlock>
-                    </StackPanel>
-                    <TextBlock  x:Name="date_6" Text="今天" HorizontalAlignment="Right" Foreground="{ThemeResource Bili-FontColor}" FontSize="18" VerticalAlignment="Center" Margin="5 0"></TextBlock>
-                </Grid>
-                <ListView x:Name="list_6" ScrollViewer.VerticalScrollMode="Disabled"  SelectionMode="None" IsItemClickEnabled="True" ItemClick="list_0_ItemClick" ItemTemplate="{StaticResource time_List}" ItemContainerStyle="{StaticResource time_List_Style}" ></ListView>
-                <Grid  Margin="0 5">
-                    <StackPanel Orientation="Horizontal">
-                        <Border Background="Gray" Width="10"  Height="24"  Margin="5,0"></Border>
-                        <TextBlock x:Name="week_7" Text="其他" Foreground="{ThemeResource Bili-FontColor}" FontSize="18" VerticalAlignment="Center" ></TextBlock>
-                    </StackPanel>
-                    <TextBlock  x:Name="date_7" Text="一周前" HorizontalAlignment="Right" Foreground="{ThemeResource Bili-FontColor}" FontSize="18" VerticalAlignment="Center" Margin="5 0"></TextBlock>
-                </Grid>
-                <ListView x:Name="list_7" ScrollViewer.VerticalScrollMode="Disabled"  SelectionMode="None" IsItemClickEnabled="True" ItemClick="list_0_ItemClick" ItemTemplate="{StaticResource time_List}" ItemContainerStyle="{StaticResource time_List_Style}" ></ListView>
-            </StackPanel>
-        </ScrollViewer>
-        <ProgressBar x:Name="pr_Load_Ban" IsIndeterminate="True" Background="{x:Null}" VerticalAlignment="Top" Foreground="White"></ProgressBar>
-    </Grid>
+    <RelativePanel Background="{ThemeResource Bili-Background}">
+        <AppBarButton 
+            x:Name="BtnBack" 
+            Icon="Back" 
+            Width="48" 
+            Height="48" 
+            Foreground="White"
+            RelativePanel.AlignTopWithPanel="True"
+            RelativePanel.AlignLeftWithPanel="True"
+            Click="BtnBack_Click"
+            Background="{StaticResource BG}"/>
+        <RelativePanel
+            RelativePanel.RightOf="BtnBack"
+            RelativePanel.AlignTopWithPanel="True"
+            RelativePanel.AlignRightWithPanel="True"
+            Height="48"
+            Background="{StaticResource BG}">
+            <TextBlock
+                RelativePanel.AlignVerticalCenterWithPanel="True"
+            Text="番剧更新时间表" 
+            FontSize="16" 
+            x:Name="TopTxtHeader"
+            Foreground="White"/>
+        </RelativePanel>
+        <ProgressBar
+            RelativePanel.Below="BtnBack"
+            RelativePanel.AlignLeftWithPanel="True"
+            RelativePanel.AlignRightWithPanel="True"
+            x:Name="PrLoadBan"
+            IsIndeterminate="True" 
+            Background="{x:Null}" 
+            Foreground="White"/>
+        <ListView
+            RelativePanel.Below="PrLoadBan"
+            RelativePanel.AlignLeftWithPanel="True"
+            RelativePanel.AlignRightWithPanel="True"
+            RelativePanel.AlignBottomWithPanel="True"
+            ItemsSource="{x:Bind Partitions}">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="model:BanTimeLinePartitionViewModel">
+                    <RelativePanel>
+                        <controls:ImageEx
+                            Margin="0,5,5,5"
+                            RelativePanel.AlignTopWithPanel="True"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            x:Name="WeekImagePanel"
+                            Height="25"
+                            Width="25"
+                            Foreground="Gray"
+                            Source="{x:Bind WeekIconPath}"/>
+                        <TextBlock
+                            Margin="0,5,0,5"
+                            Name="WeekPanel"
+                            RelativePanel.RightOf="WeekImagePanel"
+                            RelativePanel.AlignTopWithPanel="True"
+                            Text="{x:Bind Week }"
+                            FontSize="18"
+                            Foreground="Gray"/>
+                        <TextBlock
+                            Margin="5"
+                            Name="DatePanel"
+                            RelativePanel.AlignRightWithPanel="True"
+                            RelativePanel.AlignTopWithPanel="True"
+                            Text="{x:Bind PubDate}"
+                            Foreground="Gray"/>
+                        <localControl:AdaptiveGridView
+                            RelativePanel.Below="WeekImagePanel"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"
+                            RelativePanel.AlignBottomWithPanel="True"
+                            ItemsSource="{x:Bind BanTimeItems}"
+                            DesiredWidth="240"
+                            ItemHeight="380"
+                            IsItemClickEnabled="True"
+                            ItemClick="AdaptiveGridView_ItemClick"
+                            StretchContentForSingleRow="False">
+                            <localControl:AdaptiveGridView.ItemTemplate>
+                                <DataTemplate x:DataType="model:BanTimeLineItemViewModel">
+                                    <RelativePanel
+                                        MaxWidth="330">
+                                        <controls:ImageEx
+                                            x:Name="CoverPanel"
+                                            RelativePanel.AlignTopWithPanel="True"
+                                            RelativePanel.AlignRightWithPanel="True"
+                                            RelativePanel.AlignLeftWithPanel="True"
+                                            Height="320"
+                                            Width="240"
+                                            Source="{x:Bind Cover}"
+                                            />
+                                        <controls:ImageEx
+                                            Margin="5,300,0,0"
+                                            x:Name="ClockIconPanel"
+                                            RelativePanel.AlignLeftWithPanel="True"
+                                            Height="18"
+                                            Width="18"
+                                            Source="ms-appx:///Assets/Icon/bangumi_timeline_clock.png" 
+                                            Canvas.ZIndex="1"
+                                            />
+                                        <TextBlock
+                                            RelativePanel.RightOf="ClockIconPanel"
+                                            FontSize="14"
+                                            Margin="5,300,0,0"
+                                            Canvas.ZIndex="1"
+                                            Foreground="White"
+                                            Text="{x:Bind Ontime}"
+                                            />
+                                        <TextBlock
+                                            RelativePanel.AlignLeftWithPanel="True"
+                                            RelativePanel.AlignRightWithPanel="True"
+                                            RelativePanel.Below="CoverPanel"
+                                            Name="TitlePanel"
+                                            Text="{x:Bind Title}"
+                                            />
+                                        <TextBlock
+                                            RelativePanel.AlignLeftWithPanel="True"
+                                            RelativePanel.AlignRightWithPanel="True"
+                                            Name="SeasonPanel"
+                                            RelativePanel.Below="TitlePanel"
+                                            FontSize="13"
+                                            Foreground="Gray"
+                                            Text="{x:Bind EpIndex}"/>
+                                    </RelativePanel>
+                                </DataTemplate>
+                            </localControl:AdaptiveGridView.ItemTemplate>
+                        </localControl:AdaptiveGridView>
+                    </RelativePanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </RelativePanel>
 </Page>

@@ -99,8 +99,8 @@
                                 />
                         <localControl:AdaptiveGridView
                                 Margin="5"
-                                DesiredWidth="210"
-                                ItemHeight="175"
+                                DesiredWidth="250"
+                                ItemHeight="220"
                                 IsItemClickEnabled="True"
                                 SelectionMode="None"
                                 RelativePanel.Below="IconPanel"
