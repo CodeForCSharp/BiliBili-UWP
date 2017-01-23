@@ -1,5 +1,6 @@
 ﻿using bilibili2.Class;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -29,8 +30,40 @@ namespace bilibili2.Pages
     {
         public delegate void GoBackHandler();
         public event GoBackHandler BackEvent;
+        IncrementalLoadingCollection<LiveItemViewModel> Lives { get; }
+        IncrementalLoadingCollection<LiveSearchUserViewModel> Users { get; }
+        WebClientClass wc = new WebClientClass();
+        private string keyword;
         public SearchLivePage()
         {
+            Lives = new IncrementalLoadingCollection<LiveItemViewModel>
+            {
+                LoadDataTask = async () =>
+                {
+                    string url = $"http://live.bilibili.com/AppSearch/index?_device=wp&_ulv=10000&appkey={ApiHelper._appKey}&build=411005&keyword={WebUtility.UrlEncode(keyword)}&page={Lives.CurrentPage}&pagesize=20&platform=android&type=room";
+                    url += "&sign=" + ApiHelper.GetSign(url);
+                    string results = await wc.GetResults(new Uri(url));
+                    var model = JObject.Parse(results);
+                    if (model["code"].Value<int>() == 0)
+                    {
+                        Lives.MaxPage = model["data"]["total_page"].Value<int>();
+                        var items = model["data"]["room"].Select(token => new LiveItemViewModel
+                        {
+                            Face=token["face"].Value<string>(),
+                            Name = token["name"].Value<string>(),
+                            Src = token["cover"].Value<string>(),
+                            Online = token["online"].Value<int>(),
+                            RoomId = token["room_id"].Value<string>(),
+                            Title = token["title"].Value<string>()
+                        });
+                        return Tuple.Create(items, Lives.CurrentPage<=Lives.MaxPage));
+                    }
+                    else
+                    {
+                        throw new Exception("Vaild Paramters");
+                    }
+                }
+            };
             this.InitializeComponent();
             NavigationCacheMode = NavigationCacheMode.Enabled;
         }
@@ -46,32 +79,13 @@ namespace bilibili2.Pages
                 BackEvent();
             }
         }
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
-            if (e.Parameter!=null)
-            {
-                txt_Find.Text = e.Parameter as string;
-                GetSearchResults(e.Parameter as string);
-            }
-        }
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-            live_List.ItemsSource = null;
-            list_User.ItemsSource = null;
-        }
-
-        private void btn_Liveing_Click(object sender, RoutedEventArgs e)
-        {
-            pivot.SelectedIndex = Convert.ToInt32((sender as Button).Tag);
-        }
 
         //偷懒。。。pagesize就直接写100.。。。
         private async void GetSearchResults(string keyword)
         {
             try
             {
-                pr_Load.Visibility = Visibility.Visible;
+                PrLoad.Visibility = Visibility.Visible;
                 //http://live.bilibili.com/AppSearch/index?_device=wp&_ulv=10000&access_key={0}&appkey={1}&build=411005&keyword={2}&page=1&pagesize=20&platform=android&type=all
                 WebClientClass wc = new WebClientClass();
                 string url = string.Format("http://live.bilibili.com/AppSearch/index?_device=wp&_ulv=10000&access_key={0}&appkey={1}&build=411005&keyword={2}&page=1&pagesize=100&platform=android&type=all", ApiHelper.access_key, ApiHelper._appKey, WebUtility.UrlEncode(keyword));
@@ -99,20 +113,7 @@ namespace bilibili2.Pages
             }
             finally
             {
-                pr_Load.Visibility = Visibility.Collapsed;
-            }
-        }
-
-        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            if (this.ActualWidth <= 500)
-            {
-                ViewBox_num.Width = ActualWidth / 2 - 20;
-            }
-            else
-            {
-                int i = Convert.ToInt32(ActualWidth / 200);
-                ViewBox_num.Width = ActualWidth / i - 15;
+                PrLoad.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -121,32 +122,6 @@ namespace bilibili2.Pages
             this.Frame.Navigate(typeof(LiveInfoPage), (e.ClickedItem as SearchLiveModel).roomid);
         }
 
-        private void pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            UpdateUI();
-        }
-        public void UpdateUI()
-        {
-            btn_Liveing.Foreground = new SolidColorBrush(new Color() { A = 178, G = 255, B = 255, R = 255 });
-            btn_User.Foreground = new SolidColorBrush(new Color() { A = 178, G = 255, B = 255, R = 255 });
-
-            btn_Liveing.FontWeight = FontWeights.Normal;
-            btn_User.FontWeight = FontWeights.Normal;
-
-            switch (pivot.SelectedIndex)
-            {
-                case 0:
-                    btn_Liveing.Foreground = new SolidColorBrush(Colors.White);
-                    btn_Liveing.FontWeight = FontWeights.Bold;
-                    break;
-                case 1:
-                    btn_User.Foreground = new SolidColorBrush(Colors.White);
-                    btn_User.FontWeight = FontWeights.Bold;
-                    break;
-                default:
-                    break;
-            }
-        }
         private void ListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             this.Frame.Navigate(typeof(LiveInfoPage),(e.ClickedItem as SearchLiveModel).roomid);

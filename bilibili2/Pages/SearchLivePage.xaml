@@ -8,6 +8,9 @@
     x:Class="bilibili2.Pages.SearchLivePage"
     mc:Ignorable="d"
     Tag="搜索直播"
+    xmlns:localControl="using:bilibili2.Controls"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:model="using:bilibili2"
    SizeChanged="Page_SizeChanged"
     >
     <Page.Resources>
@@ -18,65 +21,255 @@
             <Setter Property="BorderBrush" Value="{ThemeResource Bili-Background}"/>
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
-        <DataTemplate x:Key="GridItem">
-            <Viewbox MaxWidth="{Binding Width, ElementName=ViewBox_num}">
-                <Grid MaxWidth="200" >
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="125"/>
-                        <RowDefinition Height="24"/>
-                        <RowDefinition Height="24"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="48"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Image Source="{Binding cover}" Width="200" VerticalAlignment="Top" Height="125" Grid.ColumnSpan="2"/>
-                    <Ellipse Width="44" Height="44" VerticalAlignment="Bottom" HorizontalAlignment="Left" Grid.RowSpan="2" Margin="2">
-                        <Ellipse.Fill>
-                            <ImageBrush ImageSource="{Binding face}"/>
-                        </Ellipse.Fill>
-                    </Ellipse>
-                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding title}"  TextTrimming="CharacterEllipsis" Margin="5,0"/>
-                    <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="2">
-                        <Image  Source="ms-appx:///Assets/MiniIcon/up.png" Width="16" Height="16" HorizontalAlignment="Left" Margin="5,2,0,0"/>
-                        <TextBlock FontSize="12" VerticalAlignment="Center" Foreground="Gray" Text="{Binding name}"/>
-                        <Image  Source="ms-appx:///Assets/Icon/Play.png" Width="16" Height="16" HorizontalAlignment="Left" Margin="5,2,0,0"/>
-                        <TextBlock FontSize="12" VerticalAlignment="Center" Foreground="Gray" Text="{Binding online}"/>
-                    </StackPanel>
-                </Grid>
-            </Viewbox>
-        </DataTemplate>
     </Page.Resources>
-    <Grid  Background="{ThemeResource Bili-Background}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="48"/>
-            <RowDefinition Height="32"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Grid Background="{StaticResource BG}" Grid.Row="0" Height="48" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="48"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
-            <AppBarButton x:Name="btn_back" Click="btn_back_Click" Icon="Back" Width="48" Height="48" Foreground="White"/>
-            <AutoSuggestBox x:Name="txt_Find"  PlaceholderText="搜索主播、房间" Grid.Column="1" Margin="5" QueryIcon="Find" VerticalAlignment="Center" QuerySubmitted="txt_Find_QuerySubmitted" ></AutoSuggestBox>
-        </Grid>
-        <Grid Background="{StaticResource BG}"   Grid.Row="1" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Button x:Name="btn_Liveing" Background="#00000000"  FontSize="16"  Foreground="#B2FFFFFF" Tag="0" VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="btn_Liveing_Click" Content="正在直播"/>
-            <Button x:Name="btn_User" Grid.Column="1" FontSize="16"  Foreground="#B2FFFFFF" Tag="1"  Background="#00000000"  VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="btn_Liveing_Click" Content="主播"/>
-        </Grid>
-        <Border x:Name="ViewBox_num" Width="200" Height="1" VerticalAlignment="Top"/>
-        <Pivot x:Name="pivot" Style="{StaticResource PivotStyle1}" Grid.Row="2" SelectionChanged="pivot_SelectionChanged">
-            <PivotItem Margin="0">
-                <GridView x:Name="live_List" SelectionMode="None" IsItemClickEnabled="True" ItemClick="live_HOT_ItemClick" HorizontalAlignment="Center" VerticalAlignment="Top" ItemContainerStyle="{StaticResource itemStyle}" ItemTemplate="{StaticResource GridItem}"/>
+    <RelativePanel  Background="{ThemeResource Bili-Background}">
+        <AppBarButton
+            RelativePanel.AlignLeftWithPanel="True"
+            RelativePanel.AlignTopWithPanel="True"
+            Name="BtnBack" 
+            Icon="Back" 
+            Width="48"
+            Height="48"
+            Foreground="White"/>
+        <AutoSuggestBox 
+            RelativePanel.RightOf="BtnBack"
+            Name="TxtFind" 
+            PlaceholderText="搜索主播或房间" 
+            Margin="5" 
+            QueryIcon="Find"/>
+        <ProgressBar
+            RelativePanel.Below="BtnBack"
+            RelativePanel.AlignLeftWithPanel="True"
+            RelativePanel.AlignRightWithPanel="True"
+            x:Name="PrLoad"
+            Visibility="Collapsed"
+            VerticalAlignment="Top" 
+            Foreground="White"
+            Background="#33FFFFFF" 
+            IsIndeterminate="True"/>
+        <Pivot 
+            RelativePanel.Below="PrLoad"
+            RelativePanel.AlignLeftWithPanel="True"
+            RelativePanel.AlignRightWithPanel="True"
+            RelativePanel.AlignBottomWithPanel="True"
+            x:Name="Pivot">
+            <Pivot.Resources>
+                <Style TargetType="PivotHeaderItem">
+                    <Setter Property="FontSize" Value="{ThemeResource PivotHeaderItemFontSize}" />
+                    <Setter Property="FontFamily" Value="{ThemeResource PivotHeaderItemFontFamily}" />
+                    <Setter Property="FontWeight" Value="{ThemeResource PivotHeaderItemThemeFontWeight}" />
+                    <Setter Property="CharacterSpacing" Value="{ThemeResource PivotHeaderItemCharacterSpacing}" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
+                    <Setter Property="Padding" Value="{ThemeResource PivotHeaderItemMargin}" />
+                    <Setter Property="Height" Value="15" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                    <Setter Property="IsTabStop" Value="False" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="PivotHeaderItem">
+                                <Grid
+          x:Name="Grid"
+          Background="{TemplateBinding Background}">
+                                    <Grid.Resources>
+                                        <Style x:Key="BaseContentPresenterStyle" TargetType="ContentPresenter">
+                                            <Setter Property="FontFamily" Value="XamlAutoFontFamily"/>
+                                            <Setter Property="FontWeight" Value="SemiBold"/>
+                                            <Setter Property="FontSize" Value="15"/>
+                                            <Setter Property="TextWrapping" Value="Wrap"/>
+                                            <Setter Property="LineStackingStrategy" Value="MaxHeight"/>
+                                            <Setter Property="TextLineBounds" Value="Full"/>
+                                            <Setter Property="OpticalMarginAlignment" Value="TrimSideBearings"/>
+                                        </Style>
+                                        <Style x:Key="BodyContentPresenterStyle" TargetType="ContentPresenter" BasedOn="{StaticResource BaseContentPresenterStyle}">
+                                            <Setter Property="FontFamily" Value="{ThemeResource PivotHeaderItemFontFamily}" />
+                                            <Setter Property="FontWeight" Value="{ThemeResource PivotHeaderItemThemeFontWeight}"/>
+                                            <Setter Property="FontSize" Value="{ThemeResource PivotHeaderItemFontSize}"/>
+                                        </Style>
+                                    </Grid.Resources>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="2"/>
+                                    </Grid.RowDefinitions>
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup x:Name="SelectionStates">
+                                            <VisualStateGroup.Transitions>
+                                                <VisualTransition From="Unselected" To="UnselectedLocked" GeneratedDuration="0:0:0.33" />
+                                                <VisualTransition From="UnselectedLocked" To="Unselected" GeneratedDuration="0:0:0.33" />
+                                            </VisualStateGroup.Transitions>
+                                            <VisualState x:Name="Disabled">
+                                                <Storyboard>
+                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                               Storyboard.TargetProperty="Foreground" >
+                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlDisabledBaseMediumLowBrush}" />
+                                                    </ObjectAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </VisualState>
+                                            <VisualState x:Name="Unselected" />
+                                            <VisualState x:Name="UnselectedLocked">
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetName="ContentPresenterTranslateTransform"
+                                 Storyboard.TargetProperty="X"
+                                 Duration="0" To="{ThemeResource PivotHeaderItemLockedTranslation}" />
+                                                    <DoubleAnimation Storyboard.TargetName="ContentPresenter"
+                                 Storyboard.TargetProperty="(UIElement.Opacity)"
+                                 Duration="0" To="0" />
+                                                </Storyboard>
+                                            </VisualState>
+                                            <VisualState x:Name="Selected">
+                                                <Storyboard>
+                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                               Storyboard.TargetProperty="Foreground" >
+                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource BG}" />
+                                                    </ObjectAnimationUsingKeyFrames>
+                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Grid"
+                                               Storyboard.TargetProperty="Background" >
+                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightTransparentBrush}" />
+                                                    </ObjectAnimationUsingKeyFrames>
+                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Rectangle"
+                                               Storyboard.TargetProperty="Fill" >
+                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource BG}" />
+                                                    </ObjectAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </VisualState>
+                                            <VisualState x:Name="UnselectedPointerOver">
+                                                <Storyboard>
+                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                               Storyboard.TargetProperty="Foreground" >
+                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseMediumHighBrush}" />
+                                                    </ObjectAnimationUsingKeyFrames>
+                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Grid"
+                                               Storyboard.TargetProperty="Background" >
+                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightTransparentBrush}" />
+                                                    </ObjectAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </VisualState>
+                                            <VisualState x:Name="SelectedPointerOver">
+                                                <Storyboard>
+                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                                Storyboard.TargetProperty="Foreground" >
+                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseMediumHighBrush}" />
+                                                    </ObjectAnimationUsingKeyFrames>
+                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Grid"
+                                               Storyboard.TargetProperty="Background" >
+                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightTransparentBrush}" />
+                                                    </ObjectAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </VisualState>
+                                            <VisualState x:Name="UnselectedPressed">
+                                                <Storyboard>
+                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                               Storyboard.TargetProperty="Foreground" >
+                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseMediumHighBrush}" />
+                                                    </ObjectAnimationUsingKeyFrames>
+                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Grid"
+                                               Storyboard.TargetProperty="Background" >
+                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightTransparentBrush}" />
+                                                    </ObjectAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </VisualState>
+                                            <VisualState x:Name="SelectedPressed">
+                                                <Storyboard>
+                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                               Storyboard.TargetProperty="Foreground" >
+                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseMediumHighBrush}" />
+                                                    </ObjectAnimationUsingKeyFrames>
+                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Grid"
+                                               Storyboard.TargetProperty="Background" >
+                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightTransparentBrush}" />
+                                                    </ObjectAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateManager.VisualStateGroups>
+                                    <ContentPresenter
+                                        Grid.Row="0"
+            x:Name="ContentPresenter"
+            Content="{TemplateBinding Content}"
+            ContentTemplate="{TemplateBinding ContentTemplate}"
+            Margin="{TemplateBinding Padding}"
+            FontSize="{TemplateBinding FontSize}"
+            FontFamily="{TemplateBinding FontFamily}"
+            FontWeight="{TemplateBinding FontWeight}"
+            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+            VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                        <ContentPresenter.RenderTransform>
+                                            <TranslateTransform x:Name="ContentPresenterTranslateTransform" />
+                                        </ContentPresenter.RenderTransform>
+                                    </ContentPresenter>
+                                    <Rectangle Fill="Transparent"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Pivot.Resources>
+            <PivotItem Header="正在直播">
+                <localControl:AdaptiveGridView
+            x:Name="LivesPanel"
+            ItemHeight="220"
+            DesiredWidth="250"
+            RelativePanel.Below="TagPanel"
+            ItemsSource="{x:Bind Lives}"
+            RelativePanel.AlignLeftWithPanel="True"
+            RelativePanel.AlignRightWithPanel="True"
+            RelativePanel.AlignBottomWithPanel="True"
+            IsItemClickEnabled="True"
+            ItemClick="LivesPanel_ItemClick"
+            StretchContentForSingleRow="False">
+                    <localControl:AdaptiveGridView.ItemTemplate>
+                        <DataTemplate x:DataType="model:LiveItemViewModel">
+                            <RelativePanel MaxWidth="250">
+                                <controls:ImageEx
+                            Name="CoverPanel"
+                            RelativePanel.AlignTopWithPanel="True"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"
+                            Source="{x:Bind Src}"
+                            Margin="5"/>
+                                <TextBlock
+                            Name="TitlePanel"
+                            RelativePanel.Below="CoverPanel"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"
+                            RelativePanel.Above="NamePanel"
+                            Text="{x:Bind Title}"
+                            TextWrapping="Wrap"
+                            Margin="5"/>
+                                <TextBlock
+                            FontSize="12"
+                            Margin="5"
+                            Name="NamePanel"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignBottomWithPanel="True"
+                            Text="{x:Bind Name}"
+                            Foreground="Gray"/>
+                                <Image
+                            Margin="0,5"
+                            RelativePanel.AlignBottomWithPanel="True"
+                            RelativePanel.LeftOf="NumPanel"
+                            Source="ms-appx:///Assets/Icon/ic_watching.png"
+                            Height="15"
+                            Width="22"/>
+                                <TextBlock
+                            FontSize="13"
+                            Margin="5"
+                            Foreground="Gray"
+                            Name="NumPanel"
+                            RelativePanel.AlignRightWithPanel="True"
+                            RelativePanel.AlignBottomWithPanel="True"
+                            Text="{x:Bind Online}"/>
+                            </RelativePanel>
+                        </DataTemplate>
+                    </localControl:AdaptiveGridView.ItemTemplate>
+                </localControl:AdaptiveGridView>
             </PivotItem>
-            <PivotItem Margin="0" >
-                <ListView x:Name="list_User" SelectionMode="None" IsItemClickEnabled="True" ItemClick="ListView_ItemClick">
+            <PivotItem Header="主播">
+                <ListView 
+                    x:Name="UserList" 
+                          SelectionMode="None"
+                          IsItemClickEnabled="True">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
@@ -85,39 +278,81 @@
                         </Style>
                     </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Margin="5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <Ellipse Width="48" Height="48" Grid.RowSpan="3" Margin="0 0 10 0">
+                        <DataTemplate x:DataType="model:LiveSearchUserViewModel">
+                            <RelativePanel>
+                                <Ellipse
+                                    Name="FacePanel"
+                                    Width="48"
+                                    Height="48" 
+                                    Margin="10"
+                                    RelativePanel.AlignTopWithPanel="True"
+                                    RelativePanel.AlignBottomWithPanel="True"
+                                    RelativePanel.AlignLeftWithPanel="True">
                                     <Ellipse.Fill>
-                                        <ImageBrush ImageSource="{Binding face}"></ImageBrush>
+                                        <ImageBrush ImageSource="{x:Bind Face}"/>
                                     </Ellipse.Fill>
                                 </Ellipse>
-                                <TextBlock Grid.Column="1" Text="{Binding name}"></TextBlock>
-                                <TextBlock Grid.Column="1" Grid.Row="1" FontSize="14" Foreground="{Binding color}" Text="{Binding Live_Status}" ></TextBlock>
-                                <TextBlock Grid.Column="1" Grid.Row="2" FontSize="14" Foreground="Gray" >
-                                <Run>分区：</Run>
-                                  <Run Text="{Binding areaName}"></Run>
-                                  <Run>关注：</Run>
-                                  <Run Text="{Binding fansNum}"></Run>
+                                <TextBlock 
+                                    Name="NamePanel"
+                                    FontSize="15"
+                                    Text="{x:Bind Name}"
+                                    RelativePanel.RightOf="FacePanel"
+                                    RelativePanel.AlignTopWithPanel="True"/>
+                                <StackPanel
+                                    Name="LiveStatusPanel"
+                                    RelativePanel.RightOf="NamePanel"
+                                    RelativePanel.AlignVerticalCenterWith="NamePanel"
+                                    Background="{x:Bind LiveStatusColor}">
+                                    <TextBlock 
+                                        Foreground="#30000000"
+                                    FontSize="13" 
+                                    Text="{x:Bind LiveStatusString}"/>
+                                </StackPanel>
+                                <TextBlock 
+                                    Name="AreaAndFansPanel"
+                                    RelativePanel.RightOf="FacePanel"
+                                    RelativePanel.Below="LiveStatusPanel"
+                                    FontSize="14" 
+                                    Foreground="Gray" >
+                                  <Run Text="{x:Bind AreaName}"/>
+                                  <Run>  </Run>
+                                  <Run Text="{x:Bind FansNum}"/>
                                 </TextBlock>
-                            </Grid>
+                                <ListView
+                                    RelativePanel.Below="AreaAndFansPanel"
+                                    RelativePanel.RightOf="FacePanel"
+                                    ScrollViewer.HorizontalScrollMode="Disabled"
+                                    ScrollViewer.VerticalScrollMode="Disabled"
+                                    ItemsSource="{x:Bind RoomTags}">
+                                    <ListView.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <ItemsWrapGrid
+                                                Orientation="Horizontal"
+                                                VerticalAlignment="Top"/>
+                                        </ItemsPanelTemplate>
+                                    </ListView.ItemsPanel>
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate x:DataType="model:LiveTagViewModel">
+                                            <Border 
+                                                CornerRadius="2"
+                                                BorderBrush="#30000000">
+                                                <TextBlock
+                                                    Text="{x:Bind Name}"
+                                                    FontSize="12"
+                                                    Foreground="Gray"/>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </RelativePanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
-                   
                 </ListView>
             </PivotItem>
         </Pivot>
-        <ProgressBar x:Name="pr_Load" Visibility="Collapsed" VerticalAlignment="Top" Foreground="White" Background="#33FFFFFF" IsIndeterminate="True"></ProgressBar>
-        <bilibili2:MessageShow x:Name="messShow" Grid.RowSpan="3" VerticalAlignment="Bottom" Margin="20" HorizontalAlignment="Center"/>
-
-    </Grid>
+        <bilibili2:MessageShow 
+            x:Name="messShow"
+            VerticalAlignment="Bottom" 
+            Margin="20" />
+    </RelativePanel>
 </Page>

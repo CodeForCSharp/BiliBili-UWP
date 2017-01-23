@@ -1080,6 +1080,18 @@ namespace bilibili2
         public string TagId { get; set; }
         public string TagName { get; set; }
     }
+
+    public class LiveSearchUserViewModel
+    {
+        public string Face { get; set; }
+        public string Name { get; set; }
+        public string LiveStatusColor { get; set; }
+        public string LiveStatusString { get; set; }
+        public string FansNum { get; set; }
+        public string AreaName { get; set; }
+        public int RoomId { get; set; }
+        public List<LiveTagViewModel> RoomTags { get; set; }
+    }
     public class MessageModel
     {
         public int code { get; set; }
