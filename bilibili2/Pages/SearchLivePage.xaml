@@ -11,7 +11,6 @@
     xmlns:localControl="using:bilibili2.Controls"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:model="using:bilibili2"
-   SizeChanged="Page_SizeChanged"
     >
     <Page.Resources>
         <SolidColorBrush x:Name="bg" x:Key="BG" Color="#FFDF85A0" />
@@ -30,13 +29,17 @@
             Icon="Back" 
             Width="48"
             Height="48"
-            Foreground="White"/>
+            Foreground="White"
+            Click="BtnBack_Click"
+            Background="{StaticResource BG}"/>
         <AutoSuggestBox 
             RelativePanel.RightOf="BtnBack"
             Name="TxtFind" 
             PlaceholderText="搜索主播或房间" 
             Margin="5" 
-            QueryIcon="Find"/>
+            QueryIcon="Find"
+            QuerySubmitted="TxtFind_QuerySubmitted"
+            RelativePanel.AlignRightWithPanel="True"/>
         <ProgressBar
             RelativePanel.Below="BtnBack"
             RelativePanel.AlignLeftWithPanel="True"
@@ -52,17 +55,18 @@
             RelativePanel.AlignLeftWithPanel="True"
             RelativePanel.AlignRightWithPanel="True"
             RelativePanel.AlignBottomWithPanel="True"
-            x:Name="Pivot">
+            x:Name="Pivot"
+            Visibility="Collapsed">
             <Pivot.Resources>
                 <Style TargetType="PivotHeaderItem">
-                    <Setter Property="FontSize" Value="{ThemeResource PivotHeaderItemFontSize}" />
+                    <Setter Property="FontSize" Value="15" />
                     <Setter Property="FontFamily" Value="{ThemeResource PivotHeaderItemFontFamily}" />
                     <Setter Property="FontWeight" Value="{ThemeResource PivotHeaderItemThemeFontWeight}" />
                     <Setter Property="CharacterSpacing" Value="{ThemeResource PivotHeaderItemCharacterSpacing}" />
                     <Setter Property="Background" Value="Transparent" />
                     <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
                     <Setter Property="Padding" Value="{ThemeResource PivotHeaderItemMargin}" />
-                    <Setter Property="Height" Value="15" />
+                    <Setter Property="Height" Value="48" />
                     <Setter Property="VerticalContentAlignment" Value="Center" />
                     <Setter Property="HorizontalAlignment" Value="Center"/>
                     <Setter Property="IsTabStop" Value="False" />
@@ -89,7 +93,7 @@
                                         </Style>
                                     </Grid.Resources>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="*"/>
                                         <RowDefinition Height="2"/>
                                     </Grid.RowDefinitions>
                                     <VisualStateManager.VisualStateGroups>
@@ -198,7 +202,12 @@
                                             <TranslateTransform x:Name="ContentPresenterTranslateTransform" />
                                         </ContentPresenter.RenderTransform>
                                     </ContentPresenter>
-                                    <Rectangle Fill="Transparent"/>
+                                    <Rectangle
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch"
+                                        x:Name="Rectangle"
+                                        Grid.Row="2"
+                                        Fill="Transparent"/>
                                 </Grid>
                             </ControlTemplate>
                         </Setter.Value>
@@ -269,7 +278,9 @@
                 <ListView 
                     x:Name="UserList" 
                           SelectionMode="None"
-                          IsItemClickEnabled="True">
+                          IsItemClickEnabled="True"
+                    ItemsSource="{x:Bind Users}"
+                    ItemClick="UserList_ItemClick">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
@@ -352,7 +363,6 @@
         </Pivot>
         <bilibili2:MessageShow 
             x:Name="messShow"
-            VerticalAlignment="Bottom" 
             Margin="20" />
     </RelativePanel>
 </Page>

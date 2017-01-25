@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
@@ -33,7 +34,9 @@ namespace bilibili2.Pages
         IncrementalLoadingCollection<LiveItemViewModel> Lives { get; }
         IncrementalLoadingCollection<LiveSearchUserViewModel> Users { get; }
         WebClientClass wc = new WebClientClass();
-        private string keyword;
+        private string keyword = "";
+        private int totalRoom;
+        private int totalUser;
         public SearchLivePage()
         {
             Lives = new IncrementalLoadingCollection<LiveItemViewModel>
@@ -46,17 +49,50 @@ namespace bilibili2.Pages
                     var model = JObject.Parse(results);
                     if (model["code"].Value<int>() == 0)
                     {
-                        Lives.MaxPage = model["data"]["total_page"].Value<int>();
-                        var items = model["data"]["room"].Select(token => new LiveItemViewModel
+                        Lives.MaxPage = model["data"]["room"]["total_page"].Value<int>();
+                        totalRoom = model["data"]["room"]["total_room"].Value<int>();
+                        var items = model["data"]["room"]["list"].Select(token => new LiveItemViewModel
                         {
-                            Face=token["face"].Value<string>(),
+                            Face = token["face"].Value<string>(),
                             Name = token["name"].Value<string>(),
                             Src = token["cover"].Value<string>(),
                             Online = token["online"].Value<int>(),
-                            RoomId = token["room_id"].Value<string>(),
+                            RoomId = token["roomid"].Value<string>(),
                             Title = token["title"].Value<string>()
                         });
-                        return Tuple.Create(items, Lives.CurrentPage<=Lives.MaxPage));
+                        return Tuple.Create(items, Lives.CurrentPage <= Lives.MaxPage);
+                    }
+                    else
+                    {
+                        throw new Exception("Vaild Paramters");
+                    }
+                }
+            };
+            Users = new IncrementalLoadingCollection<LiveSearchUserViewModel>
+            {
+                LoadDataTask = async () =>
+                {
+
+                    string url = $"http://live.bilibili.com/AppSearch/index?_device=wp&_ulv=10000&appkey={ApiHelper._appKey}&build=411005&keyword={WebUtility.UrlEncode(keyword)}&page={Lives.CurrentPage}&pagesize=20&platform=android&type=user";
+                    url += "&sign=" + ApiHelper.GetSign(url);
+                    string results = await wc.GetResults(new Uri(url));
+                    var model = JObject.Parse(results);
+                    if (model["code"].Value<int>() == 0)
+                    {
+                        Users.MaxPage = model["data"]["user"]["total_page"].Value<int>();
+                        totalUser = model["data"]["user"]["total_user"].Value<int>();
+                        var items = model["data"]["user"]["list"].Select(token => new LiveSearchUserViewModel
+                        {
+                            AreaName = $"分区:  {token["areaName"].Value<string>()}",
+                            Face = token["face"].Value<string>(),
+                            FansNum = $"关注数:  {token["fansNum"].Value<int>()}",
+                            LiveStatusColor = token["live_status"].Value<int>() == 0 ? "#FF808080" : "#FFDF85A0",
+                            LiveStatusString = token["live_status"].Value<int>() == 0 ? "闲置中" : "直播中",
+                            Name = token["name"].Value<string>(),
+                            RoomId = token["roomid"].Value<int>(),
+                            RoomTags = token["roomTags"].Select(tag => new LiveTagViewModel { Name = tag.Value<string>() }).ToList()
+                        });
+                        return Tuple.Create(items, Users.CurrentPage <= Users.MaxPage);
                     }
                     else
                     {
@@ -68,7 +104,51 @@ namespace bilibili2.Pages
             NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
-        private void btn_back_Click(object sender, RoutedEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            if(e.NavigationMode==NavigationMode.New)
+            {
+                NavigationCacheMode = NavigationCacheMode.Disabled;
+            }
+            base.OnNavigatedTo(e);
+        }
+
+        private void TxtFind_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            if (TxtFind.Text.Length == 0)
+            {
+                messShow.Show("搜索内容不能为空！", 3000);
+            }
+            else if(TxtFind.Text.Length<2||TxtFind.Text.Length>50)
+            {
+                messShow.Show("关键字长度必须在2-50字节以内", 3000);
+            }
+            else
+            {
+                keyword = TxtFind.Text;
+                Users.Reset();
+                Lives.Reset();
+                Pivot.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void LivesPanel_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            if(e.ClickedItem is LiveItemViewModel model)
+            {
+                Frame.Navigate(typeof(LiveInfoPage), model.RoomId);
+            }
+        }
+
+        private void UserList_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            if(e.ClickedItem is LiveSearchUserViewModel model)
+            {
+                Frame.Navigate(typeof(LiveInfoPage), model.RoomId);
+            }
+        }
+
+        private void BtnBack_Click(object sender, RoutedEventArgs e)
         {
             if (this.Frame.CanGoBack)
             {
@@ -78,63 +158,6 @@ namespace bilibili2.Pages
             {
                 BackEvent();
             }
-        }
-
-        //偷懒。。。pagesize就直接写100.。。。
-        private async void GetSearchResults(string keyword)
-        {
-            try
-            {
-                PrLoad.Visibility = Visibility.Visible;
-                //http://live.bilibili.com/AppSearch/index?_device=wp&_ulv=10000&access_key={0}&appkey={1}&build=411005&keyword={2}&page=1&pagesize=20&platform=android&type=all
-                WebClientClass wc = new WebClientClass();
-                string url = string.Format("http://live.bilibili.com/AppSearch/index?_device=wp&_ulv=10000&access_key={0}&appkey={1}&build=411005&keyword={2}&page=1&pagesize=100&platform=android&type=all", ApiHelper.access_key, ApiHelper._appKey, WebUtility.UrlEncode(keyword));
-                url += "&sign=" + ApiHelper.GetSign(url);
-                string results = await wc.GetResults(new Uri(url));
-                SearchLiveModel model = JsonConvert.DeserializeObject<SearchLiveModel>(results);
-                if (model.code == 0)
-                {
-                    SearchLiveModel dataModel = JsonConvert.DeserializeObject<SearchLiveModel>(model.data.ToString());
-                    SearchLiveModel roomModel = JsonConvert.DeserializeObject<SearchLiveModel>(dataModel.room.ToString());
-                    SearchLiveModel UserModel = JsonConvert.DeserializeObject<SearchLiveModel>(dataModel.user.ToString());
-                    btn_Liveing.Content = "正在直播(" + roomModel.total_room + ")";
-                    btn_User.Content = "主播(" + UserModel.total_user + ")";
-                    live_List.ItemsSource = JsonConvert.DeserializeObject<List<SearchLiveModel>>(roomModel.list.ToString());
-                    list_User.ItemsSource = JsonConvert.DeserializeObject<List<SearchLiveModel>>(UserModel.list.ToString());
-                }
-                else
-                {
-                    messShow.Show(model.message, 3000);
-                }
-            }
-            catch (Exception)
-            {
-                messShow.Show("读取信息失败", 3000);
-            }
-            finally
-            {
-                PrLoad.Visibility = Visibility.Collapsed;
-            }
-        }
-
-        private void live_HOT_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            this.Frame.Navigate(typeof(LiveInfoPage), (e.ClickedItem as SearchLiveModel).roomid);
-        }
-
-        private void ListView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            this.Frame.Navigate(typeof(LiveInfoPage),(e.ClickedItem as SearchLiveModel).roomid);
-        }
-
-        private void txt_Find_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
-        {
-            if (txt_Find.Text.Length==0)
-            {
-                messShow.Show("搜索内容不能为空！",3000);
-                return;
-            }
-            GetSearchResults(txt_Find.Text);
         }
     }
 }
