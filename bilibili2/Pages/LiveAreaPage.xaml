@@ -107,7 +107,7 @@
         </ListView>
         <localControl:AdaptiveGridView
             x:Name="LivesPanel"
-            ItemHeight="220"
+            ItemHeight="240"
             DesiredWidth="250"
             RelativePanel.Below="TagPanel"
             ItemsSource="{x:Bind Lives}"

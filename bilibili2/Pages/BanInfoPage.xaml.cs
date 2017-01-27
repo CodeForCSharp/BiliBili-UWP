@@ -22,6 +22,7 @@ using Windows.UI.Xaml.Navigation;
 using Windows.UI.Core;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.UI;
+using Windows.Data.Xml.Dom;
 
 // “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上提供
 
@@ -84,7 +85,7 @@ namespace bilibili2.Pages
         {
             try
             {
-                XmlDocument HisDoc = new XmlDocument();
+                Windows.Data.Xml.Dom.XmlDocument HisDoc = new Windows.Data.Xml.Dom.XmlDocument();
                 StorageFolder folder = ApplicationData.Current.LocalFolder;
                 StorageFile xmlfile = await folder.CreateFileAsync("History.xml", CreationCollisionOption.OpenIfExists);
                 string results = await FileIO.ReadTextAsync(xmlfile);
@@ -94,14 +95,14 @@ namespace bilibili2.Pages
                     results = @"<History></History>";
                 }
                 HisDoc.LoadXml(results);
-                XmlElement el = HisDoc.DocumentElement;
-                XmlElement x = HisDoc.CreateElement("info");
+                Windows.Data.Xml.Dom.XmlElement el = HisDoc.DocumentElement;
+                Windows.Data.Xml.Dom.XmlElement x = HisDoc.CreateElement("info");
                 x.SetAttribute("p", id);
                 x.SetAttribute("type", type);
                 x.SetAttribute("date", DateTime.Now.ToString());
                 x.SetAttribute("title", title);
                 el.AppendChild(x);
-                await FileIO.WriteTextAsync(xmlfile, HisDoc.InnerXml);
+                await FileIO.WriteTextAsync(xmlfile, HisDoc.InnerText);
             }
             catch (Exception)
             {

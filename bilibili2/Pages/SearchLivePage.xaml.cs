@@ -73,7 +73,7 @@ namespace bilibili2.Pages
                 LoadDataTask = async () =>
                 {
 
-                    string url = $"http://live.bilibili.com/AppSearch/index?_device=wp&_ulv=10000&appkey={ApiHelper._appKey}&build=411005&keyword={WebUtility.UrlEncode(keyword)}&page={Lives.CurrentPage}&pagesize=20&platform=android&type=user";
+                    string url = $"http://live.bilibili.com/AppSearch/index?_device=wp&_ulv=10000&appkey={ApiHelper._appKey}&build=411005&keyword={WebUtility.UrlEncode(keyword)}&page={Users.CurrentPage}&pagesize=20&platform=android&type=user";
                     url += "&sign=" + ApiHelper.GetSign(url);
                     string results = await wc.GetResults(new Uri(url));
                     var model = JObject.Parse(results);
@@ -90,7 +90,7 @@ namespace bilibili2.Pages
                             LiveStatusString = token["live_status"].Value<int>() == 0 ? "闲置中" : "直播中",
                             Name = token["name"].Value<string>(),
                             RoomId = token["roomid"].Value<int>(),
-                            RoomTags = token["roomTags"].Select(tag => new LiveTagViewModel { Name = tag.Value<string>() }).ToList()
+                            RoomTags = token["roomTags"].Select(tag => new LiveTagViewModel { Name = tag.Value<string>() }).Where(vm=>!string.IsNullOrEmpty(vm.Name)).ToList()
                         });
                         return Tuple.Create(items, Users.CurrentPage <= Users.MaxPage);
                     }
@@ -101,27 +101,17 @@ namespace bilibili2.Pages
                 }
             };
             this.InitializeComponent();
-            NavigationCacheMode = NavigationCacheMode.Enabled;
-        }
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            if(e.NavigationMode==NavigationMode.New)
-            {
-                NavigationCacheMode = NavigationCacheMode.Disabled;
-            }
-            base.OnNavigatedTo(e);
         }
 
         private void TxtFind_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             if (TxtFind.Text.Length == 0)
             {
-                messShow.Show("搜索内容不能为空！", 3000);
+                MessageShow.Show("搜索内容不能为空！", 3000);
             }
             else if(TxtFind.Text.Length<2||TxtFind.Text.Length>50)
             {
-                messShow.Show("关键字长度必须在2-50字节以内", 3000);
+                MessageShow.Show("关键字长度必须在2-50字节以内", 3000);
             }
             else
             {
@@ -136,6 +126,7 @@ namespace bilibili2.Pages
         {
             if(e.ClickedItem is LiveItemViewModel model)
             {
+                NavigationCacheMode = NavigationCacheMode.Enabled;
                 Frame.Navigate(typeof(LiveInfoPage), model.RoomId);
             }
         }
@@ -144,6 +135,7 @@ namespace bilibili2.Pages
         {
             if(e.ClickedItem is LiveSearchUserViewModel model)
             {
+                NavigationCacheMode = NavigationCacheMode.Enabled;
                 Frame.Navigate(typeof(LiveInfoPage), model.RoomId);
             }
         }

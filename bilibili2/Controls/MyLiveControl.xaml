@@ -100,7 +100,7 @@
                         <localControl:AdaptiveGridView
                                 Margin="5"
                                 DesiredWidth="250"
-                                ItemHeight="220"
+                                ItemHeight="240"
                                 IsItemClickEnabled="True"
                                 SelectionMode="None"
                                 RelativePanel.Below="IconPanel"

@@ -8,6 +8,8 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
+using Windows.Data.Xml.Dom;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Graphics.Display;
@@ -530,15 +532,15 @@ namespace bilibili2.Pages
                         a = files;
                     }
                 }
-                XmlDocument xdoc = new XmlDocument();
+                Windows.Data.Xml.Dom.XmlDocument xdoc = new Windows.Data.Xml.Dom.XmlDocument();
                 xdoc.LoadXml(a);
-                XmlElement el = xdoc.DocumentElement;
-                XmlNodeList xml = el.ChildNodes;
-                foreach (XmlNode item in xml)
+                Windows.Data.Xml.Dom.XmlElement el = xdoc.DocumentElement;
+                Windows.Data.Xml.Dom.XmlNodeList xml = el.ChildNodes;
+                foreach (var item in xml)
                 {
-                    if (item.Attributes["p"] != null)
+                    if (item.Attributes?.GetNamedItem("p") != null)
                     {
-                        string heheda = item.Attributes["p"].Value;
+                        string heheda = item.Attributes.GetNamedItem("p").InnerText;
                         string[] haha = heheda.Split(',');
                         ls.Add(new MyDanmaku.DanMuModel
                         {
