@@ -121,7 +121,7 @@ namespace bilibili2.Pages
         bool lastPostVIs = false;
         protected override async  void OnNavigatedTo(NavigationEventArgs e)
         {
-            sql.CreateTable();
+            //sql.CreateTable();
             datetimer.Interval = new TimeSpan(0, 0, 1);
             datetimer.Tick += Datetimer_Tick;
             datetimer.Start();
@@ -149,6 +149,7 @@ namespace bilibili2.Pages
 
         private async Task PlayVideo(VideoModel model)
         {
+            model.cid = Convert.ToInt64(double.Parse(model.cid)).ToString();
             if (model.path!=null)
             {
                PlayLocalOld(model);
@@ -159,16 +160,16 @@ namespace bilibili2.Pages
             pro_Num.Text = "填充弹幕中...";
             Cid = model.cid;
             Aid = model.aid;
-            if (sql.ValuesExists(Cid))
-            {
-                menu_LastPost.IsEnabled = true;
-                LastPost = sql.QueryValue(Cid);
-            }
-            else
-            {
-                menu_LastPost.IsEnabled = false;
-                sql.InsertValue(Cid);
-            }
+            //if (sql.ValuesExists(Cid))
+            //{
+            //    menu_LastPost.IsEnabled = true;
+            //    LastPost = sql.QueryValue(Cid);
+            //}
+            //else
+            //{
+            //    menu_LastPost.IsEnabled = false;
+            //    sql.InsertValue(Cid);
+            //}
             lastPostVIs = false;
             DanMuPool = await GetDM(model.cid,false,false,string.Empty);
             pro_Num.Text = "读取视频信息...";
@@ -180,16 +181,16 @@ namespace bilibili2.Pages
             try
             {
                 Cid = model.cid;
-                if (sql.ValuesExists(Cid))
-                {
-                    menu_LastPost.IsEnabled = true;
-                    LastPost = sql.QueryValue(Cid);
-                }
-                else
-                {
-                    menu_LastPost.IsEnabled = false;
-                    sql.InsertValue(Cid);
-                }
+                //if (sql.ValuesExists(Cid))
+                //{
+                //    menu_LastPost.IsEnabled = true;
+                //    LastPost = sql.QueryValue(Cid);
+                //}
+                //else
+                //{
+                //    menu_LastPost.IsEnabled = false;
+                //    sql.InsertValue(Cid);
+                //}
                 lastPostVIs = false;
                 top_Title.Text = model.title;
                 StorageFile file = await StorageFile.GetFileFromPathAsync(model.path);
@@ -572,7 +573,7 @@ namespace bilibili2.Pages
                slider3.Maximum = mediaElement.NaturalDuration.TimeSpan.TotalSeconds;
                slider.Value = mediaElement.Position.TotalSeconds;
                txt_Post.Text = mediaElement.Position.Hours.ToString("00") + ":" + mediaElement.Position.Minutes.ToString("00") + ":" + mediaElement.Position.Seconds.ToString("00") + "/" + mediaElement.NaturalDuration.TimeSpan.Hours.ToString("00") + ":" + mediaElement.NaturalDuration.TimeSpan.Minutes.ToString("00") + ":" + mediaElement.NaturalDuration.TimeSpan.Seconds.ToString("00");
-               sql.UpdateValue(Cid,Convert.ToInt32(mediaElement.Position.TotalSeconds));
+               //sql.UpdateValue(Cid,Convert.ToInt32(mediaElement.Position.TotalSeconds));
            });
             if (mediaElement.CurrentState== MediaElementState.Playing&& LoadDanmu)
             {

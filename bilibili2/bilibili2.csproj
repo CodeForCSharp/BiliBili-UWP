@@ -279,6 +279,7 @@
     <Content Include="Assets\Icon\bangumi_timeline_weekday_5.png" />
     <Content Include="Assets\Icon\bangumi_timeline_weekday_6.png" />
     <Content Include="Assets\Icon\bangumi_timeline_weekday_0.png" />
+    <Content Include="Assets\Icon\bili_default_image_tv.9.png" />
     <Content Include="Assets\Icon\DM.png" />
     <Content Include="Assets\Icon\DY.png" />
     <Content Include="Assets\Icon\ic_header_indicator_rank.png" />

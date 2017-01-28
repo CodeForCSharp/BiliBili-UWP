@@ -1173,16 +1173,16 @@ namespace bilibili2
         //打开话题
         private void Find_btn_Topic_Click(object sender, RoutedEventArgs e)
         {
-            if (this.ActualWidth > 500)
-            {
-                sp_Find.IsPaneOpen = true;
-                GetTopic();
-            }
-            else
-            {
+            //if (this.ActualWidth > 500)
+            //{
+            //    sp_Find.IsPaneOpen = true;
+            //    GetTopic();
+            //}
+            //else
+            //{
                 infoFrame.Navigate(typeof(TopicPage));
                 //jinr.From = this.ActualWidth;
-            }
+            //}
 
         }
         //读取话题

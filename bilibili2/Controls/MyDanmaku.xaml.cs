@@ -442,7 +442,7 @@ namespace bilibili2.Controls
                 {
                     try
                     {
-                        _DanColor = Convert.ToInt32(_DanColor).ToString("X2");
+                        _DanColor = Convert.ToInt64(_DanColor).ToString("X2");
                         if (_DanColor.StartsWith("#"))
                             _DanColor = _DanColor.Replace("#", string.Empty);
                         int v = int.Parse(_DanColor, System.Globalization.NumberStyles.HexNumber);

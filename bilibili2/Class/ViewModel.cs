@@ -1092,6 +1092,13 @@ namespace bilibili2
         public int RoomId { get; set; }
         public List<LiveTagViewModel> RoomTags { get; set; }
     }
+
+    public class BanTopicViewModel
+    {
+        public string Title { get; set; }
+        public string Cover { get; set; }
+        public string Link { get; set; }
+    }
     public class MessageModel
     {
         public int code { get; set; }

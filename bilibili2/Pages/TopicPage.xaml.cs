@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using bilibili2.Class;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,15 +29,49 @@ namespace bilibili2.Pages
     {
         public delegate void GoBackHandler();
         public event GoBackHandler BackEvent;
+        IncrementalLoadingCollection<BanTopicViewModel> Topics { get; }
+        WebClientClass wc = new WebClientClass();
         public TopicPage()
         {
+            Topics = new IncrementalLoadingCollection<BanTopicViewModel>
+            {
+                LoadDataTask = async () =>
+                {
+                    var url = $"http://api.bilibili.com/topic/getlist?_device=android&appkey=422fd9d7289a1dd9&build=411005&pagesize=20&page={Topics.CurrentPage}";
+                    url += $"&sign={ApiHelper.GetSign(url)}";
+                    var result = await wc.GetResults(new Uri(url));
+                    var model = JObject.Parse(result);
+                    if (model["code"].Value<int>() == 0)
+                    {
+                        Topics.MaxPage = model["pages"].Value<int>();
+                        var items = model["list"].Select(token => new BanTopicViewModel
+                        {
+                            Cover = token["cover"].Value<string>(),
+                            Link = token["link"].Value<string>(),
+                            Title = token["title"].Value<string>()
+                        });
+                        return Tuple.Create(items, Topics.CurrentPage <= Topics.MaxPage);
+                    }
+                    else
+                    {
+                        throw new Exception("Vaild Parameter");
+                    }
+                }
+            };
             this.InitializeComponent();
             NavigationCacheMode = NavigationCacheMode.Enabled;
-           
         }
-     
 
-        private void btn_back_Click(object sender, RoutedEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
+            if (e.NavigationMode == NavigationMode.New)
+            {
+                Topics.Reset();
+            }
+        }
+
+        private void BtnBack_Click(object sender, RoutedEventArgs e)
         {
             if (this.Frame.CanGoBack)
             {
@@ -46,52 +82,12 @@ namespace bilibili2.Pages
                 BackEvent();
             }
         }
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
-            if (e.NavigationMode== NavigationMode.New)
-            {
-                GetTopic();
-            }
-        }
-        private async void GetTopic()
-        {
-            try
-            {
-                pr_Load.Visibility = Visibility.Visible;
-                WebClientClass wc = new WebClientClass();
-                string results = await wc.GetResults(new Uri("http://www.bilibili.com/index/slideshow.json"));
-                TopicModel model = JsonConvert.DeserializeObject<TopicModel>(results);
-                list_Topic.ItemsSource = JsonConvert.DeserializeObject<List<TopicModel>>(model.list.ToString());
-            }
-            catch (Exception ex)
-            {
-                messShow.Show("读取话题失败\r\n" + ex.Message, 3000);
-            }
-            finally
-            {
-                pr_Load.Visibility = Visibility.Collapsed;
-            }
-        }
 
-        private void list_Topic_ItemClick(object sender, ItemClickEventArgs e)
+        private void ListTopicPanel_ItemClick(object sender, ItemClickEventArgs e)
         {
-            if (Regex.IsMatch(((TopicModel)e.ClickedItem).link, "/video/av(.*)?[/|+](.*)?"))
+            if(e.ClickedItem is BanTopicViewModel model)
             {
-                string a = Regex.Match(((TopicModel)e.ClickedItem).link, "/video/av(.*)?[/|+](.*)?").Groups[1].Value;
-                this.Frame.Navigate(typeof(VideoInfoPage), a);
-            }
-            else
-            {
-                if (Regex.IsMatch(((TopicModel)e.ClickedItem).link, @"live.bilibili.com/(.*?)"))
-                {
-                    string a = Regex.Match(((TopicModel)e.ClickedItem).link + "a", "live.bilibili.com/(.*?)a").Groups[1].Value;
-                    // livePlayVideo(a);
-                }
-                else
-                {
-                    this.Frame.Navigate(typeof(WebViewPage), ((TopicModel)e.ClickedItem).link);
-                }
+                Frame.Navigate(typeof(WebViewPage), model.Link);
             }
         }
     }

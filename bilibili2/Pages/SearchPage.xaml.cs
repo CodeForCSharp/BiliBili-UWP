@@ -41,6 +41,18 @@ namespace bilibili2.Pages
 
         WebClientClass wc;
         //搜索视频
+        public void SearchType()
+        {
+            var url = $"http://app.bilibili.com/x/v2/search/type?_device=android&appkey=422fd9d7289a1dd9&build=411005&keyword={Uri.EscapeDataString("LOL")}&pn={1}&ps=20&platform=android&type={2}";
+            url += $"&sign={ApiHelper.GetSign(url)}";
+
+        }
+
+        public void SearchAll()
+        {
+            var url = $"http://app.bilibili.com/x/v2/search?_device=android&appkey=422fd9d7289a1dd9&build=411005&keyword={Uri.EscapeDataString("LOL")}&pn={1}&ps=20&platform=android&duration={0}&order={"default"}";//rid={}
+            url += $"&sign={ApiHelper.GetSign(url)}";
+        }
         public async void SeachVideo()
         {
             try
