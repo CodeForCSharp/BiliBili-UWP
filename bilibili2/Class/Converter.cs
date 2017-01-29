@@ -64,5 +64,13 @@ namespace bilibili2.Class
                 return $"{date.Month}月{date.Day}日";
             }
         }
+
+        public static string DurationToLongDuration(string duration)
+        {
+            var part = duration.Split(':');
+            var minutes = int.Parse(part[0]);
+            return $"{minutes/60}:{minutes%60}:{part[1]}";
+        }
+
     }
 }

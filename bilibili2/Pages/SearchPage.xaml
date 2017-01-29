@@ -7,230 +7,286 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Tag="搜索结果"
-    >
+    xmlns:selector="using:bilibili2.Selector"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:model="using:bilibili2">
     <Page.Resources>
         <SolidColorBrush x:Name="bg" x:Key="BG" />
     </Page.Resources>
-    <Grid Background="{ThemeResource Bili-Background}">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition Height="auto"></RowDefinition>
-            </Grid.RowDefinitions>
-            <Grid Background="{StaticResource BG}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="48"/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="48"/>
-                </Grid.ColumnDefinitions>
-                <AppBarButton x:Name="btn_back" Click="btn_back_Click" Icon="Back" Width="48" Height="48" Foreground="White"/>
-                <TextBlock x:Name="text_Title" Text="搜索" Margin="5 0" HorizontalAlignment="Left" Grid.Column="1" VerticalAlignment="Center"  FontSize="16" Foreground="White"></TextBlock>
-                <AppBarButton x:Name="btn_Filter" Grid.Column="2" Width="48" Height="48" Icon="Filter" Click="btn_Filter_Click" Foreground="White">
-                    <AppBarButton.Flyout>
-                        <Flyout>
-                            <StackPanel>
-                                <ComboBox x:Name="cb_part"  Width="120"  VerticalAlignment="Center" SelectedIndex="0" Margin="5" BorderBrush="{x:Null}" Background="{x:Null}" SelectionChanged="cb_part_SelectionChanged">
-                                    <ComboBoxItem >全部分区</ComboBoxItem>
-                                    <ComboBoxItem Tag="13">番剧</ComboBoxItem>
-                                    <ComboBoxItem Tag="1">动画</ComboBoxItem>
-                                    <ComboBoxItem Tag="3">音乐</ComboBoxItem>
-                                    <ComboBoxItem Tag="129">舞蹈</ComboBoxItem>
-                                    <ComboBoxItem Tag="4">游戏</ComboBoxItem>
-                                    <ComboBoxItem Tag="36">科技</ComboBoxItem>
-                                    <ComboBoxItem Tag="5">娱乐</ComboBoxItem>
-                                    <ComboBoxItem Tag="119">鬼畜</ComboBoxItem>
-                                    <ComboBoxItem Tag="23">电影</ComboBoxItem>
-                                    <ComboBoxItem Tag="11">电视剧</ComboBoxItem>
-                                    <ComboBoxItem Tag="155">时尚</ComboBoxItem>
-                                </ComboBox>
-                                <ComboBox x:Name="cb_OrderBy" SelectionChanged="cb_part_SelectionChanged" VerticalAlignment="Center"   Width="120" SelectedIndex="0" Margin="5" BorderBrush="{x:Null}" Background="{x:Null}">
-                                    <ComboBoxItem >综合排序</ComboBoxItem>
-                                    <ComboBoxItem Tag="ranklevel">相关度</ComboBoxItem>
-                                    <ComboBoxItem Tag="pubdate">发布日期</ComboBoxItem>
-                                    <ComboBoxItem Tag="click">播放</ComboBoxItem>
-                                    <ComboBoxItem Tag="dm">弹幕</ComboBoxItem>
-                                    <ComboBoxItem Tag="scores">评论</ComboBoxItem>
-                                    <ComboBoxItem Tag="stow">收藏</ComboBoxItem>
-                                </ComboBox>
-                            </StackPanel>
-                        </Flyout>
-                    </AppBarButton.Flyout>
-                </AppBarButton>
-            </Grid>
-            <Pivot x:Name="pivot" SelectionChanged="pivot_SelectionChanged" Grid.Row="1">
-                <PivotItem Margin="0">
-                    <PivotItem.Header>
-                        <TextBlock Text="视频" FontSize="18"></TextBlock>
-                    </PivotItem.Header>
-                    <Grid >
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <ScrollViewer  x:Name="sv_SP" Grid.Row="1" VerticalScrollBarVisibility="Auto" ViewChanged="sv_SP_ViewChanged" >
-                            <StackPanel>
-                                <ListView x:Name="Seach_listview_Video" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" SelectionMode="None" IsItemClickEnabled="True" ItemClick="Seach_listview_Video_ItemClick">
-                                    <ListView.ItemContainerStyle>
-                                        <Style TargetType="ListViewItem">
-                                            <Setter Property="BorderThickness" Value="0,0,0,1"></Setter>
-                                            <Setter Property="BorderBrush" Value="#FFCBCBCB"></Setter>
-                                        </Style>
-                                    </ListView.ItemContainerStyle>
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid Margin="0,5" Height="80">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="120"></ColumnDefinition>
-                                                    <ColumnDefinition></ColumnDefinition>
-                                                </Grid.ColumnDefinitions>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="auto"></RowDefinition>
-                                                    <RowDefinition ></RowDefinition>
-                                                    <RowDefinition></RowDefinition>
-                                                    <RowDefinition ></RowDefinition>
-                                                </Grid.RowDefinitions>
-                                                <Image Source="{Binding pic}" Height="75" Width="120" Grid.RowSpan="4"></Image>
-                                                <TextBlock Text="{Binding title}" FontSize="14" Grid.Column="1" TextWrapping="Wrap" MaxLines="2" Margin="10,0" ></TextBlock>
-                                                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Margin="10,0" VerticalAlignment="Center">
-                                                    <Image Source="ms-appx:///Assets/MiniIcon/up.png" Width="16" Height="16"></Image>
-                                                    <TextBlock Text="{Binding author}"  FontSize="12"  TextWrapping="Wrap" MaxLines="2"  Foreground="#FF787878" VerticalAlignment="Center"></TextBlock>
-                                                </StackPanel>
-                                                <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Margin="10,0" VerticalAlignment="Center">
-                                                    <Image Source="ms-appx:///Assets/Icon/Play.png" Width="16" Height="16"></Image>
-                                                    <TextBlock Text="{Binding play}"  FontSize="12"  TextWrapping="Wrap" MaxLines="2"  Foreground="#FF787878" Margin="0,0,10,0"></TextBlock>
-                                                    <Image Source="ms-appx:///Assets/MiniIcon/DM.png" Width="16" Height="16"></Image>
-                                                    <TextBlock Text="{Binding video_review}"  FontSize="12"  TextWrapping="Wrap" MaxLines="2"  Foreground="#FF787878"></TextBlock>
-                                                </StackPanel>
-                                                <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="1" Margin="10,0" VerticalAlignment="Center">
-                                                    <Image Source="ms-appx:///Assets/MiniIcon/Time.png" Width="16" Height="16"></Image>
-                                                    <TextBlock Text="{Binding duration}"  FontSize="12"  TextWrapping="Wrap" MaxLines="2"  Foreground="#FF898989"></TextBlock>
-                                                </StackPanel>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                                <HyperlinkButton x:Name="User_load_more" HorizontalAlignment="Center" VerticalAlignment="Bottom" Click="User_load_more_Click">加载更多</HyperlinkButton>
-                            </StackPanel>
-                        </ScrollViewer>
-                    </Grid>
-
-                </PivotItem>
-                <PivotItem Margin="0 0">
-                    <PivotItem.Header>
-                        <TextBlock Text="UP主" FontSize="18"></TextBlock>
-                    </PivotItem.Header>
-                    <ScrollViewer  VerticalScrollBarVisibility="Auto">
-                        <StackPanel>
-                            <ListView x:Name="Seach_listview_Up"  ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" SelectionMode="None" IsItemClickEnabled="True" ItemClick="Seach_listview_Up_ItemClick">
-                                <ListView.ItemContainerStyle>
-                                    <Style TargetType="ListViewItem">
-                                        <Setter Property="BorderThickness" Value="0,0,0,1"></Setter>
-                                        <Setter Property="BorderBrush" Value="#FFCBCBCB"></Setter>
-                                    </Style>
-                                </ListView.ItemContainerStyle>
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid Margin="0,5" Height="70">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="70"></ColumnDefinition>
-                                                <ColumnDefinition></ColumnDefinition>
-                                            </Grid.ColumnDefinitions>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition ></RowDefinition>
-                                                <RowDefinition ></RowDefinition>
-                                            </Grid.RowDefinitions>
-                                            <Ellipse Width="60" Height="60" Grid.RowSpan="2">
-                                                <Ellipse.Fill>
-                                                    <ImageBrush ImageSource="{Binding upic}"></ImageBrush>
-                                                </Ellipse.Fill>
-                                            </Ellipse>
-                                            <TextBlock Text="{Binding uname}" FontSize="16" VerticalAlignment="Center"  Grid.Column="1" TextWrapping="Wrap" MaxLines="2" Margin="10,0" ></TextBlock>
-                                            <TextBlock Text="{Binding usign}"  TextWrapping="Wrap" FontSize="14" Grid.Column="1" Grid.Row="1"  MaxLines="2" Margin="10,0" Foreground="#FF6A6969" ></TextBlock>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                            <HyperlinkButton x:Name="Up_load_more" HorizontalAlignment="Center" VerticalAlignment="Bottom" Click="Up_load_more_Click">加载更多</HyperlinkButton>
-                        </StackPanel>
-                    </ScrollViewer>
-                </PivotItem>
-                <PivotItem Margin="0 0">
-                    <PivotItem.Header>
-                        <TextBlock Text="番剧" FontSize="18"></TextBlock>
-                    </PivotItem.Header>
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <StackPanel >
-                            <ListView x:Name="Seach_listview_Ban"  ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" SelectionMode="None" IsItemClickEnabled="True" ItemClick="Seach_listview_Ban_ItemClick">
-                                <ListView.ItemContainerStyle>
-                                    <Style TargetType="ListViewItem">
-                                        <Setter Property="BorderThickness" Value="0,0,0,1"></Setter>
-                                        <Setter Property="BorderBrush" Value="#FFCBCBCB"></Setter>
-                                    </Style>
-                                </ListView.ItemContainerStyle>
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid Margin="0,5" Height="80">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="80"></ColumnDefinition>
-                                                <ColumnDefinition></ColumnDefinition>
-                                            </Grid.ColumnDefinitions>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="20"></RowDefinition>
-                                                <RowDefinition ></RowDefinition>
-                                            </Grid.RowDefinitions>
-                                            <Image Width="80" Height="80" Grid.RowSpan="2" Source="{Binding cover}"></Image>
-                                            <TextBlock Text="{Binding title}" FontSize="14" VerticalAlignment="Center"  Grid.Column="1" TextWrapping="Wrap" MaxLines="2" Margin="10,0" ></TextBlock>
-                                            <TextBlock Text="{Binding evaluate}"  TextWrapping="Wrap" FontSize="12" Grid.Column="1" Grid.Row="1"  MaxLines="3" Margin="10,0" Foreground="#FF6A6969" ></TextBlock>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                            <HyperlinkButton x:Name="Ban_load_more" HorizontalAlignment="Center" VerticalAlignment="Bottom" Click="Ban_load_more_Click">加载更多</HyperlinkButton>
-                        </StackPanel>
-                    </ScrollViewer>
-
-                </PivotItem>
-                <PivotItem Margin="0 0">
-                    <PivotItem.Header>
-                        <TextBlock Text="专题" FontSize="18"></TextBlock>
-                    </PivotItem.Header>
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <StackPanel >
-                            <ListView x:Name="Seach_listview_Sp"  ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" SelectionMode="None" IsItemClickEnabled="True" ItemClick="Seach_listview_Sp_ItemClick">
-                                <ListView.ItemContainerStyle>
-                                    <Style TargetType="ListViewItem">
-                                        <Setter Property="BorderThickness" Value="0,0,0,1"></Setter>
-                                        <Setter Property="BorderBrush" Value="#FFCBCBCB"></Setter>
-                                    </Style>
-                                </ListView.ItemContainerStyle>
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid Margin="0,5" Height="80">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="80"></ColumnDefinition>
-                                                <ColumnDefinition></ColumnDefinition>
-                                            </Grid.ColumnDefinitions>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="20"></RowDefinition>
-                                                <RowDefinition ></RowDefinition>
-                                            </Grid.RowDefinitions>
-                                            <Image Width="80" Height="80" Grid.RowSpan="2" Source="{Binding pic}"></Image>
-                                            <TextBlock Text="{Binding title}" FontSize="14" VerticalAlignment="Center"  Grid.Column="1" TextWrapping="Wrap" MaxLines="2" Margin="10,0" ></TextBlock>
-                                            <TextBlock Text="{Binding description}"  TextWrapping="Wrap" FontSize="12" Grid.Column="1" Grid.Row="1"  MaxLines="3" Margin="10,0" Foreground="#FF6A6969" ></TextBlock>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                            <HyperlinkButton x:Name="Sp_load_more" HorizontalAlignment="Center" VerticalAlignment="Bottom" Click="Sp_load_more_Click">加载更多</HyperlinkButton>
-                        </StackPanel>
-                    </ScrollViewer>
-                </PivotItem>
-            </Pivot>
-            <ProgressBar x:Name="pr_Loading" IsIndeterminate="True" Background="{x:Null}" VerticalAlignment="Top" Foreground="White"></ProgressBar>
-        </Grid>
-        <Border x:Name="grid_GG" Height="auto" Grid.RowSpan="2" Visibility="Collapsed" VerticalAlignment="Top" CornerRadius="10" HorizontalAlignment="Center" Background="#7F000000" Margin="0,10">
-            <TextBlock x:Name="txt_GG" Foreground="White" VerticalAlignment="Center" Margin="10,5">信息不能为空</TextBlock>
-        </Border>
-    </Grid>
+    <RelativePanel Background="{ThemeResource Bili-Background}">
+        <AppBarButton 
+            Name="BtnBack" 
+            Icon="Back"
+            Width="48" 
+            Height="48"
+            Foreground="White"
+            Background="{StaticResource BG}"/>
+        <AutoSuggestBox
+            Name="SearchPanel"/>
+        <ProgressBar 
+            Name="PrLoading" 
+            IsIndeterminate="True" 
+            Background="{x:Null}"
+            Foreground="White"/>
+        <Pivot 
+            Name="Pivot">
+            <PivotItem Header="综合">
+                <ListView 
+                        Name="SearchAllPanel" 
+                        SelectionMode="None" 
+                        IsItemClickEnabled="True">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="model:BanSearchArchiveViewModel">
+                            <RelativePanel>
+                                <controls:ImageEx
+                                    Name="CoverPanel"
+                                    RelativePanel.AlignTopWithPanel="True"
+                                    RelativePanel.AlignLeftWithPanel="True"
+                                    RelativePanel.AlignBottomWithPanel="True"
+                                    Height="150"
+                                    Width="240"
+                                    Source="{x:Bind Cover}"/>
+                                <StackPanel
+                                    RelativePanel.AlignBottomWithPanel="True"
+                                    Margin="200,0,0,10"
+                                    Background="#40FFFFFF"
+                                    Canvas.ZIndex="1">
+                                    <TextBlock 
+                                        Text="{x:Bind Duration}"
+                                        Foreground="White"
+                                        FontSize="12"/>
+                                </StackPanel>
+                                <TextBlock
+                                    RelativePanel.RightOf="CoverPanel"
+                                    RelativePanel.AlignTopWithPanel="True"
+                                    TextWrapping="Wrap"
+                                    MaxLines="2"
+                                    TextTrimming="CharacterEllipsis"
+                                    Name="TitlePanel"
+                                    Text="{x:Bind Title}"/>
+                                <Image 
+                                    Name="UpIconPanel"
+                                    RelativePanel.Below="TitlePanel"
+                                    RelativePanel.RightOf="CoverPanel"
+                                    Margin="5"
+                                    Source="ms-appx:///Assets/Icon/ic_category_up.png"/>
+                                <TextBlock
+                                    Margin="5"
+                                    RelativePanel.Below="TitlePanel"
+                                    RelativePanel.RightOf="UpIconPanel"
+                                    Text="{x:Bind Author}"
+                                    Foreground="Gray"
+                                    FontSize="13"/>
+                                <Image
+                                    Name="PlayIconPanel"
+                                    Margin="5"
+                                    RelativePanel.Below="UpIconPanel"
+                                    RelativePanel.RightOf="CoverPanel"
+                                    Source="ms-appx:///Assets/Icon/ic_info_views2.png"/>
+                                <TextBlock
+                                    Name="PlayPanel"
+                                    RelativePanel.Below="UpIconPanel"
+                                    RelativePanel.RightOf="PlayIconPanel"
+                                    Text="{x:Bind Play}"
+                                    Foreground="Gray"
+                                    FontSize="12"/>
+                                <Image
+                                    Name="DanmukuIconPanel"
+                                    Margin="25,5,5,5"
+                                    RelativePanel.Below="UpIconPanel"
+                                    RelativePanel.RightOf="PlayPanel"
+                                    Source="ms-appx:///Assets/Icon/ic_info_danmakus2.png"/>
+                                <TextBlock
+                                    RelativePanel.RightOf="DanmukuIconPanel"
+                                    RelativePanel.Below="UpIconPanel"
+                                    Text="{x:Bind Danmaku}"
+                                    Foreground="Gray"
+                                    FontSize="12"/>
+                            </RelativePanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </PivotItem>
+            <PivotItem Header="番剧">
+                <ListView
+                    SelectionMode="None"
+                    Name="BanPanel"
+                    >
+                    <DataTemplate x:DataType="model:BanSearchBanViewModel">
+                        <RelativePanel>
+                            <controls:ImageEx
+                RelativePanel.AlignTopWithPanel="True"
+                RelativePanel.AlignLeftWithPanel="True"
+                RelativePanel.AlignBottomWithPanel="True"
+                Name="CoverPanel"
+                Height="320"
+                Width="240"
+                Source="{x:Bind Cover}"/>
+                            <TextBlock
+                Name="TitlePanel"
+                RelativePanel.AlignTopWithPanel="True"
+                RelativePanel.RightOf="CoverPanel"
+                Text="{x:Bind Title}"/>
+                            <TextBlock
+                Margin="5"
+                Foreground="Gray"
+                RelativePanel.RightOf="CoverPanel"
+                RelativePanel.Below="TitlePanel"
+                FontSize="13"
+                Name="SeasonPanel"
+                >
+                <Run Text="{x:Bind NewestSeason}"/>
+                <Run Text=","/>
+                <Run Text="{x:Bind TotalCount}"/>
+                            </TextBlock>
+                            <TextBlock
+                RelativePanel.RightOf="CoverPanel"
+                RelativePanel.Below="SeasonPanel"
+                Margin="5"
+                FontSize="13"
+                Foreground="Gray"
+                Name="DescPanel"
+                Text="{x:Bind CatDesc}"/>
+                        </RelativePanel>
+                    </DataTemplate>
+                </ListView>
+            </PivotItem>
+            <PivotItem Header="UP主">
+                <ListView
+                    SelectionMode="None"
+                    Name="UpPanel">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="model:BanSearchUpViewModel">
+                            <RelativePanel>
+                                <Ellipse
+                RelativePanel.AlignTopWithPanel="True"
+                RelativePanel.AlignLeftWithPanel="True"
+                RelativePanel.AlignBottomWithPanel="True"
+                Height="50"
+                Width="50"
+                Margin="5"
+                Name="CoverPanel">
+                                    <Ellipse.Fill>
+                                        <ImageBrush ImageSource="{x:Bind Cover}"/>
+                                    </Ellipse.Fill>
+                                </Ellipse>
+                                <TextBlock
+                Name="TitlePanel"
+                Text="{x:Bind Title}"
+                RelativePanel.AlignTopWithPanel="True"
+                RelativePanel.RightOf="CoverPanel"/>
+                                <TextBlock
+                FontSize="13"
+                Foreground="Gray"
+                RelativePanel.RightOf="CoverPanel"
+                RelativePanel.Below="TitlePanel"
+                Name="FansPanel"
+                Margin="5"
+                Text="{x:Bind Fans}"/>
+                                <TextBlock
+                FontSize="13"
+                Foreground="Gray"
+                RelativePanel.RightOf="FansPanel"
+                RelativePanel.Below="TitlePanel"
+                Name="ArchivesPanel"
+                Margin="5"
+                Text="{x:Bind Archives}"/>
+                                <TextBlock
+                FontSize="13"
+                Foreground="Gray"
+                RelativePanel.Below="FansPanel"
+                RelativePanel.RightOf="CoverPanel"
+                Name="DescPanel"
+                Text="{x:Bind Sign}"
+                TextTrimming="CharacterEllipsis"/>
+                            </RelativePanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </PivotItem>
+            <PivotItem Header="影视">
+                <ListView
+                    SelectionMode="None"
+                    Name="MoivePanel">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="model:BanSearchMoiveViewModel">
+                            <RelativePanel>
+                                <controls:ImageEx
+                RelativePanel.AlignTopWithPanel="True"
+                RelativePanel.AlignLeftWithPanel="True"
+                RelativePanel.AlignBottomWithPanel="True"
+                Name="CoverPanel"
+                Height="320"
+                Width="240"
+                Source="{x:Bind Cover}"/>
+                                <TextBlock
+                Name="TitlePanel"
+                RelativePanel.AlignTopWithPanel="True"
+                RelativePanel.RightOf="CoverPanel"
+                Text="{x:Bind Title}"/>
+                            </RelativePanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </PivotItem>
+            <PivotItem>
+                <ListView
+                    SelectionMode="None"
+                    Name="SpecialPanel">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="model:BanSearchSpecialViewModel">
+                            <RelativePanel>
+                                <Ellipse
+                RelativePanel.AlignTopWithPanel="True"
+                RelativePanel.AlignLeftWithPanel="True"
+                RelativePanel.AlignBottomWithPanel="True"
+                Height="50"
+                Width="50"
+                Margin="5"
+                Name="CoverPanel">
+                                    <Ellipse.Fill>
+                                        <ImageBrush ImageSource="{x:Bind Cover}"/>
+                                    </Ellipse.Fill>
+                                </Ellipse>
+                                <TextBlock
+                Name="TitlePanel"
+                Text="{x:Bind Title}"
+                RelativePanel.AlignTopWithPanel="True"
+                RelativePanel.RightOf="CoverPanel"/>
+                                <TextBlock
+                FontSize="13"
+                Foreground="Gray"
+                RelativePanel.RightOf="CoverPanel"
+                RelativePanel.Below="TitlePanel"
+                Name="ArchivesPanel"
+                Margin="5"
+                Text="{x:Bind Archives}"/>
+                                <TextBlock
+                FontSize="13"
+                Foreground="Gray"
+                RelativePanel.RightOf="FansPanel"
+                RelativePanel.Below="TitlePanel"
+                Name="PlayPanel"
+                Margin="5"
+                Text="{x:Bind Play}"/>
+                                <TextBlock
+                FontSize="13"
+                Foreground="Gray"
+                RelativePanel.Below="FansPanel"
+                RelativePanel.RightOf="CoverPanel"
+                Name="DescPanel"
+                Text="{x:Bind Desc}"
+                TextTrimming="CharacterEllipsis"/>
+                            </RelativePanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </PivotItem>
+        </Pivot>
+    </RelativePanel>
 </Page>

@@ -282,6 +282,7 @@
     <Content Include="Assets\Icon\bili_default_image_tv.9.png" />
     <Content Include="Assets\Icon\DM.png" />
     <Content Include="Assets\Icon\DY.png" />
+    <Content Include="Assets\Icon\ic_category_up.png" />
     <Content Include="Assets\Icon\ic_header_indicator_rank.png" />
     <Content Include="Assets\Icon\ic_header_movie_all.png" />
     <Content Include="Assets\Icon\ic_info_danmakus2.png" />

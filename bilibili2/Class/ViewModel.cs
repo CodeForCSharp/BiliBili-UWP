@@ -1099,6 +1099,56 @@ namespace bilibili2
         public string Cover { get; set; }
         public string Link { get; set; }
     }
+
+    public class BanSearchBanViewModel
+    {
+        public string Title { get; set; }
+        public string Cover { get; set; }
+        public string Param { get; set; }
+        public string TotalCount { get; set; }
+        public int Finish { get; set; }
+        public string CatDesc { get; set; }
+        public string NewestSeason { get; set; }
+    }
+
+    public class BanSearchUpViewModel
+    {
+        public string Title { get; set; }
+        public string Cover { get; set; }
+        public string Param { get; set; }
+        public string Sign { get; set; }
+        public string Fans { get; set; }
+        public string Archives { get; set; }
+    }
+
+    public class BanSearchMoiveViewModel
+    {
+        public string Title { get; set; }
+        public string Cover { get; set; }
+        public string Goto { get; set; }
+        public string Param { get; set; }
+    }
+
+    public class BanSearchSpecialViewModel
+    {
+        public string Title { get; set; }
+        public string Cover { get; set; }
+        public int Archives { get; set; }
+        public int Play { get; set; }
+        public string Desc { get; set; }
+        public string Param { get; set; }
+    }
+
+    public class BanSearchArchiveViewModel
+    {
+        public string Cover { get; set; }
+        public string Author { get; set; }
+        public string Play { get; set; }
+        public int Danmaku { get; set; }
+        public string Title{ get; set; }
+        public string Duration { get; set; }
+        public string Param { get; set; }
+    }
     public class MessageModel
     {
         public int code { get; set; }
