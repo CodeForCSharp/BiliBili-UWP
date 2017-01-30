@@ -331,7 +331,7 @@
                     <Button  x:Name="btn_Weitou"  Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Background="{StaticResource BG}"  FontSize="16" Foreground="#B2FFFFFF" Tag="2"  Content="喂投榜" Click="btn_Live_Click"/>
                     <Button x:Name="btn_Fans"  Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Background="{StaticResource BG}"  FontSize="16" Foreground="#B2FFFFFF"  Tag="3"  Content="粉丝榜" Click="btn_Live_Click"/>
                 </Grid>
-                <Pivot x:Name="pivot" Style="{StaticResource PivotStyle1}" Grid.Row="1" SelectionChanged="pivot_SelectionChanged" >
+                <Pivot x:Name="pivot"  Grid.Row="1" SelectionChanged="pivot_SelectionChanged" >
                     <PivotItem Margin="0">
                         <Grid >
                             <Grid.RowDefinitions>

@@ -384,7 +384,7 @@
                 </Grid>
 
 
-                <Pivot x:Name="pivot_Home" Grid.Row="2"  Style="{StaticResource PivotStyle1}" SelectionChanged="pivot_Home_SelectionChanged">
+                <Pivot x:Name="pivot_Home" Grid.Row="2"  SelectionChanged="pivot_Home_SelectionChanged">
                     <PivotItem Margin="0">
                         <SplitView x:Name="sp_Live" PanePlacement="Right" >
                             <SplitView.Pane>

@@ -69,7 +69,8 @@ namespace bilibili2.Class
         {
             var part = duration.Split(':');
             var minutes = int.Parse(part[0]);
-            return $"{minutes/60}:{minutes%60}:{part[1]}";
+            var seconds = int.Parse(part[1]);
+            return $"{minutes/60:D2}:{minutes%60:D2}:{seconds:D2}";
         }
 
     }

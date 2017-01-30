@@ -244,7 +244,7 @@
                     </Border>
                 </Grid>
             </SplitView.Pane>
-            <Pivot x:Name="pivot" Style="{StaticResource PivotStyle1}" Margin="0" SelectionChanged="pivot_SelectionChanged">
+            <Pivot x:Name="pivot"  Margin="0" SelectionChanged="pivot_SelectionChanged">
                 <PivotItem Margin="0">
                     <ScrollViewer x:Name="sv2" HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Auto">
                         <Grid>

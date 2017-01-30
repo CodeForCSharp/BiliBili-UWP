@@ -1105,8 +1105,7 @@ namespace bilibili2
         public string Title { get; set; }
         public string Cover { get; set; }
         public string Param { get; set; }
-        public string TotalCount { get; set; }
-        public int Finish { get; set; }
+        public string Index { get; set; }
         public string CatDesc { get; set; }
         public string NewestSeason { get; set; }
     }
@@ -1133,8 +1132,8 @@ namespace bilibili2
     {
         public string Title { get; set; }
         public string Cover { get; set; }
-        public int Archives { get; set; }
-        public int Play { get; set; }
+        public string Archives { get; set; }
+        public string Play { get; set; }
         public string Desc { get; set; }
         public string Param { get; set; }
     }

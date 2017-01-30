@@ -71,7 +71,7 @@
             <Button  x:Name="btn_TZ" Grid.Column="3" FontSize="16"  Foreground="#B2FFFFFF" Tag="3"  Background="#00000000"  VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Content="系统通知" Click="btn_HF_Click"/>
             <Button  x:Name="btn_SX" Grid.Column="4" FontSize="16"  Foreground="#B2FFFFFF" Tag="4"  Background="#00000000"  VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Content="我的私信" Click="btn_HF_Click"/>
         </Grid>
-        <Pivot x:Name="pivot" Grid.Row="2" Style="{StaticResource PivotStyle1}" Margin="0" SelectionChanged="pivot_SelectionChanged">
+        <Pivot x:Name="pivot" Grid.Row="2" Margin="0" SelectionChanged="pivot_SelectionChanged">
             <PivotItem Margin="0">
                 <ListView x:Name="list_Reply" SelectionMode="None" IsItemClickEnabled="True" ItemClick="list_Reply_ItemClick">
                     <ListView.ItemContainerStyle>
