@@ -171,7 +171,7 @@ namespace bilibili2
         {
             get
             {
-                if (Convert.ToInt32(view) > 10000)
+                if (Convert.ToDouble(view) > 10000)
                 {
                     double d = (double)Convert.ToDouble(view) / 10000;
                     return d.ToString("0.0") + "万";

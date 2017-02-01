@@ -1,6 +1,7 @@
 ﻿using bilibili2.Class;
 using bilibili2.Controls;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -479,9 +480,18 @@ namespace bilibili2.Pages
                 string url = "http://interface.bilibili.com/playurl?platform=android&cid=" + mid + "&quality=" + quality + "&otype=json&appkey=422fd9d7289a1dd9&type=mp4";
                 url += "&sign=" + ApiHelper.GetSign(url);
                 string results = await wc.GetResults(new Uri(url));
-                VideoUriModel model = JsonConvert.DeserializeObject<VideoUriModel>(results);
-                List<VideoUriModel> model1 = JsonConvert.DeserializeObject<List<VideoUriModel>>(model.durl.ToString());
-                mediaElement.Source = new Uri(model1[0].url);
+                var model = JObject.Parse(results);
+                List<string> urls = new List<string>()
+                {
+                    model["durl"].First["url"].Value<string>()
+                };
+                foreach(var item in model["durl"].First["backup_url"])
+                {
+                    urls.Add(item.Value<string>());
+                }
+                //VideoUriModel model = JsonConvert.DeserializeObject<VideoUriModel>(results);
+                //List<VideoUriModel> model1 = JsonConvert.DeserializeObject<List<VideoUriModel>>(model.durl.ToString());
+                mediaElement.Source = new Uri(urls.First());
                 pro_Num.Text = "开始缓冲视频...";
             }
             catch (Exception)
