@@ -428,7 +428,14 @@
         </Style>
     </Page.Resources>
     <Grid Background="{ThemeResource Bili-Background}" >
-        <MediaElement x:Name="mediaElement" Volume="{Binding Value, ElementName=slider_V, Mode=OneWay}" AutoPlay="True" BufferingProgressChanged="mediaElement_BufferingProgressChanged" CurrentStateChanged="mediaElement_CurrentStateChanged" DownloadProgressChanged="mediaElement_DownloadProgressChanged" MediaEnded="mediaElement_MediaEnded"/>
+        <MediaElement 
+            x:Name="mediaElement"                           
+            Volume="{Binding Value, ElementName=slider_V, Mode=OneWay}"
+            AutoPlay="True" 
+            BufferingProgressChanged="mediaElement_BufferingProgressChanged" 
+            CurrentStateChanged="mediaElement_CurrentStateChanged" 
+            DownloadProgressChanged="mediaElement_DownloadProgressChanged" 
+            MediaEnded="mediaElement_MediaEnded"/>
         <Controls:MyDanmaku x:Name="danmu"/>
         <Border x:Name="bor_Back" Background="#00000000"  Grid.RowSpan="4" />
         <SplitView x:Name="splitView" PanePlacement="Right" OpenPaneLength="350" Foreground="White" PaneBackground="#CC6A6A6A">

@@ -15,6 +15,7 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Graphics.Display;
 using Windows.Media;
+using Windows.Media.Core;
 using Windows.Media.Playback;
 using Windows.Storage;
 using Windows.System.Display;
@@ -477,7 +478,7 @@ namespace bilibili2.Pages
             {
                 pro_Num.Text = "读取视频地址...";
                 WebClientClass wc = new WebClientClass();
-                string url = "http://interface.bilibili.com/playurl?platform=android&cid=" + mid + "&quality=" + quality + "&otype=json&appkey=422fd9d7289a1dd9&type=mp4";
+                string url = $"http://interface.bilibili.com/playurl?platform=android&cid={mid}&quality={quality}&otype=json&appkey=422fd9d7289a1dd9&type=flv";
                 url += "&sign=" + ApiHelper.GetSign(url);
                 string results = await wc.GetResults(new Uri(url));
                 var model = JObject.Parse(results);
@@ -485,13 +486,13 @@ namespace bilibili2.Pages
                 {
                     model["durl"].First["url"].Value<string>()
                 };
-                foreach(var item in model["durl"].First["backup_url"])
-                {
-                    urls.Add(item.Value<string>());
-                }
+                //foreach(var item in model["durl"].First["backup_url"])
+                //{
+                //    urls.Add(item.Value<string>());
+                //}
                 //VideoUriModel model = JsonConvert.DeserializeObject<VideoUriModel>(results);
                 //List<VideoUriModel> model1 = JsonConvert.DeserializeObject<List<VideoUriModel>>(model.durl.ToString());
-                mediaElement.Source = new Uri(urls.First());
+                mediaElement.Source =new Uri(urls.First());
                 pro_Num.Text = "开始缓冲视频...";
             }
             catch (Exception)
