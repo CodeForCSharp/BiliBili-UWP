@@ -653,21 +653,6 @@ namespace bilibili2
         public string img { get; set; }
         public string link { get; set; }
     }
-    //排行
-    public class RankModel
-    {
-        public object hot_original { get; set; }
-        public object list { get; set; }
-        public string pic { get; set; }
-        public string title { get; set; }
-        public string play { get; set; }
-        public string author { get; set; }
-        public string video_review { get; set; }
-        public string description { get; set; }
-        public string mid { get; set; }
-        public string aid { get; set; }
-        public int num { get; set; }
-    }
     //番剧更新表
     public class BangumiTimeLineModel
     {
@@ -923,79 +908,6 @@ namespace bilibili2
         }
     }
 
-    public class SVideoModel
-    {
-        //第一层
-        public int code { get; set; }
-        public int page { get; set; }//页数
-        public int numResults { get; set; }//结果数量
-        public int numPages { get; set; }//结果
-        public object result { get; set; }//结果
-        //第二层
-        public long id { get; set; }//视频AID
-        public string mid { get; set; }//用户Mid
-        public string author { get; set; }//作者
-        public string typename { get; set; }
-        public string aid { get; set; }
-        public string description { get; set; }
-        public string title { get; set; }//标题
-        public string pic { get; set; }//封面
-        public string play { get; set; }//播放
-        public string video_review { get; set; }//弹幕
-        public string duration { get; set; }//时长
-    }
-
-    public class SUpModel
-    {
-        //第一层
-        public int code { get; set; }
-        public int page { get; set; }//页数
-        public int numResults { get; set; }//结果数量
-        public int numPages { get; set; }//结果
-        public object result { get; set; }//结果
-        //第二层
-        public string mid { get; set; }//用户Mid
-        public string uname { get; set; }//作者
-        public string usign { get; set; }
-        public string upic { get; set; }
-    }
-
-    public class SBanModel
-    {
-        //第一层
-        public int code { get; set; }
-        public int page { get; set; }//页数
-        public int numResults { get; set; }//结果数量
-        public int numPages { get; set; }//结果
-        public object result { get; set; }//结果
-
-        public string title { get; set; }
-        public string season_id { get; set; }
-        public string bangumi_id { get; set; }
-        public string spid { get; set; }
-        public string evaluate { get; set; }
-        public string cover { get; set; }
-        public int is_finish { get; set; }
-        public string newest_ep_index { get; set; }
-        public int total_count { get; set; }
-    }
-
-    public class SSpModel
-    {
-        //第一层
-        public int code { get; set; }
-        public int page { get; set; }//页数
-        public int numResults { get; set; }//结果数量
-        public int numPages { get; set; }
-        public object result { get; set; }//结果
-
-        //第三层
-        public string id { get; set; }//id
-        public string spid { get; set; }
-        public string title { get; set; }
-        public string description { get; set; }//标题
-        public string pic { get; set; }//封面
-    }
 
     public class VideoUriModel
     {
@@ -1147,6 +1059,24 @@ namespace bilibili2
         public string Title{ get; set; }
         public string Duration { get; set; }
         public string Param { get; set; }
+    }
+
+    public class RegionRankViewModel
+    {
+        public string Name { get; set; }
+        public int Tid { get; set; }
+        public ObservableCollection<RankItemViewModel> Items { get; set; } = new ObservableCollection<RankItemViewModel>();
+    }
+    public class RankItemViewModel
+    {
+        public string Cover { get; set; }
+        public string Title { get; set; }
+        public string Pts { get; set; }
+        public string Param { get; set; }
+        public string Name { get; set; }
+        public int Rank { get; set; }
+        public int RankFontSize { get; set; }
+        public string RankForeground { get; set; }
     }
     public class MessageModel
     {
@@ -1387,61 +1317,4 @@ namespace bilibili2
         }
 
     }
-
-    public class SearchLiveModel
-    {
-        public int code { get; set; }
-        public string message { get; set; }
-
-        public object data { get; set; }
-        public int page { get; set; }
-        public int pagesize { get; set; }
-
-        public object room { get; set; }
-        public object list { get; set; }
-        public string roomid { get; set; }
-        public string cover { get; set; }
-        public string title { get; set; }
-        public string name { get; set; }
-        public string face { get; set; }
-        public int online { get; set; }
-        public int total_room { get; set; }
-        public int total_page { get; set; }
-
-        public object user { get; set; }
-        public int live_status { get; set; }//0False,1True
-        public string areaName { get; set; }
-        public int fansNum { get; set; }
-        public int total_user { get; set; }
-
-        public string Live_Status
-        {
-            get {
-                if (live_status == 1)
-                {
-                    return "直播中";
-                }
-                else
-                {
-                    return "闲置中";
-                }
-            }
-        }
-        public SolidColorBrush color
-        {
-            get
-            {
-                if (live_status==0)
-                {
-                    return new SolidColorBrush(Colors.Gray);
-                }
-                else
-                {
-                    return new SolidColorBrush(Colors.OrangeRed);
-                }
-            }
-        }
-
-    }
-
 }

@@ -73,5 +73,16 @@ namespace bilibili2.Class
             return $"{minutes/60:D2}:{minutes%60:D2}:{seconds:D2}";
         }
 
+        public static int RankIndexToFontSize(int index)
+        {
+            switch (index)
+            {
+                case 1: return 18;
+                case 2: return 17;
+                case 3: return 16;
+                default:
+                    return 15;
+            }
+        }
     }
 }
