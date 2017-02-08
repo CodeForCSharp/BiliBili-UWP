@@ -69,11 +69,11 @@ namespace bilibili2.Class
 
         public async Task<string> GetVideoUri(string cid, int quality)
         {
-            //http://interface.bilibili.com/playurl?platform=android&cid=5883400&quality=2&otype=json&appkey=422fd9d7289a1dd9&type=mp4
+            //http://interface.bilibili.com/playurl?platform=android&cid=5883400&quality=2&otype=json&appkey=1d8b6e7d45233436&type=mp4
             try
             {
                 wc = new WebClientClass();
-                string results = await wc.GetResults(new Uri("http://interface.bilibili.com/playurl?platform=android&cid=" + cid + "&quality=" + quality + "&otype=json&appkey=422fd9d7289a1dd9&type=mp4"));
+                string results = await wc.GetResults(new Uri("http://interface.bilibili.com/playurl?platform=android&cid=" + cid + "&quality=" + quality + "&otype=json&appkey=1d8b6e7d45233436&type=mp4"));
                 VideoUriModel model = JsonConvert.DeserializeObject<VideoUriModel>(results);
                 List<VideoUriModel> model1 = JsonConvert.DeserializeObject<List<VideoUriModel>>(model.durl.ToString());
                 return model1[0].url;

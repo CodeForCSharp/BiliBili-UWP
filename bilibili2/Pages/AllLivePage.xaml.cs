@@ -51,7 +51,7 @@ namespace bilibili2.Pages
         private async void GetAllAreas()
         {
             PrLoad.Visibility = Visibility.Visible;
-            var result = await wc.GetResults(new Uri($"http://live.bilibili.com/AppIndex/areas?_device=wp&_ulv=10000&appkey={ApiHelper._appKey}&build=411005&platform=android&scale=xxhdpi"));
+            var result = await wc.GetResults(new Uri($"http://live.bilibili.com/AppIndex/areas?_device=wp&_ulv=10000&appkey={ApiHelper._appKey}&build=434000&platform=android&scale=xxhdpi"));
             var model = JsonConvert.DeserializeObject<LiveAreasModel>(result);
             if (model.Code == 0)
             {

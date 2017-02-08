@@ -40,7 +40,7 @@ namespace bilibili2.Pages
             {
                 LoadDataTask = async () =>
                 {
-                    var url = $"http://live.bilibili.com/mobile/rooms?_device=wp&_ulv=10000&build=411005&platform=android&appkey={ApiHelper._appKey}&page={Lives.CurrentPage}&area_id={id}&page={Lives.CurrentPage}";
+                    var url = $"http://live.bilibili.com/mobile/rooms?_device=wp&_ulv=10000&build=434000&platform=android&appkey={ApiHelper._appKey}&page={Lives.CurrentPage}&area_id={id}&page={Lives.CurrentPage}";
                     if (selectedTag != "全部")
                     {
                         url += $"&tag={selectedTag}";
@@ -83,7 +83,7 @@ namespace bilibili2.Pages
         }
         private async void GetTagInfo()
         {
-            var url = $"http://live.bilibili.com/AppIndex/tags?_device=wp&_ulv=10000&build=411005&platform=android&appkey={ApiHelper._appKey}";
+            var url = $"http://live.bilibili.com/AppIndex/tags?_device=wp&_ulv=10000&build=434000&platform=android&appkey={ApiHelper._appKey}";
             url += $"&sign={ApiHelper.GetSign(url)}";
             var result = await wc.GetResults(new Uri(url));
             var tags = JObject.Parse(result)["data"][$"{id}"].Select(token => new LiveTagViewModel { Name = token.Value<string>()});

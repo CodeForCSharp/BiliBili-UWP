@@ -166,7 +166,7 @@ namespace bilibili2.Pages
         //搜索视频
         public async Task<JObject> SearchTypeAsync(int type,int pn)
         {
-            var url = $"http://app.bilibili.com/x/v2/search/type?_device=android&appkey=422fd9d7289a1dd9&build=411005&keyword={Uri.EscapeDataString(keyword)}&pn={pn}&ps=20&platform=android&type={type}";
+            var url = $"http://app.bilibili.com/x/v2/search/type?_device=android&appkey=1d8b6e7d45233436&build=434000&keyword={Uri.EscapeDataString(keyword)}&pn={pn}&ps=20&platform=android&type={type}";
             url += $"&sign={ApiHelper.GetSign(url)}";
             var result = await wc.GetResults(new Uri(url));
             return JObject.Parse(result);
@@ -174,7 +174,7 @@ namespace bilibili2.Pages
 
         public async Task<JObject> SearchAllAsync(int pn)
         {
-            var url = $"http://app.bilibili.com/x/v2/search?_device=android&appkey=422fd9d7289a1dd9&build=411005&keyword={Uri.EscapeDataString(keyword)}&pn={pn}&ps=20&platform=android&order={"default"}";//rid={}
+            var url = $"http://app.bilibili.com/x/v2/search?_device=android&appkey=1d8b6e7d45233436&build=434000&keyword={Uri.EscapeDataString(keyword)}&pn={pn}&ps=20&platform=android&order={"default"}";//rid={}
             url += $"&sign={ApiHelper.GetSign(url)}";
             var result = await wc.GetResults(new Uri(url));
             return JObject.Parse(result);

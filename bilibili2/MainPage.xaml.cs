@@ -125,7 +125,7 @@ namespace bilibili2
             {
                  wc = new WebClientClass();
                 // http://message.bilibili.com/api/msg/query.room.list.do?access_key=a36a84cc8ef4ea2f92c416951c859a25&actionKey=appkey&appkey=c1b107428d337928&build=414000&page_size=100&platform=android&ts=1461404884000&sign=5e212e424761aa497a75b0fb7fbde775
-                string url = string.Format("http://message.bilibili.com/api/notify/query.notify.count.do?_device=wp&_ulv=10000&access_key={0}&actionKey=appkey&appkey={1}&build=411005&platform=android&ts={2}", ApiHelper.access_key, ApiHelper._appKey, ApiHelper.GetTimeSpen);
+                string url = string.Format("http://message.bilibili.com/api/notify/query.notify.count.do?_device=wp&_ulv=10000&access_key={0}&actionKey=appkey&appkey={1}&build=434000&platform=android&ts={2}", ApiHelper.access_key, ApiHelper._appKey, ApiHelper.GetTimeSpen);
                 url += "&sign=" + ApiHelper.GetSign(url);
                 string results = await wc.GetResults(new Uri(url));
                 MessageModel model = JsonConvert.DeserializeObject<MessageModel>(results);
@@ -1700,7 +1700,7 @@ namespace bilibili2
             {
                 pr_Load_Ban.Visibility = Visibility.Visible;
                 WebClientClass wc = new WebClientClass();
-                string uri = "http://bangumi.bilibili.com/api/tags?_device=wp&_ulv=10000&appkey=422fd9d7289a1dd9&build=411005&page=" + 1 + "&pagesize=60&platform=android&ts=" + ApiHelper.GetTimeSpen + "000";
+                string uri = "http://bangumi.bilibili.com/api/tags?_device=wp&_ulv=10000&appkey=1d8b6e7d45233436&build=434000&page=" + 1 + "&pagesize=60&platform=android&ts=" + ApiHelper.GetTimeSpen + "000";
                 string sign = ApiHelper.GetSign(uri);
                 uri += "&sign=" + sign;
                 string results = await wc.GetResults(new Uri(uri));
@@ -1837,7 +1837,7 @@ namespace bilibili2
             {
                 Ban_TJ_more.Text = "正在加载...";
                 wc = new WebClientClass();
-                string uri = "http://bangumi.bilibili.com/api/bangumi_recommend?_device=wp&appkey=422fd9d7289a1dd9&build=411005&cursor=" + Page_BanTJ + "&pagesize=10&platform=android&ts=" + ApiHelper.GetTimeSpen;
+                string uri = "http://bangumi.bilibili.com/api/bangumi_recommend?_device=wp&appkey=1d8b6e7d45233436&build=434000&cursor=" + Page_BanTJ + "&pagesize=10&platform=android&ts=" + ApiHelper.GetTimeSpen;
                 uri += "&sign=" + ApiHelper.GetSign(uri);
                 string results = await wc.GetResults(new Uri(uri));
                 BanTJModel model = JsonConvert.DeserializeObject<BanTJModel>(results);
@@ -2090,7 +2090,7 @@ namespace bilibili2
             try
             {
                 wc = new WebClientClass();
-                string url = string.Format("http://live.bilibili.com/AppIndex/home?_device=android&_ulv=10000&access_key={0}&appkey={1}&build=411005&platform=android&scale=xxhdpi", ApiHelper.access_key, ApiHelper._appKey);
+                string url = string.Format("http://live.bilibili.com/AppIndex/home?_device=android&_ulv=10000&access_key={0}&appkey={1}&build=434000&platform=android&scale=xxhdpi", ApiHelper.access_key, ApiHelper._appKey);
                 url += "&sign=" + ApiHelper.GetSign(url);
                 string results = await wc.GetResults(new Uri(url));
                 var model = JsonConvert.DeserializeObject<HomeLiveModel>(results);

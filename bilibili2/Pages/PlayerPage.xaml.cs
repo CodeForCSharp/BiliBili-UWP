@@ -478,7 +478,7 @@ namespace bilibili2.Pages
             {
                 pro_Num.Text = "读取视频地址...";
                 WebClientClass wc = new WebClientClass();
-                string url = $"http://interface.bilibili.com/playurl?platform=android&cid={mid}&quality={quality}&otype=json&appkey=422fd9d7289a1dd9&type=flv";
+                string url = $"https://interface.bilibili.com/playurl?platform=android&cid={mid}&quality={quality}&otype=json&appkey=1d8b6e7d45233436&type=flv";
                 url += "&sign=" + ApiHelper.GetSign(url);
                 string results = await wc.GetResults(new Uri(url));
                 var model = JObject.Parse(results);

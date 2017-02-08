@@ -28,7 +28,7 @@ namespace bilibili2.Controls
                 pr_Load.Visibility = Visibility.Visible;
                 WebClientClass wc = new WebClientClass();
                 //&access_key={0}
-                string url = $"http://live.bilibili.com/AppIndex/home?_device=android&_ulv=10000&appkey={ApiHelper._appKey}&build=411005&platform=android&scale=xxhdpi";
+                string url = $"http://live.bilibili.com/AppIndex/home?_device=android&_ulv=10000&appkey={ApiHelper._appKey}&build=434000&platform=android&scale=xxhdpi";
                 url += "&sign=" + ApiHelper.GetSign(url);
                 string results = await wc.GetResults(new Uri(url));
                 HomeLiveModel model = JsonConvert.DeserializeObject<HomeLiveModel>(results);

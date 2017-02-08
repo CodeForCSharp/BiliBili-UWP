@@ -41,7 +41,7 @@ namespace bilibili2.Pages
             {
                 PrLoadBan.Visibility = Visibility.Visible;
                WebClientClass  wc = new WebClientClass();
-                var url = $"https://bangumi.bilibili.com/api/timeline_v4?_device=android&_ulv=10000&build=411005&platform=android&appkey=422fd9d7289a1dd9&area_id=1{Uri.EscapeDataString(",")}2{Uri.EscapeDataString(",")}-1";
+                var url = $"https://bangumi.bilibili.com/api/timeline_v4?_device=android&_ulv=10000&build=434000&platform=android&appkey=1d8b6e7d45233436&area_id=1{Uri.EscapeDataString(",")}2{Uri.EscapeDataString(",")}-1";
                 url += $"&sign={ApiHelper.GetSign(url)}";
                 var results = await wc.GetResults(new Uri(url));
                 var model = JObject.Parse(results);

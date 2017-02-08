@@ -43,7 +43,7 @@ namespace bilibili2.Pages
             {
                 LoadDataTask = async () =>
                 {
-                    string url = $"http://live.bilibili.com/AppSearch/index?_device=wp&_ulv=10000&appkey={ApiHelper._appKey}&build=411005&keyword={WebUtility.UrlEncode(keyword)}&page={Lives.CurrentPage}&pagesize=20&platform=android&type=room";
+                    string url = $"http://live.bilibili.com/AppSearch/index?_device=wp&_ulv=10000&appkey={ApiHelper._appKey}&build=434000&keyword={WebUtility.UrlEncode(keyword)}&page={Lives.CurrentPage}&pagesize=20&platform=android&type=room";
                     url += "&sign=" + ApiHelper.GetSign(url);
                     string results = await wc.GetResults(new Uri(url));
                     var model = JObject.Parse(results);
@@ -73,7 +73,7 @@ namespace bilibili2.Pages
                 LoadDataTask = async () =>
                 {
 
-                    string url = $"http://live.bilibili.com/AppSearch/index?_device=wp&_ulv=10000&appkey={ApiHelper._appKey}&build=411005&keyword={WebUtility.UrlEncode(keyword)}&page={Users.CurrentPage}&pagesize=20&platform=android&type=user";
+                    string url = $"http://live.bilibili.com/AppSearch/index?_device=wp&_ulv=10000&appkey={ApiHelper._appKey}&build=434000&keyword={WebUtility.UrlEncode(keyword)}&page={Users.CurrentPage}&pagesize=20&platform=android&type=user";
                     url += "&sign=" + ApiHelper.GetSign(url);
                     string results = await wc.GetResults(new Uri(url));
                     var model = JObject.Parse(results);
