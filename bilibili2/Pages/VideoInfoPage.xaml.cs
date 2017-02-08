@@ -171,9 +171,9 @@ namespace bilibili2
                 pr_Load.Visibility = Visibility.Visible;
                
                 WebClientClass wc = new WebClientClass();
-                string uri = string.Format("http://app.bilibili.com/x/view?_device=wp&_ulv=10000&access_key={0}&aid={1}&appkey=1d8b6e7d45233436&build=434000&plat=4&platform=android&ts={2}",ApiHelper.access_key,aid,ApiHelper.GetTimeSpen);
+                string uri = string.Format("http://app.bilibili.com/x/view?_device=wp&_ulv=10000&access_key={0}&aid={1}&appkey=84956560bc028eb7&build=434000&plat=4&platform=android&ts={2}",ApiHelper.access_key,aid,ApiHelper.GetTimeSpen);
                 uri += "&sign="+ApiHelper.GetSign(uri);
-                //string results = await wc.GetResults(new Uri("http://api.bilibili.com/view?type=json&appkey=1d8b6e7d45233436&id=" + aid + "&batch=1&"+ApiHelper.access_key+"&rnd=" + new Random().Next(1, 9999)));
+                //string results = await wc.GetResults(new Uri("http://api.bilibili.com/view?type=json&appkey=84956560bc028eb7&id=" + aid + "&batch=1&"+ApiHelper.access_key+"&rnd=" + new Random().Next(1, 9999)));
                 string results = await wc.GetResults(new Uri(uri));
                 VideoModel model = new VideoModel();
                 model = JsonConvert.DeserializeObject<VideoModel>(results);

@@ -52,7 +52,7 @@ namespace bilibili2.Pages
             {
                 PrLoadBan.Visibility = Visibility.Visible;
                 WebClientClass wc = new WebClientClass();
-                string url = $"http://bangumi.bilibili.com/api/tags?_device=wp&_ulv=10000&appkey=1d8b6e7d45233436&build=434000&page={1}&pagesize=60&platform=android&ts={ApiHelper.GetTimeSpen}000";
+                string url = $"http://bangumi.bilibili.com/api/tags?_device=wp&_ulv=10000&appkey=84956560bc028eb7&build=434000&page={1}&pagesize=60&platform=android&ts={ApiHelper.GetTimeSpen}000";
                 url += $"&sign={ApiHelper.GetSign(url)}";
                 string results = await wc.GetResults(new Uri(url));
                 var model = JObject.Parse(results);

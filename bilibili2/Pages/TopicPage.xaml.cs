@@ -37,7 +37,7 @@ namespace bilibili2.Pages
             {
                 LoadDataTask = async () =>
                 {
-                    var url = $"http://api.bilibili.com/topic/getlist?_device=android&appkey=1d8b6e7d45233436&build=434000&pagesize=20&page={Topics.CurrentPage}";
+                    var url = $"http://api.bilibili.com/topic/getlist?_device=android&appkey=84956560bc028eb7&build=434000&pagesize=20&page={Topics.CurrentPage}";
                     url += $"&sign={ApiHelper.GetSign(url)}";
                     var result = await wc.GetResults(new Uri(url));
                     var model = JObject.Parse(result);

@@ -23,8 +23,8 @@ namespace bilibili2
         public const string JyAppkey = @"自行申请";
         public const string JySecret = @"自行申请";
 
-        public const string _appSecret = "560c52ccd288fed045859ed18bffd973";
-        public const string _appKey = "1d8b6e7d45233436";
+        public const string _appSecret = "94aba54af9065f71de72f5508f1cd42e";
+        public const string _appKey = "84956560bc028eb7";
         public static string access_key = string.Empty;
 
         public static string GetSign(string url)
@@ -87,7 +87,7 @@ namespace bilibili2
             {
                 //发送第一次请求，得到access_key
                 WebClientClass wc = new WebClientClass();
-                string results =await wc.GetResults(new Uri("https://api.bilibili.com/login?appkey=1d8b6e7d45233436&platform=wp&pwd=" +WebUtility.UrlEncode(Password) + "&type=json&userid=" + WebUtility.UrlEncode(UserName)));
+                string results =await wc.GetResults(new Uri("https://api.bilibili.com/login?appkey=84956560bc028eb7&platform=wp&pwd=" +WebUtility.UrlEncode(Password) + "&type=json&userid=" + WebUtility.UrlEncode(UserName)));
                 //Json解析及数据判断
                 LoginModel model = new LoginModel();
                 model = JsonConvert.DeserializeObject<LoginModel>(results);
@@ -115,7 +115,7 @@ namespace bilibili2
                 if (model.code == 0)
                 {
                     access_key = model.access_key;
-                    Windows.Web.Http.HttpResponseMessage hr2 = await hc.GetAsync(new Uri("http://api.bilibili.com/login/sso?&access_key=" + model.access_key + "&appkey=1d8b6e7d45233436&platform=wp"));
+                    Windows.Web.Http.HttpResponseMessage hr2 = await hc.GetAsync(new Uri("http://api.bilibili.com/login/sso?&access_key=" + model.access_key + "&appkey=84956560bc028eb7&platform=wp"));
                     hr2.EnsureSuccessStatusCode();
                     StorageFolder folder = ApplicationData.Current.LocalFolder;
                     StorageFile file = await folder.CreateFileAsync("us.bili", CreationCollisionOption.OpenIfExists);

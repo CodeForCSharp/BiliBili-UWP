@@ -1700,7 +1700,7 @@ namespace bilibili2
             {
                 pr_Load_Ban.Visibility = Visibility.Visible;
                 WebClientClass wc = new WebClientClass();
-                string uri = "http://bangumi.bilibili.com/api/tags?_device=wp&_ulv=10000&appkey=1d8b6e7d45233436&build=434000&page=" + 1 + "&pagesize=60&platform=android&ts=" + ApiHelper.GetTimeSpen + "000";
+                string uri = "http://bangumi.bilibili.com/api/tags?_device=wp&_ulv=10000&appkey=84956560bc028eb7&build=434000&page=" + 1 + "&pagesize=60&platform=android&ts=" + ApiHelper.GetTimeSpen + "000";
                 string sign = ApiHelper.GetSign(uri);
                 uri += "&sign=" + sign;
                 string results = await wc.GetResults(new Uri(uri));
@@ -1837,7 +1837,7 @@ namespace bilibili2
             {
                 Ban_TJ_more.Text = "正在加载...";
                 wc = new WebClientClass();
-                string uri = "http://bangumi.bilibili.com/api/bangumi_recommend?_device=wp&appkey=1d8b6e7d45233436&build=434000&cursor=" + Page_BanTJ + "&pagesize=10&platform=android&ts=" + ApiHelper.GetTimeSpen;
+                string uri = "http://bangumi.bilibili.com/api/bangumi_recommend?_device=wp&appkey=84956560bc028eb7&build=434000&cursor=" + Page_BanTJ + "&pagesize=10&platform=android&ts=" + ApiHelper.GetTimeSpen;
                 uri += "&sign=" + ApiHelper.GetSign(uri);
                 string results = await wc.GetResults(new Uri(uri));
                 BanTJModel model = JsonConvert.DeserializeObject<BanTJModel>(results);

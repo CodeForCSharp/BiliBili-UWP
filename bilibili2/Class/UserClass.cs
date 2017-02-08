@@ -282,7 +282,7 @@ namespace bilibili2.Class
             List<GetAttentionLive> list = new List<GetAttentionLive>();
             try
             {
-                string url = string.Format("http://live.bilibili.com/AppFeed/index?_device=wp&_ulv=10000&access_key={0}&appkey=1d8b6e7d45233436&build=434000&page=1&pagesize=20&platform=android",ApiHelper.access_key);
+                string url = string.Format("http://live.bilibili.com/AppFeed/index?_device=wp&_ulv=10000&access_key={0}&appkey=84956560bc028eb7&build=434000&page=1&pagesize=20&platform=android",ApiHelper.access_key);
                 url += "&sign="+ApiHelper.GetSign(url);
                 string result =await  new WebClientClass().GetResults(new Uri(url));
                 GetAttentionLive mode = JsonConvert.DeserializeObject<GetAttentionLive>(result);

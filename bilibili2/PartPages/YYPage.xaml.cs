@@ -167,22 +167,22 @@ namespace bilibili2.PartPages
                     switch (order)
                     {
                         case 0:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=31&page=" + PageNum_LZ + "&pagesize=50&order=default";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=31&page=" + PageNum_LZ + "&pagesize=50&order=default";
                             break;
                         case 1:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=31&page=" + PageNum_LZ + "&pagesize=50&order=damku";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=31&page=" + PageNum_LZ + "&pagesize=50&order=damku";
                             break;
                         case 2:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=31&page=" + PageNum_LZ + "&pagesize=50&order=hot";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=31&page=" + PageNum_LZ + "&pagesize=50&order=hot";
                             break;
                         case 3:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=31&page=" + PageNum_LZ + "&pagesize=50&order=review";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=31&page=" + PageNum_LZ + "&pagesize=50&order=review";
                             break;
                         case 4:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=31&page=" + PageNum_LZ + "&pagesize=50&order=stow";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=31&page=" + PageNum_LZ + "&pagesize=50&order=stow";
                             break;
                         default:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=31&page=" + PageNum_LZ + "&pagesize=50&order=default";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=31&page=" + PageNum_LZ + "&pagesize=50&order=default";
                             break;
                     }
                     #endregion
@@ -235,22 +235,22 @@ namespace bilibili2.PartPages
                     switch (order)
                     {
                         case 0:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=30&page=" + PageNum_WJ + "&pagesize=50&order=default";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=30&page=" + PageNum_WJ + "&pagesize=50&order=default";
                             break;
                         case 1:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=30&page=" + PageNum_WJ + "&pagesize=50&order=damku";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=30&page=" + PageNum_WJ + "&pagesize=50&order=damku";
                             break;
                         case 2:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=30&page=" + PageNum_WJ + "&pagesize=50&order=hot";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=30&page=" + PageNum_WJ + "&pagesize=50&order=hot";
                             break;
                         case 3:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=30&page=" + PageNum_WJ + "&pagesize=50&order=review";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=30&page=" + PageNum_WJ + "&pagesize=50&order=review";
                             break;
                         case 4:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=30&page=" + PageNum_WJ + "&pagesize=50&order=stow";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=30&page=" + PageNum_WJ + "&pagesize=50&order=stow";
                             break;
                         default:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=30&page=" + PageNum_WJ + "&pagesize=50&order=default";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=30&page=" + PageNum_WJ + "&pagesize=50&order=default";
                             break;
                     }
                     #endregion
@@ -300,22 +300,22 @@ namespace bilibili2.PartPages
                     switch (order)
                     {
                         case 0:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=59&page=" + PageNum_GC + "&pagesize=50&order=default";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=59&page=" + PageNum_GC + "&pagesize=50&order=default";
                             break;
                         case 1:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=59&page=" + PageNum_GC + "&pagesize=50&order=damku";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=59&page=" + PageNum_GC + "&pagesize=50&order=damku";
                             break;
                         case 2:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=59&page=" + PageNum_GC + "&pagesize=50&order=hot";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=59&page=" + PageNum_GC + "&pagesize=50&order=hot";
                             break;
                         case 3:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=59&page=" + PageNum_GC + "&pagesize=50&order=review";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=59&page=" + PageNum_GC + "&pagesize=50&order=review";
                             break;
                         case 4:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=59&page=" + PageNum_GC + "&pagesize=50&order=stow";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=59&page=" + PageNum_GC + "&pagesize=50&order=stow";
                             break;
                         default:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=59&page=" + PageNum_GC + "&pagesize=50&order=default";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=59&page=" + PageNum_GC + "&pagesize=50&order=default";
                             break;
                     }
                     #endregion
@@ -365,22 +365,22 @@ namespace bilibili2.PartPages
                     switch (order)
                     {
                         case 0:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=29&page=" + PageNum_ZX + "&pagesize=50&order=default";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=29&page=" + PageNum_ZX + "&pagesize=50&order=default";
                             break;
                         case 1:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=29&page=" + PageNum_ZX + "&pagesize=50&order=damku";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=29&page=" + PageNum_ZX + "&pagesize=50&order=damku";
                             break;
                         case 2:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=29&page=" + PageNum_ZX + "&pagesize=50&order=hot";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=29&page=" + PageNum_ZX + "&pagesize=50&order=hot";
                             break;
                         case 3:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=29&page=" + PageNum_ZX + "&pagesize=50&order=review";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=29&page=" + PageNum_ZX + "&pagesize=50&order=review";
                             break;
                         case 4:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=29&page=" + PageNum_ZX + "&pagesize=50&order=stow";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=29&page=" + PageNum_ZX + "&pagesize=50&order=stow";
                             break;
                         default:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=29&page=" + PageNum_ZX + "&pagesize=50&order=default";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=29&page=" + PageNum_ZX + "&pagesize=50&order=default";
                             break;
                     }
                     #endregion
@@ -430,22 +430,22 @@ namespace bilibili2.PartPages
                     switch (order)
                     {
                         case 0:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=28&page=" + PageNum_GF + "&pagesize=50&order=default";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=28&page=" + PageNum_GF + "&pagesize=50&order=default";
                             break;
                         case 1:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=28&page=" + PageNum_GF + "&pagesize=50&order=damku";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=28&page=" + PageNum_GF + "&pagesize=50&order=damku";
                             break;
                         case 2:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=28&page=" + PageNum_GF + "&pagesize=50&order=hot";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=28&page=" + PageNum_GF + "&pagesize=50&order=hot";
                             break;
                         case 3:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=28&page=" + PageNum_GF + "&pagesize=50&order=review";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=28&page=" + PageNum_GF + "&pagesize=50&order=review";
                             break;
                         case 4:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=28&page=" + PageNum_GF + "&pagesize=50&order=stow";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=28&page=" + PageNum_GF + "&pagesize=50&order=stow";
                             break;
                         default:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=28&page=" + PageNum_GF + "&pagesize=50&order=default";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=28&page=" + PageNum_GF + "&pagesize=50&order=default";
                             break;
                     }
                     #endregion
@@ -495,22 +495,22 @@ namespace bilibili2.PartPages
                     switch (order)
                     {
                         case 0:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=54&page=" + PageNum_OP + "&pagesize=50&order=default";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=54&page=" + PageNum_OP + "&pagesize=50&order=default";
                             break;
                         case 1:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=54&page=" + PageNum_OP + "&pagesize=50&order=damku";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=54&page=" + PageNum_OP + "&pagesize=50&order=damku";
                             break;
                         case 2:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=54&page=" + PageNum_OP + "&pagesize=50&order=hot";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=54&page=" + PageNum_OP + "&pagesize=50&order=hot";
                             break;
                         case 3:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=54&page=" + PageNum_OP + "&pagesize=50&order=review";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=54&page=" + PageNum_OP + "&pagesize=50&order=review";
                             break;
                         case 4:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=54&page=" + PageNum_OP + "&pagesize=50&order=stow";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=54&page=" + PageNum_OP + "&pagesize=50&order=stow";
                             break;
                         default:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=54&page=" + PageNum_OP + "&pagesize=50&order=default";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=54&page=" + PageNum_OP + "&pagesize=50&order=default";
                             break;
                     }
                     #endregion
@@ -560,22 +560,22 @@ namespace bilibili2.PartPages
                     switch (order)
                     {
                         case 0:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=130&page=" + PageNum_XJ + "&pagesize=50&order=default";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=130&page=" + PageNum_XJ + "&pagesize=50&order=default";
                             break;
                         case 1:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=130&page=" + PageNum_XJ + "&pagesize=50&order=damku";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=130&page=" + PageNum_XJ + "&pagesize=50&order=damku";
                             break;
                         case 2:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=130&page=" + PageNum_XJ + "&pagesize=50&order=hot";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=130&page=" + PageNum_XJ + "&pagesize=50&order=hot";
                             break;
                         case 3:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=130&page=" + PageNum_XJ + "&pagesize=50&order=review";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=130&page=" + PageNum_XJ + "&pagesize=50&order=review";
                             break;
                         case 4:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=130&page=" + PageNum_XJ + "&pagesize=50&order=stow";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=130&page=" + PageNum_XJ + "&pagesize=50&order=stow";
                             break;
                         default:
-                            uri = "http://api.bilibili.com/list?type=json&appkey=1d8b6e7d45233436&tid=130&page=" + PageNum_XJ + "&pagesize=50&order=default";
+                            uri = "http://api.bilibili.com/list?type=json&appkey=84956560bc028eb7&tid=130&page=" + PageNum_XJ + "&pagesize=50&order=default";
                             break;
                     }
                     #endregion

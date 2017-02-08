@@ -117,7 +117,7 @@ namespace bilibili2.Pages
         }
         public async void GetBangumiInfo(string banID)
         {
-            //string uri = "http://bangumi.bilibili.com/api/season?_device=wp&_ulv=10000&build=434000&platform=android&appkey=1d8b6e7d45233436&ts="+APIHelper.GetTimeSpen+ "000&type=sp&sp_id=56719";
+            //string uri = "http://bangumi.bilibili.com/api/season?_device=wp&_ulv=10000&build=434000&platform=android&appkey=84956560bc028eb7&ts="+APIHelper.GetTimeSpen+ "000&type=sp&sp_id=56719";
             //string sign=  APIHelper.GetSign(uri);
             //uri += "&sign=" + sign;
             try
@@ -125,7 +125,7 @@ namespace bilibili2.Pages
                 pr_load.Visibility = Visibility.Visible;
                 wc = new WebClientClass();
                 string uri = "";
-                    uri = string.Format("http://bangumi.bilibili.com/api/season?_device=wp&access_key={2}&_ulv=10000&build=434000&platform=android&appkey=1d8b6e7d45233436&ts={0}000&type=bangumi&season_id={1}", ApiHelper.GetTimeSpen, banID, ApiHelper.access_key);
+                    uri = string.Format("http://bangumi.bilibili.com/api/season?_device=wp&access_key={2}&_ulv=10000&build=434000&platform=android&appkey=84956560bc028eb7&ts={0}000&type=bangumi&season_id={1}", ApiHelper.GetTimeSpen, banID, ApiHelper.access_key);
                 uri += "&sign=" + ApiHelper.GetSign(uri);
                 string result = await wc.GetResults(new Uri(uri));
                 BangumiInfoModel model = new BangumiInfoModel();
