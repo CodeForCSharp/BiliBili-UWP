@@ -108,6 +108,7 @@
     <Compile Include="Class\Converter.cs" />
     <Compile Include="Class\DownloadManage.cs" />
     <Compile Include="Class\GetSilverHelper.cs" />
+    <Compile Include="Class\HttpStreamingStream.cs" />
     <Compile Include="Class\IncrementalLoadingCollection.cs" />
     <Compile Include="Class\MD5.cs" />
     <Compile Include="Class\SettingHelper.cs" />

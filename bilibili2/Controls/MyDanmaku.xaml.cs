@@ -6,6 +6,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Media.Playback;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -48,7 +49,7 @@ namespace bilibili2.Controls
         /// 是否正在播放
         /// </summary>
         public bool IsPlaying = true;
-        public MediaElementState state;
+        public MediaPlaybackState state;
         private int row = 0;//行数
         private int maxRow = 10;
         /// <summary>
@@ -230,7 +231,7 @@ namespace bilibili2.Controls
             {
                 D_Top.Children.Add(grid);
                 await Task.Delay(5000);
-                if (state== MediaElementState.Paused)
+                if (state== MediaPlaybackState.Paused)
                 {
                     ClearTopButtomDanmuku();
                 }
@@ -243,7 +244,7 @@ namespace bilibili2.Controls
             {
                 D_Bottom.Children.Add(grid);
                 await Task.Delay(5000);
-                if (state == MediaElementState.Paused)
+                if (state == MediaPlaybackState.Paused)
                 {
                     ClearTopButtomDanmuku();
                 }
