@@ -9,6 +9,7 @@
     x:Class="bilibili2.Pages.PlayerPage"
     mc:Ignorable="d"
     Tag="播放器"
+    Unloaded="Page_Unloaded"
     >
     <Page.Resources>
         <local:PostThumbToolTipValueConverter x:Key="MyThumbToolTipValueConverter" />

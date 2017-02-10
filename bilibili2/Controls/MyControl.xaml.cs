@@ -54,7 +54,9 @@ namespace bilibili2
                 pr_Load.Visibility = Visibility.Visible;
                 foreach (var item in Partitions)
                 {
-                    string result = await wc.GetResults(new Uri($"http://api.bilibili.com/list?type=json&appkey={ApiHelper._appKey}&tid={item.Uid}&page=1&pagesize={10}&order={order[item.Order]}&ver=2&rnd={new Random().Next(1000, 9999)}"));
+                    var url = $"http://api.bilibili.com/list?type=json&appkey={ApiHelper._appKey}&tid={item.Uid}&page=1&pagesize={10}&order={order[item.Order]}&ver=2&rnd={new Random().Next(1000, 9999)}";
+                    url += $"&sign={ApiHelper.GetSign(url)}";
+                    string result = await wc.GetResults(new Uri(url));           
                     var model = JsonConvert.DeserializeObject<HomeAVModel>(result);
                     if(model.Code==0)
                     {
@@ -98,7 +100,9 @@ namespace bilibili2
             {
                 var uid = (int)button.Tag;
                 var partition = Partitions.Find(p => p.Uid == uid);
-                string result = await wc.GetResults(new Uri($"http://api.bilibili.com/list?type=json&appkey={ApiHelper._appKey}&tid={uid}&page=1&pagesize={10}&order={order[partition.Order]}&ver=2&rnd={new Random().Next(1000, 9999)}"));
+                var url = $"http://api.bilibili.com/list?type=json&appkey={ApiHelper._appKey}&tid={uid}&page=1&pagesize={10}&order={order[partition.Order]}&ver=2&rnd={new Random().Next(1000, 9999)}";
+                url += $"&sign={ApiHelper.GetSign(url)}";
+                string result = await wc.GetResults(new Uri(url));
                 partition.Order++;
                 if (partition.Order > 2) { partition.Order = 0; }
                 var model = JsonConvert.DeserializeObject<HomeAVModel>(result);

@@ -27,12 +27,11 @@ namespace bilibili2.Controls
         public MyDanmaku()
         {
             this.InitializeComponent();
-           
         }
         /// <summary>
         /// 弹幕字体
         /// </summary>
-        public string fontFamily = "默认";
+        public string fontFamily = "微软雅黑";
         /// <summary>
         /// 弹幕字体大小
         /// </summary>
@@ -57,76 +56,55 @@ namespace bilibili2.Controls
         /// </summary>
         /// <param name="model">弹幕参数</param>
         /// <param name="Myself">是否自己发送的</param>
-        public async void AddGunDanmu(DanMuModel model,bool Myself)
+        public void AddFloatDanmaku(DanmakuViewModel model, bool Myself)
         {
             try
             {
-                
                 //创建基础控件
-                TextBlock tx = new TextBlock();
-                TextBlock tx2 = new TextBlock();
-                Grid grid = new Grid();
-                //设置控件相关信息
-                grid.Margin = new Thickness(0, 0, 20, 0);
-                grid.VerticalAlignment = VerticalAlignment.Center;
-                grid.HorizontalAlignment = HorizontalAlignment.Left;
-                if (fontFamily != "默认")
+                TextBlock tx = new TextBlock
                 {
-                    tx.FontFamily = new FontFamily(fontFamily);
-                    tx2.FontFamily = new FontFamily(fontFamily);
-                }
-                tx2.Text = model.DanText;
-                tx.Text = model.DanText;
-                tx2.Foreground = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
-                tx.Foreground = model.DanColor;
-                //弹幕大小
-                double size = double.Parse(model.DanSize);
-                if (size == 25)
+                    Text = model.Text,
+                    Foreground = model.Color,
+                    FontSize = model.Size == 25 ? fontSize : fontSize - 2,
+                    FontFamily = new FontFamily(fontFamily),
+                    DataContext = model
+                };
+                var dropShadow = tx.GetAlphaMask().Compositor.CreateDropShadow();
+                dropShadow.BlurRadius = 5;
+                dropShadow.Opacity = 1;
+                dropShadow.Color = Color.FromArgb(255, 0, 0, 0);
+                var moveTransform = new TranslateTransform
                 {
-                    tx2.FontSize = fontSize;
-                    tx.FontSize = fontSize;
-                }
-                else
-                {
-                    tx2.FontSize = fontSize - 2;
-                    tx.FontSize = fontSize - 2;
-                }
-
-                //grid包含弹幕文本信息
-                grid.Children.Add(tx2);
-                grid.Children.Add(tx);
-                grid.VerticalAlignment = VerticalAlignment.Top;
-                grid.HorizontalAlignment = HorizontalAlignment.Left;
-
-                TranslateTransform moveTransform = new TranslateTransform();
-                moveTransform.X = grid_Danmu.ActualWidth;
-                grid.RenderTransform = moveTransform;
+                    X = grid_Danmu.ActualWidth
+                };
+                tx.RenderTransform = moveTransform;
                 //将弹幕加载入控件中,并且设置位置
-                grid_Danmu.Children.Add(grid);
-                Grid.SetRow(grid, row);
+                grid_Danmu.Children.Add(tx);
+                Grid.SetRow(tx, row);
                 row++;
                 if (row == maxRow)
                 {
                     row = 0;
                 }
-                tx2.Margin = new Thickness(1);
-                if (Myself)
-                {
-                    grid.BorderThickness = new Thickness(2);
-                    grid.BorderBrush = new SolidColorBrush(Colors.Gray);
-                }
-                grid.Opacity = Tran;
-                grid.DataContext = model;
+                //if (Myself)
+                //{
+                //    tx.BorderThickness = new Thickness(2);
+                //    tx.BorderBrush = new SolidColorBrush(Colors.Gray);
+                //}
                 //更新弹幕UI，不更新无法获得弹幕的ActualWidth
-                grid.UpdateLayout();
+                //tx.UpdateLayout();
                 //创建动画
                 Duration duration = new Duration(TimeSpan.FromSeconds(Speed));
-                DoubleAnimation myDoubleAnimationX = new DoubleAnimation();
-                myDoubleAnimationX.Duration = duration;
+                DoubleAnimation myDoubleAnimationX = new DoubleAnimation
+                {
+                    Duration = duration,
+                    To = -(tx.ActualWidth),//到达
+                };
                 //创建故事版
-                Storyboard justintimeStoryboard = new Storyboard();
-                justintimeStoryboard.Duration = duration;
-                myDoubleAnimationX.To = -(grid.ActualWidth);//到达
+                Storyboard justintimeStoryboard = new Storyboard
+                {
+                    Duration = duration
+                };
                 justintimeStoryboard.Children.Add(myDoubleAnimationX);
                 Storyboard.SetTarget(myDoubleAnimationX, moveTransform);
                 //故事版加入动画
@@ -134,34 +112,33 @@ namespace bilibili2.Controls
                 grid_Danmu.Resources.Remove("justintimeStoryboard");
                 grid_Danmu.Resources.Add("justintimeStoryboard", justintimeStoryboard);
                 justintimeStoryboard.Begin();
-                //等待，暂停则暂停
-                await Task.Run(async () =>
+                DispatcherTimer timer = new DispatcherTimer
                 {
-                    int i = 0;
-                    while (true)
+                    Interval = new TimeSpan(0, 0, 0, 1)
+                };
+                int i = 0;
+                timer.Tick += async (sender, args) =>
+                {
+                    if (!IsPlaying)
                     {
-                        if (!IsPlaying)
+                        await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                         {
-                            await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-                                justintimeStoryboard.Pause();
-                            });
-                            //break;
-                        }
-                        else
-                        {
-                            if (i == Speed*2)
-                            {
-                                break;
-                            }
-                            i++;
-                            await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-                                justintimeStoryboard.Resume();
-                            });
-                        }
-                        await Task.Delay(500);
+                            justintimeStoryboard.Pause();
+                        });
                     }
-                });
-                grid_Danmu.Children.Remove(grid);
+                    else
+                    {
+                        if (i == Speed * 2)
+                        {
+                            grid_Danmu.Children.Remove(tx);
+                        }
+                        i++;
+                        await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                        {
+                            justintimeStoryboard.Resume();
+                        });
+                    }
+                };
             }
             catch (Exception)
             {
@@ -184,7 +161,7 @@ namespace bilibili2.Controls
         /// <param name="model">弹幕参数</param>
         /// <param name="istop">是否顶部</param>
         /// <param name="Myself">是否自己发送的</param>
-        public async void AddTopButtomDanmu(DanMuModel model, bool istop,bool Myself)
+        public async void AddTopButtomDanmu(DanmakuViewModel model, bool istop,bool Myself)
         {
             TextBlock tx = new TextBlock();
             TextBlock tx2 = new TextBlock();
@@ -195,11 +172,11 @@ namespace bilibili2.Controls
                 tx2.FontFamily = new FontFamily(fontFamily);
             }
 
-                tx2.Text =model.DanText;
-                tx.Text = model.DanText ;
+                tx2.Text =model.Text;
+                tx.Text = model.Text ;
             tx2.Foreground = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
-            tx.Foreground = model.DanColor;//new SolidColorBrush(co[rd.Next(0, 7)]);
-            double size = double.Parse(model.DanSize);
+            tx.Foreground = model.Color;//new SolidColorBrush(co[rd.Next(0, 7)]);
+            double size = model.Size;
             if (size == 25)
             {
                 tx2.FontSize = fontSize;
@@ -295,27 +272,27 @@ namespace bilibili2.Controls
         /// 读取弹幕屏幕中的弹幕
         /// </summary>
         /// <returns></returns>
-        public List<DanMuModel> GetScreenDanmu()
+        public List<DanmakuViewModel> GetScreenDanmu()
         {
-            List<DanMuModel> list = new List<DanMuModel>();
+            List<DanmakuViewModel> list = new List<DanmakuViewModel>();
             foreach (Grid item in D_Top.Children)
             {
-                list.Add(item.DataContext as DanMuModel);
+                list.Add(item.DataContext as DanmakuViewModel);
             }
             foreach (Grid item in D_Bottom.Children)
             {
-                list.Add(item.DataContext as DanMuModel);
+                list.Add(item.DataContext as DanmakuViewModel);
             }
             foreach (Grid item in grid_Danmu.Children)
             {
-                list.Add(item.DataContext as DanMuModel);
+                list.Add(item.DataContext as DanmakuViewModel);
             }
             return list;
         }
         /// <summary>
         /// 移除当前屏幕中的弹幕
         /// </summary>
-        public void RemoveDanmu(DanMuModel model)
+        public void RemoveDanmu(DanmakuViewModel model)
         {
             foreach (Grid item in grid_Danmu.Children)
             {
@@ -345,19 +322,19 @@ namespace bilibili2.Controls
         /// </summary>
         /// <param name="IsVisible">是否可见</param>
         /// <param name="mode">模式</param>
-        public void SetDanmuVisibility(bool IsVisible, DanmuMode mode)
+        public void SetDanmuVisibility(bool IsVisible, DanmakuMode mode)
         {
             if (IsVisible)
             {
                 switch (mode)
                 {
-                    case DanmuMode.Roll:
+                    case DanmakuMode.Roll:
                         grid_Danmu.Visibility = Visibility.Visible;
                         break;
-                    case DanmuMode.Top:
+                    case DanmakuMode.Top:
                         D_Top.Visibility = Visibility.Visible;
                         break;
-                    case DanmuMode.Buttom:
+                    case DanmakuMode.Buttom:
                         D_Bottom.Visibility = Visibility.Visible;
                         break;
                     default:
@@ -368,13 +345,13 @@ namespace bilibili2.Controls
             {
                 switch (mode)
                 {
-                    case DanmuMode.Roll:
+                    case DanmakuMode.Roll:
                         grid_Danmu.Visibility = Visibility.Collapsed;
                         break;
-                    case DanmuMode.Top:
+                    case DanmakuMode.Top:
                         D_Top.Visibility = Visibility.Collapsed;
                         break;
-                    case DanmuMode.Buttom:
+                    case DanmakuMode.Buttom:
                         D_Bottom.Visibility = Visibility.Collapsed;
                         break;
                     default:
@@ -383,101 +360,11 @@ namespace bilibili2.Controls
             }
         }
 
-        public enum DanmuMode
+        public enum DanmakuMode
         {
             Roll=0,
             Top=1,
             Buttom=2
         }
-
-        public class DanMuModel
-        {
-            public static double Tran = 255;//弹幕透明度
-            //头声明
-            public string chatserver { get; set; }//弹幕服务器
-            public string chatid { get; set; }//弹幕ID
-            public string mission { get; set; }//任务？
-            public string maxlimit { get; set; }//弹幕池上限
-            public string source { get; set; }//来源？
-            //弹幕信息
-            //<d p = "1355.2700195312,5,25,16776960,1447587837,0,222d0737,1347973259" > やがて巡り巡る季節に僕らは息をする</d>
-            private decimal _DanTime;//弹幕出现时间
-            public decimal DanTime
-            {
-                get { return _DanTime; }
-                set { _DanTime = value; }
-            }
-            public string DanMode { get; set; }//弹幕模式 1..3 滚动弹幕 4底端弹幕 5顶端弹幕 6.逆向弹幕 7精准定位 8高级弹幕
-            public string DanSize { get; set; }//弹幕大小 12非常小,16特小,18小,25中,36大,45很大,64特别大
-            public string _DanColor { get; set; }//弹幕颜色，十进制
-            public string DanModeStr
-            {
-                get
-                {
-                    switch (DanMode)
-                    {
-                        case "4":
-                            return "底端";
-                        case "5":
-                            return "顶端";
-                        default:
-                            return "滚动";
-                    }
-                }
-            }
-            public string DanTimeStr
-            {
-                get
-                {
-                    TimeSpan ts = new TimeSpan(0,0, Convert.ToInt32(DanTime));
-                    return ts.Minutes.ToString("00") + ":" + ts.Seconds.ToString("00");
-                }
-            }
-            public SolidColorBrush color
-            {
-                get;set;
-            }
-            public SolidColorBrush DanColor
-            {
-                get
-                {
-                    try
-                    {
-                        _DanColor = Convert.ToInt64(_DanColor).ToString("X2");
-                        if (_DanColor.StartsWith("#"))
-                            _DanColor = _DanColor.Replace("#", string.Empty);
-                        int v = int.Parse(_DanColor, System.Globalization.NumberStyles.HexNumber);
-                        SolidColorBrush solid= new SolidColorBrush(new Color()
-                        {
-                            A = Convert.ToByte(Tran),
-                            R = Convert.ToByte((v >> 16) & 255),
-                            G = Convert.ToByte((v >> 8) & 255),
-                            B = Convert.ToByte((v >> 0) & 255)
-                        });
-                        color = solid;
-                        return solid;
-                    }
-                    catch (Exception)
-                    {
-                        SolidColorBrush solid = new SolidColorBrush(new Color()
-                        {
-                            A = 255,
-                            R = 255,
-                            G = 255,
-                            B = 255
-                        });
-                        color = solid;
-                        return solid;
-                    }
-
-                }
-            }
-            public string DanSendTime { get; set; }//弹幕发送时间
-            public string DanPool { get; set; }//弹幕池，0普通池 1字幕池 2特殊池 【目前特殊池为高级弹幕专用】
-            public string DanID { get; set; }//弹幕发送人ID
-            public string DanRowID { get; set; }
-            public string DanText { get; set; }//信息
-        }
-
     }
 }

@@ -211,15 +211,12 @@ namespace bilibili2.Class
             public DownModel downModel { get; set; }
             public CancellationTokenSource cts = new CancellationTokenSource();
             public event PropertyChangedEventHandler PropertyChanged;
-            protected void thisPropertyChanged(string name)
+            protected void ThisPropertyChanged(string name)
             {
-                if (PropertyChanged != null)
-                {
-                    PropertyChanged(this, new PropertyChangedEventArgs(name));
-                }
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
             }
             private DownloadOperation _downOp;
-            public DownloadOperation downOp
+            public DownloadOperation DownOp
             {
                 get { return _downOp; }
                 set
@@ -235,7 +232,7 @@ namespace bilibili2.Class
                 set
                 {
                     _progress = value;
-                    thisPropertyChanged("Progress");
+                    ThisPropertyChanged("Progress");
                 }
             }
 
@@ -245,18 +242,18 @@ namespace bilibili2.Class
                 get { return _Size; }
                 set
                 {
-                    _Size = (((double)Convert.ToDouble(value) / 1024 / 1024)).ToString("0.0") + "M/" + ((Double)downOp.Progress.TotalBytesToReceive / 1024 / 1024).ToString("0.0") + "M";
-                    thisPropertyChanged("Size");
+                    _Size = (((double)Convert.ToDouble(value) / 1024 / 1024)).ToString("0.0") + "M/" + ((Double)DownOp.Progress.TotalBytesToReceive / 1024 / 1024).ToString("0.0") + "M";
+                    ThisPropertyChanged("Size");
                 }
             }
-            public string Guid { get { return downOp.Guid.ToString(); } }
+            public string Guid { get { return DownOp.Guid.ToString(); } }
             public string _Status;
             public string Status
             {
-                get { thisPropertyChanged("Status"); return _Status; }
+                get { ThisPropertyChanged("Status"); return _Status; }
                 set
                 {
-                    switch (downOp.Progress.Status)
+                    switch (DownOp.Progress.Status)
                     {
                         case BackgroundTransferStatus.Idle:
                             _Status = "空闲中";
@@ -289,7 +286,7 @@ namespace bilibili2.Class
                             _Status = "Wait...";
                             break;
                     }
-                    thisPropertyChanged("Status");
+                    ThisPropertyChanged("Status");
                 }
             }
         }

@@ -638,7 +638,12 @@ namespace bilibili2.Pages
                             loaded.Add(item.nickname + item.timeline + item.text);
                             if (LoadDanmu&&!DanDis_Dis(item.text))
                             {
-                                danmu.AddGunDanmu(new Controls.MyDanmaku.DanMuModel() { DanText = item.text, DanSize = "25", _DanColor = "16777215" }, false);
+                                danmu.AddFloatDanmaku(new DanmakuViewModel
+                                {
+                                    Text = item.text,
+                                    Size = 25,
+                                    Color = new SolidColorBrush(Converter.StringToColor("16777215"))
+                                }, false);
                             }
 
                         }
@@ -675,9 +680,11 @@ namespace bilibili2.Pages
             {
                 stack_Comment.Children.Clear();
             }
-            TextBlock tx = new TextBlock();
-            tx.Margin = new Thickness(5);
-            tx.Text = content;
+            TextBlock tx = new TextBlock()
+            {
+                Margin = new Thickness(5),
+                Text = content
+            };
             if (Myself)
             {
                 tx.Foreground = new SolidColorBrush(Colors.Blue);
@@ -744,7 +751,12 @@ namespace bilibili2.Pages
                     AddComment("我:" + txt_Comment.Text, true);
                     if (LoadDanmu)
                     {
-                        danmu.AddGunDanmu(new Controls.MyDanmaku.DanMuModel() { DanText = txt_Comment.Text, DanSize = "25", _DanColor = "16777215" }, true);
+                        danmu.AddFloatDanmaku(new DanmakuViewModel
+                        {
+                            Text = txt_Comment.Text,
+                            Size = 25,
+                            Color = new SolidColorBrush(Converter.StringToColor("16777215"))
+                        }, true);
                     }
                     txt_Comment.Text = string.Empty;
                     btn_SendComment.IsEnabled = false;
@@ -936,7 +948,7 @@ namespace bilibili2.Pages
             var s = danmu.GetScreenDanmu();
             foreach (var item in s)
             {
-                if (DanDis_Dis(item.DanText))
+                if (DanDis_Dis(item.Text))
                 {
                     danmu.RemoveDanmu(item);
                 }

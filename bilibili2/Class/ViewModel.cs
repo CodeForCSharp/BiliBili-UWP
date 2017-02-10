@@ -1078,6 +1078,19 @@ namespace bilibili2
         public int RankFontSize { get; set; }
         public string RankForeground { get; set; }
     }
+
+    public class DanmakuViewModel
+    {
+        public TimeSpan Time { get; set; }//弹幕出现时间
+        public int Mode { get; set; }//弹幕模式 1..3 滚动弹幕 4底端弹幕 5顶端弹幕 6.逆向弹幕 7精准定位 8高级弹幕
+        public int Size { get; set; }//弹幕大小 12非常小,16特小,18小,25中,36大,45很大,64特别大
+        public SolidColorBrush Color { get; set; }//弹幕颜色
+        public long SendTime { get; set; }//弹幕发送时间
+        public int Pool { get; set; }//弹幕池，0普通池 1字幕池 2特殊池 【目前特殊池为高级弹幕专用】
+        public string Id { get; set; }//弹幕发送人ID
+        public string RowId { get; set; }
+        public string Text { get; set; }
+    }
     public class MessageModel
     {
         public int code { get; set; }

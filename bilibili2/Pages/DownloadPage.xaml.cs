@@ -87,7 +87,7 @@ namespace bilibili2.Pages
                         //ls.Add(item.Guid);
                         list_Downing.Items.Add(new DownloadManage.HandleModel()
                         {
-                            downOp = item,
+                            DownOp = item,
                             Size = item.Progress.BytesReceived.ToString(),
                             downModel = await GetInfo(item.Guid.ToString())
                         });
@@ -100,10 +100,10 @@ namespace bilibili2.Pages
                     foreach (DownloadManage.HandleModel model in list_Downing.Items)
                     {
                         //bool test = HandleList.Contains(model.downOp.Guid.ToString());
-                        if (!HandleList.Contains(model.downOp.Guid.ToString()))
+                        if (!HandleList.Contains(model.DownOp.Guid.ToString()))
                         {
                             // 监视指定的后台下载任务
-                            HandleList.Add(model.downOp.Guid.ToString());
+                            HandleList.Add(model.DownOp.Guid.ToString());
                             tasks.Add(HandleDownloadAsync(model));
                         }
                     }
@@ -234,10 +234,10 @@ namespace bilibili2.Pages
         {
             try
             {
-                DownloadProgress(model.downOp);
+                DownloadProgress(model.DownOp);
                 //进度监控
                 Progress<DownloadOperation> progressCallback = new Progress<DownloadOperation>(DownloadProgress);
-                await model.downOp.AttachAsync().AsTask(model.cts.Token, progressCallback);
+                await model.DownOp.AttachAsync().AsTask(model.cts.Token, progressCallback);
 
                 //保存任务信息
                 //  StorageFolder folder = ApplicationData.Current.LocalFolder;
@@ -288,7 +288,7 @@ namespace bilibili2.Pages
                 DownloadManage.HandleModel test = null;
                 foreach (DownloadManage.HandleModel item in list_Downing.Items)
                 {
-                    if (item.downOp.Guid == op.Guid)
+                    if (item.DownOp.Guid == op.Guid)
                     {
                         test = item;
                     }
@@ -314,9 +314,9 @@ namespace bilibili2.Pages
             {
                 foreach (DownloadManage.HandleModel item in list_Downing.SelectedItems)
                 {
-                    if (item.downOp.Progress.Status == BackgroundTransferStatus.PausedByApplication)
+                    if (item.DownOp.Progress.Status == BackgroundTransferStatus.PausedByApplication)
                     {
-                        item.downOp.Resume();
+                        item.DownOp.Resume();
                         //GetDownInfo();
                     }
                 }
@@ -329,9 +329,9 @@ namespace bilibili2.Pages
             {
                 foreach (DownloadManage.HandleModel item in list_Downing.SelectedItems)
                 {
-                    if (item.downOp.Progress.Status == BackgroundTransferStatus.Running)
+                    if (item.DownOp.Progress.Status == BackgroundTransferStatus.Running)
                     {
-                        item.downOp.Pause();
+                        item.DownOp.Pause();
                     }
                 }
             }

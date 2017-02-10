@@ -55,7 +55,6 @@ namespace bilibili2.Pages
         }
         MediaPlayer player = new MediaPlayer();
         uint videoLength = 0;
-        uint currentBytes = 0;
         HttpClient client = new HttpClient();
         private async void InitializeAdaptiveMediaSourceAsync(Uri uri)
         {
@@ -63,23 +62,6 @@ namespace bilibili2.Pages
             var ams = MediaSource.CreateFromStream(stream, stream.ContentType);
             player.Source = ams;
             mediaElement.SetMediaPlayer(player);
-            //ams.DownloadRequested += async (source, args) =>
-            //{
-            //    var deferral = args.GetDeferral();
-            //    if (currentBytes < videoLength)
-            //    {
-            //        var maxByte = currentBytes + 2000000 < videoLength ? currentBytes + 2000000 : videoLength;
-            //        client.DefaultRequestHeaders.Add("Range", $"{currentBytes}-{maxByte}");
-            //        var response = await client.GetAsync(uri);
-            //        if (response.StatusCode == System.Net.HttpStatusCode.PartialContent || response.StatusCode == System.Net.HttpStatusCode.OK)
-            //        {
-            //            currentBytes += 2000000;
-            //            var content = await response.Content.ReadAsByteArrayAsync();
-            //            args.Result.Buffer = WindowsRuntimeBufferExtensions.AsBuffer(content, 0, content.Length);
-            //        }
-            //        deferral.Complete();
-            //    }
-            //};
         }
 
         private void PlayerPage_KeyDown(CoreWindow sender, KeyEventArgs args)
@@ -140,7 +122,7 @@ namespace bilibili2.Pages
         DispatcherTimer timer = new DispatcherTimer();
         DispatcherTimer datetimer = new DispatcherTimer();//用于更新时间
         SettingHelper setting = new SettingHelper();
-        List<MyDanmaku.DanMuModel> DanMuPool = null;
+        List<DanmakuViewModel> DanMuPool = null;
         List<VideoModel> VideoList = new List<VideoModel>();//视频列表
         string device = Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily;
         int PlayP = 0;//播放第几P
@@ -505,14 +487,7 @@ namespace bilibili2.Pages
                 string results = await wc.GetResults(new Uri(url));
                 var model = JObject.Parse(results);
                 var playurl = model["durl"].First["url"].Value<string>();
-                //foreach(var item in model["durl"].First["backup_url"])
-                //{
-                //    urls.Add(item.Value<string>());
-                //}
-                //VideoUriModel model = JsonConvert.DeserializeObject<VideoUriModel>(results);
-                //List<VideoUriModel> model1 = JsonConvert.DeserializeObject<List<VideoUriModel>>(model.durl.ToString());
                 videoLength = model["durl"].First["size"].Value<uint>();
-                currentBytes = 0;
                 InitializeAdaptiveMediaSourceAsync(new Uri(playurl));
                 pro_Num.Text = "开始缓冲视频...";
             }
@@ -523,71 +498,56 @@ namespace bilibili2.Pages
             }
         }
 
-        public async Task<List<MyDanmaku.DanMuModel>> GetDM(string cid,bool IsLocal,bool IsOld,string path)
+        public async Task<List<DanmakuViewModel>> GetDM(string cid,bool IsLocal,bool IsOld,string path)
         {
-            List<MyDanmaku.DanMuModel> ls = new List<MyDanmaku.DanMuModel>();
+            List<DanmakuViewModel> ls = new List<DanmakuViewModel>();
             try
             {
-
                 string a = string.Empty;
                 if (!IsLocal)
                 {
-                   a=  await new WebClientClass().GetResults(new Uri("http://comment.bilibili.com/" + cid + ".xml"));
+                    a = await new WebClientClass().GetResults(new Uri($"http://comment.bilibili.com/{cid}.xml"));
+                }
+                else if (IsOld)
+                {
+                    var videoLibrary = KnownFolders.VideosLibrary;
+                    if (!await Microsoft.Toolkit.Uwp.StorageFileHelper.FileExistsAsync(videoLibrary, "Bili-Download"))
+                    {
+                        await videoLibrary.CreateFolderAsync("Bili-Download");
+                    }
+                    StorageFile file = await videoLibrary.GetFileAsync($"{cid}.xml");
+                    string fileText = await FileIO.ReadTextAsync(file);
+                    if (string.IsNullOrEmpty(fileText))
+                    {
+                        a = fileText;
+                    }
                 }
                 else
                 {
-                    if (IsOld)
-                    {
-                        StorageFolder folder = ApplicationData.Current.LocalFolder;
-                        StorageFolder DownFolder = await folder.GetFolderAsync("DownLoad");
-                        StorageFolder DownFolder2 = await KnownFolders.VideosLibrary.GetFolderAsync("Bili-Download");
-                        StorageFile file = await DownFolder.CreateFileAsync(cid + ".xml", CreationCollisionOption.OpenIfExists);
-                        StorageFile file2 = await DownFolder2.CreateFileAsync(cid + ".xml", CreationCollisionOption.OpenIfExists);
-                        string filesOne = await FileIO.ReadTextAsync(file);
-                        string filesTwo = await FileIO.ReadTextAsync(file2);
-                        if (filesOne.Length != 0)
-                        {
-                            a = filesOne;
-                        }
-                        else
-                        {
-                            a = filesTwo;
-                        }
-                    }
-                    else
-                    {
-                        //StorageFolder folder = ApplicationData.Current.LocalFolder;
-                        StorageFolder DownFolder = await StorageFolder.GetFolderFromPathAsync(path);
-                        //StorageFolder DownFolder2 = await KnownFolders.VideosLibrary.GetFolderAsync("Bili-Download");
-                        StorageFile file = await DownFolder.CreateFileAsync(cid + ".xml", CreationCollisionOption.OpenIfExists);
-                        
-                        string files = await FileIO.ReadTextAsync(file);
-                        a = files;
-                    }
+                    StorageFolder DownFolder = await StorageFolder.GetFolderFromPathAsync(path);
+                    StorageFile file = await DownFolder.CreateFileAsync(cid + ".xml", CreationCollisionOption.OpenIfExists);
+                    string files = await FileIO.ReadTextAsync(file);
+                    a = files;
                 }
-                Windows.Data.Xml.Dom.XmlDocument xdoc = new Windows.Data.Xml.Dom.XmlDocument();
+                XmlDocument xdoc = new XmlDocument();
                 xdoc.LoadXml(a);
-                Windows.Data.Xml.Dom.XmlElement el = xdoc.DocumentElement;
-                Windows.Data.Xml.Dom.XmlNodeList xml = el.ChildNodes;
-                foreach (var item in xml)
+                var ps = xdoc.DocumentElement.ChildNodes.Where(node => node.NodeName == "d");
+                foreach(var p in ps)
                 {
-                    if (item.Attributes?.GetNamedItem("p") != null)
+                    string attribute = p.Attributes.GetNamedItem("p").InnerText;
+                    string[] parts = attribute.Split(',');
+                    ls.Add(new DanmakuViewModel
                     {
-                        string heheda = item.Attributes.GetNamedItem("p").InnerText;
-                        string[] haha = heheda.Split(',');
-                        ls.Add(new MyDanmaku.DanMuModel
-                        {
-                            DanTime = decimal.Parse(haha[0]),
-                            DanMode = haha[1],
-                            DanSize = haha[2],
-                            _DanColor = haha[3],
-                            DanSendTime = haha[4],
-                            DanPool = haha[5],
-                            DanID = haha[6],
-                            DanRowID = haha[7],
-                            DanText = item.InnerText
-                        });
-                    }
+                        Time = TimeSpan.FromSeconds(double.Parse(parts[0])),
+                        Mode = int.Parse(parts[1]),
+                        Size = int.Parse(parts[2]),
+                        Color = new SolidColorBrush(Converter.StringToColor(parts[3])),
+                        SendTime = long.Parse(parts[4]),
+                        Pool = int.Parse(parts[5]),
+                        Id = parts[6],
+                        RowId = parts[7],
+                        Text = p.InnerText
+                    });
                 }
                 return ls;
             }
@@ -616,23 +576,23 @@ namespace bilibili2.Pages
                 {
                     foreach (var item in DanMuPool)
                     {
-                        if (!DanDis_Dis(item.DanText))
+                        if (!DanDis_Dis(item.Text))
                         {
-                            if (Convert.ToInt32(item.DanTime) == Convert.ToInt32(player.PlaybackSession.Position.TotalSeconds))
+                            if (Convert.ToInt32(item.Time.TotalSeconds) == Convert.ToInt32(player.PlaybackSession.Position.TotalSeconds))
                             {
-                                if (item.DanMode == "5")
+                                if (item.Mode == 5)
                                 {
                                     danmu.AddTopButtomDanmu(item, true, false);
                                 }
                                 else
                                 {
-                                    if (item.DanMode == "4")
+                                    if (item.Mode == 4)
                                     {
                                         danmu.AddTopButtomDanmu(item, false, false);
                                     }
                                     else
                                     {
-                                        danmu.AddGunDanmu(item, false);
+                                        danmu.AddFloatDanmaku(item, false);
                                     }
                                 }
                             }
@@ -804,7 +764,6 @@ namespace bilibili2.Pages
                             //await Task.Delay(3000);
                             btn_LastPost.Visibility = Visibility.Collapsed;
                          }
-
                          break;
                      case MediaPlaybackState.Paused:
                          btn_Play.Visibility = Visibility.Visible;
@@ -812,7 +771,6 @@ namespace bilibili2.Pages
                          danmu.IsPlaying = false;
                          progress.Visibility = Visibility.Collapsed;
                          timer.Stop();
-
                          break;
                     //case  MediaPlaybackState.Paused:
                     //    btn_Play.Visibility = Visibility.Visible;
@@ -938,15 +896,29 @@ namespace bilibili2.Pages
                     messShow.Show("已发送弹幕！",3000);
                     if (modeInt == 1)
                     {
-                        danmu.AddGunDanmu(new MyDanmaku.DanMuModel { DanText = Send_text_Comment.Text, _DanColor = ((ComboBoxItem)Send_cb_Color.SelectedItem).Tag.ToString(), DanSize = "25" }, true);
+                        danmu.AddFloatDanmaku(new DanmakuViewModel
+                        {
+                            Text = Send_text_Comment.Text,
+                            Color = new SolidColorBrush(Converter.StringToColor(((ComboBoxItem)Send_cb_Color.SelectedItem).Tag.ToString())),
+                            Size = 25
+                        }, true);
                     }
                     if (modeInt == 4)
                     {
-                        danmu.AddTopButtomDanmu(new MyDanmaku.DanMuModel { DanText = Send_text_Comment.Text, _DanColor = ((ComboBoxItem)Send_cb_Color.SelectedItem).Tag.ToString(), DanSize = "25" }, false, true);
+                        danmu.AddTopButtomDanmu(new DanmakuViewModel
+                        {
+                            Text = Send_text_Comment.Text,
+                            Color =new SolidColorBrush(Converter.StringToColor(((ComboBoxItem)Send_cb_Color.SelectedItem).Tag.ToString())),
+                            Size = 25
+                        }, false, true);
                     }
                     if (modeInt == 5)
                     {
-                        danmu.AddTopButtomDanmu(new MyDanmaku.DanMuModel { DanText = Send_text_Comment.Text, _DanColor = ((ComboBoxItem)Send_cb_Color.SelectedItem).Tag.ToString(), DanSize = "25" }, true, true);
+                        danmu.AddTopButtomDanmu(new DanmakuViewModel
+                        {
+                            Text = Send_text_Comment.Text,
+                            Color =new SolidColorBrush(Converter.StringToColor(((ComboBoxItem)Send_cb_Color.SelectedItem).Tag.ToString())),
+                            Size = 25 }, true, true);
                     }
                     Send_text_Comment.Text = string.Empty;
                 }
@@ -1110,38 +1082,38 @@ namespace bilibili2.Pages
         private void menu_setting_top_Click(object sender, RoutedEventArgs e)
         {
 
-                danmu.SetDanmuVisibility(false, MyDanmaku.DanmuMode.Top);
+                danmu.SetDanmuVisibility(false, MyDanmaku.DanmakuMode.Top);
                 setting.SetSettingValue("DanVisTop", false);
 
         }
 
         private void menu_setting_buttom_Click(object sender, RoutedEventArgs e)
         {
-                danmu.SetDanmuVisibility(false, MyDanmaku.DanmuMode.Buttom);
+                danmu.SetDanmuVisibility(false, MyDanmaku.DanmakuMode.Buttom);
                 setting.SetSettingValue("DanVisButtom", false);
         }
 
         private void menu_setting_gd_Checked(object sender, RoutedEventArgs e)
         {
-                danmu.SetDanmuVisibility(false, MyDanmaku.DanmuMode.Roll);
+                danmu.SetDanmuVisibility(false, MyDanmaku.DanmakuMode.Roll);
                 setting.SetSettingValue("DanVisRoll", false);
         }
 
         private void menu_setting_gd_Unchecked(object sender, RoutedEventArgs e)
         {
-            danmu.SetDanmuVisibility(true, MyDanmaku.DanmuMode.Roll);
+            danmu.SetDanmuVisibility(true, MyDanmaku.DanmakuMode.Roll);
             setting.SetSettingValue("DanVisRoll", true);
         }
 
         private void menu_setting_top_Unchecked(object sender, RoutedEventArgs e)
         {
-            danmu.SetDanmuVisibility(true, MyDanmaku.DanmuMode.Top);
+            danmu.SetDanmuVisibility(true, MyDanmaku.DanmakuMode.Top);
             setting.SetSettingValue("DanVisTop", true);
         }
 
         private void menu_setting_buttom_Unchecked(object sender, RoutedEventArgs e)
         {
-            danmu.SetDanmuVisibility(true, MyDanmaku.DanmuMode.Buttom);
+            danmu.SetDanmuVisibility(true, MyDanmaku.DanmakuMode.Buttom);
             setting.SetSettingValue("DanVisButtom", true);
         }
 
@@ -1181,7 +1153,7 @@ namespace bilibili2.Pages
             var s= danmu.GetScreenDanmu();
             foreach (var item in s)
             {
-                if (DanDis_Dis(item.DanText))
+                if (DanDis_Dis(item.Text))
                 {
                     danmu.RemoveDanmu(item);
                 }
@@ -1195,9 +1167,9 @@ namespace bilibili2.Pages
         /// <param name="e"></param>
         private void btn_Dis_Remove_Click(object sender, RoutedEventArgs e)
         {
-            foreach (MyDanmaku.DanMuModel item in list_DisDanmu.SelectedItems)
+            foreach (DanmakuViewModel item in list_DisDanmu.SelectedItems)
             {
-                DanDis_Add(item.DanID, true);
+                DanDis_Add(item.Id, true);
                 danmu.RemoveDanmu(item);
                 list_DisDanmu.Items.Remove(item);
               
@@ -1264,13 +1236,12 @@ namespace bilibili2.Pages
         {
             if (tw_AutoFull.IsOn)
             {
-                player.AudioCategory =  MediaPlayerAudioCategory.Media;
+                player.AudioCategory = MediaPlayerAudioCategory.Media;
             }
             else
             {
                 player.AudioCategory = MediaPlayerAudioCategory.Movie;
             }
-
         }
 
         private void Send_text_Comment_KeyDown(object sender, KeyRoutedEventArgs e)
@@ -1347,14 +1318,18 @@ namespace bilibili2.Pages
                 btn_LastPost.Visibility = Visibility.Collapsed;
             }
         }
+
+        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        {
+            player.Dispose();
+        }
     }
     //进度转换
     public sealed class PostThumbToolTipValueConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            int i = 0;
-            int.TryParse(value.ToString(), out i);
+            int.TryParse(value.ToString(), out int i);
             TimeSpan ts = new TimeSpan(0, 0, i);
             return ts.Hours.ToString("00") + ":" + ts.Minutes.ToString("00") + ":" + ts.Seconds.ToString("00");
         }

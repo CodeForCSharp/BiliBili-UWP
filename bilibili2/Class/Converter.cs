@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI;
 
 namespace bilibili2.Class
 {
@@ -82,6 +83,32 @@ namespace bilibili2.Class
                 case 3: return 16;
                 default:
                     return 15;
+            }
+        }
+
+        public static Color StringToColor(string colorName)
+        {
+            try
+            {
+                if (colorName.StartsWith("#"))
+                    colorName = colorName.Replace("#", string.Empty);
+                ulong v = ulong.Parse(colorName);
+                var a = Convert.ToByte(v >> 24 & 0XFF);
+                var r = Convert.ToByte(v >> 16 & 0XFF);
+                var g = Convert.ToByte(v >> 8 & 0XFF);
+                var b = Convert.ToByte(v >> 0 & 0XFF);
+                Color color = Color.FromArgb(a, r, g, b);
+                return color;
+            }
+            catch
+            {
+                return new Color
+                {
+                    A = 255,
+                    R = 255,
+                    G = 255,
+                    B = 255,
+                };
             }
         }
     }
