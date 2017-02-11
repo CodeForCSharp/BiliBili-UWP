@@ -69,10 +69,6 @@ namespace bilibili2.Controls
                     FontFamily = new FontFamily(fontFamily),
                     DataContext = model
                 };
-                var dropShadow = tx.GetAlphaMask().Compositor.CreateDropShadow();
-                dropShadow.BlurRadius = 5;
-                dropShadow.Opacity = 1;
-                dropShadow.Color = Color.FromArgb(255, 0, 0, 0);
                 var moveTransform = new TranslateTransform
                 {
                     X = grid_Danmu.ActualWidth
@@ -92,7 +88,7 @@ namespace bilibili2.Controls
                 //    tx.BorderBrush = new SolidColorBrush(Colors.Gray);
                 //}
                 //更新弹幕UI，不更新无法获得弹幕的ActualWidth
-                //tx.UpdateLayout();
+                tx.UpdateLayout();
                 //创建动画
                 Duration duration = new Duration(TimeSpan.FromSeconds(Speed));
                 DoubleAnimation myDoubleAnimationX = new DoubleAnimation
@@ -109,8 +105,8 @@ namespace bilibili2.Controls
                 Storyboard.SetTarget(myDoubleAnimationX, moveTransform);
                 //故事版加入动画
                 Storyboard.SetTargetProperty(myDoubleAnimationX, "X");
-                grid_Danmu.Resources.Remove("justintimeStoryboard");
-                grid_Danmu.Resources.Add("justintimeStoryboard", justintimeStoryboard);
+                //grid_Danmu.Resources.Remove("justintimeStoryboard");
+                //grid_Danmu.Resources.Add("justintimeStoryboard", justintimeStoryboard);
                 justintimeStoryboard.Begin();
                 DispatcherTimer timer = new DispatcherTimer
                 {
