@@ -788,8 +788,8 @@ namespace bilibili2.Pages
         SettingHelper setting = new SettingHelper();
         private void slider_DanmuJianju_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            danmu.SetSpacing(slider_DanmuJianju.Value);
-            setting.SetSettingValue("DanmuJianju-Live", slider_DanmuJianju.Value);
+            //danmu.SetSpacing(slider_DanmuJianju.Value);
+            //setting.SetSettingValue("DanmuJianju-Live", slider_DanmuJianju.Value);
         }
         private void slider_DanmuTran_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
@@ -945,12 +945,12 @@ namespace bilibili2.Pages
         {
             DanDis_Add(txt_Dis.Text, false);
             txt_Dis.Text = "";
-            var s = danmu.GetScreenDanmu();
+            var s = danmu.GetScreenDanmaku();
             foreach (var item in s)
             {
                 if (DanDis_Dis(item.Text))
                 {
-                    danmu.RemoveDanmu(item);
+                    danmu.RemoveDanmaku(item);
                 }
             }
         }

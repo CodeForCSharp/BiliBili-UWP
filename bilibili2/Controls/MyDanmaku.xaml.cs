@@ -26,6 +26,11 @@ namespace bilibili2.Controls
     {
         public MyDanmaku()
         {
+            timer.Tick += (sender,args) =>
+            {
+                ClearTopButtomDanmuku();
+            };
+            timer.Start();
             this.InitializeComponent();
         }
         /// <summary>
@@ -47,16 +52,95 @@ namespace bilibili2.Controls
         /// <summary>
         /// 是否正在播放
         /// </summary>
-        public bool IsPlaying = true;
-        public MediaPlaybackState state;
+        private bool isPlaying = true;
+        public bool IsPlaying
+        {
+            get
+            {
+                return isPlaying;
+            }
+            set
+            {
+                isPlaying = value;
+                if(value)
+                {
+                    Resume();
+                    timer.Start();
+                }
+                else
+                {
+                    Pause();
+                    timer.Stop();
+                }
+            }
+        }
+        private bool[] isOccupied;
+        private int rows = 0;
+        private List<Storyboard> storyBoards = new List<Storyboard>();
+        private int rowHeight = 36;
         private int row = 0;//行数
-        private int maxRow = 10;
+        private DispatcherTimer timer = new DispatcherTimer
+        {
+             Interval =new TimeSpan(0,0,0,0,500)
+        };
+
+        private void DanmakuGrid_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            SetDanmakuGrid();
+        }
+        private void ClearAllRow()
+        {
+            for (int i = 0; i < rows; i++)
+            {
+                isOccupied[i] = false;
+            }
+        }
+
+        private int GetAvailableRow()
+        {
+            for (int i = 0; i < rows; i++)
+            {
+                if(!isOccupied[i])
+                {
+                    isOccupied[i] = true;
+                    return i;
+                }
+            }
+            return -1;
+        }
+        /// <summary>
+        /// 计算并设置Grid的行数
+        /// </summary>
+        private void SetDanmakuGrid()
+        {
+            rows = Convert.ToInt32(DanmakuGrid.RenderSize.Height / rowHeight) - 1;
+            if (rows < 0) return;
+            var currentRows = DanmakuGrid.RowDefinitions.Count;
+            if (currentRows < rows)
+            {
+                for (int i = currentRows; i < rows; i++)
+                {
+                    DanmakuGrid.RowDefinitions.Add(new RowDefinition()
+                    {
+                        Height = new GridLength(rowHeight)
+                    });
+                }
+            }
+            else if (currentRows > rows)
+            {
+                for (int i = 0; i < currentRows - rows; i++)
+                {
+                    DanmakuGrid.RowDefinitions.RemoveAt(currentRows - i - 1);
+                }
+            }
+            isOccupied = new bool[rows];
+        }
         /// <summary>
         /// 添加滚动弹幕
         /// </summary>
         /// <param name="model">弹幕参数</param>
-        /// <param name="Myself">是否自己发送的</param>
-        public void AddFloatDanmaku(DanmakuViewModel model, bool Myself)
+        /// <param name="isMyself">是否自己发送的</param>
+        public void AddFloatDanmaku(DanmakuViewModel model, bool isMyself)
         {
             try
             {
@@ -69,32 +153,48 @@ namespace bilibili2.Controls
                     FontFamily = new FontFamily(fontFamily),
                     DataContext = model
                 };
+                TextBlock tx2 = new TextBlock
+                {
+                    Margin = new Thickness(1,1,0,0),
+                    Text = model.Text,
+                    Foreground = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0)),
+                    FontSize = model.Size == 25 ? fontSize : fontSize - 2,
+                    FontFamily = new FontFamily(fontFamily),
+                };
+                Grid grid = new Grid();
+                grid.Children.Add(tx2);
+                grid.Children.Add(tx);
                 var moveTransform = new TranslateTransform
                 {
-                    X = grid_Danmu.ActualWidth
+                    X = DanmakuGrid.ActualWidth
                 };
-                tx.RenderTransform = moveTransform;
+                grid.RenderTransform = moveTransform;
                 //将弹幕加载入控件中,并且设置位置
-                grid_Danmu.Children.Add(tx);
-                Grid.SetRow(tx, row);
-                row++;
-                if (row == maxRow)
+                DanmakuGrid.Children.Add(grid);
+                int i = GetAvailableRow();
+                if (i == -1)
+                {
+                    ClearAllRow();
+                    i = GetAvailableRow();
+                }
+                Grid.SetRow(grid, i);
+                if (row == rows)
                 {
                     row = 0;
                 }
-                //if (Myself)
-                //{
-                //    tx.BorderThickness = new Thickness(2);
-                //    tx.BorderBrush = new SolidColorBrush(Colors.Gray);
-                //}
+                if (isMyself)
+                {
+                    grid.BorderThickness = new Thickness(2);
+                    grid.BorderBrush = new SolidColorBrush(Colors.Gray);
+                }
                 //更新弹幕UI，不更新无法获得弹幕的ActualWidth
-                tx.UpdateLayout();
+                grid.UpdateLayout();
                 //创建动画
                 Duration duration = new Duration(TimeSpan.FromSeconds(Speed));
                 DoubleAnimation myDoubleAnimationX = new DoubleAnimation
                 {
                     Duration = duration,
-                    To = -(tx.ActualWidth),//到达
+                    To = -(grid.ActualWidth),//到达
                 };
                 //创建故事版
                 Storyboard justintimeStoryboard = new Storyboard
@@ -105,40 +205,32 @@ namespace bilibili2.Controls
                 Storyboard.SetTarget(myDoubleAnimationX, moveTransform);
                 //故事版加入动画
                 Storyboard.SetTargetProperty(myDoubleAnimationX, "X");
-                //grid_Danmu.Resources.Remove("justintimeStoryboard");
-                //grid_Danmu.Resources.Add("justintimeStoryboard", justintimeStoryboard);
+                justintimeStoryboard.Completed += (sender, args) =>
+                {
+                    DanmakuGrid.Children.Remove(grid);
+                    storyBoards.Remove(justintimeStoryboard);
+                    isOccupied[i] = false;
+                };
+                storyBoards.Add(justintimeStoryboard);
                 justintimeStoryboard.Begin();
-                DispatcherTimer timer = new DispatcherTimer
-                {
-                    Interval = new TimeSpan(0, 0, 0, 1)
-                };
-                int i = 0;
-                timer.Tick += async (sender, args) =>
-                {
-                    if (!IsPlaying)
-                    {
-                        await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                        {
-                            justintimeStoryboard.Pause();
-                        });
-                    }
-                    else
-                    {
-                        if (i == Speed * 2)
-                        {
-                            grid_Danmu.Children.Remove(tx);
-                        }
-                        i++;
-                        await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                        {
-                            justintimeStoryboard.Resume();
-                        });
-                    }
-                };
             }
             catch (Exception)
             {
             }
+        }
+        /// <summary>
+        /// 暂停所有弹幕
+        /// </summary>
+        public void Pause()
+        {
+            storyBoards.ForEach(s => s.Pause());
+        }
+        /// <summary>
+        /// 恢复所有被暂停的弹幕
+        /// </summary>
+        public void Resume()
+        {
+            storyBoards.ForEach(s => s.Resume());
         }
         /// <summary>
         /// 清除全部弹幕
@@ -146,155 +238,112 @@ namespace bilibili2.Controls
         public void ClearDanmu()
         {
             row = 0;
-            grid_Danmu.Children.Clear();
+            DanmakuGrid.Children.Clear();
             grid_Danmu2.Children.Clear();
         }
-
-        private bool Handling = false;//是否正在监听
         /// <summary>
         /// 添加顶部及底部弹幕
         /// </summary>
         /// <param name="model">弹幕参数</param>
-        /// <param name="istop">是否顶部</param>
-        /// <param name="Myself">是否自己发送的</param>
-        public async void AddTopButtomDanmu(DanmakuViewModel model, bool istop,bool Myself)
+        /// <param name="isTop">是否顶部</param>
+        /// <param name="isMyself">是否自己发送的</param>
+        public void AddTopButtomDanmaku(DanmakuViewModel model, bool isTop, bool isMyself)
         {
-            TextBlock tx = new TextBlock();
-            TextBlock tx2 = new TextBlock();
-            Grid grid = new Grid();
-            if (fontFamily != "默认")
+            TextBlock tx = new TextBlock
             {
-                tx.FontFamily = new FontFamily(fontFamily);
-                tx2.FontFamily = new FontFamily(fontFamily);
-            }
-
-                tx2.Text =model.Text;
-                tx.Text = model.Text ;
-            tx2.Foreground = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
-            tx.Foreground = model.Color;//new SolidColorBrush(co[rd.Next(0, 7)]);
-            double size = model.Size;
-            if (size == 25)
+                Text = model.Text,
+                Foreground = model.Color,
+                FontSize = model.Size == 25 ? fontSize : fontSize - 2,
+                FontFamily = new FontFamily(fontFamily),
+                DataContext = model
+            };
+            TextBlock tx2 = new TextBlock
             {
-                tx2.FontSize = fontSize;
-                tx.FontSize = fontSize;
-            }
-            else
+                Margin = new Thickness(1, 1, 0, 0),
+                Text = model.Text,
+                Foreground = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0)),
+                FontSize = model.Size == 25 ? fontSize : fontSize - 2,
+                FontFamily = new FontFamily(fontFamily),
+            };
+            Grid grid = new Grid()
             {
-                tx2.FontSize = fontSize - 2;
-                tx.FontSize = fontSize - 2;
-            }
-            //grid包含弹幕文本信息
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Tag = 0
+            };
             grid.Children.Add(tx2);
             grid.Children.Add(tx);
-
-            // tx.FontSize = Double.Parse(model.DanSize) - fontSize;
-            grid.HorizontalAlignment = HorizontalAlignment.Center;
-            grid.VerticalAlignment = VerticalAlignment.Top;
-            tx2.Margin = new Thickness(1);
-            if (Myself)
+            if (isMyself)
             {
                 grid.BorderThickness = new Thickness(2);
                 grid.BorderBrush = new SolidColorBrush(Colors.Gray);
             }
-            grid.Opacity = Tran;
-            grid.DataContext = model;
             grid.UpdateLayout();
 
-            if (istop)
+            if (isTop)
             {
                 D_Top.Children.Add(grid);
-                await Task.Delay(5000);
-                if (state== MediaPlaybackState.Paused)
-                {
-                    ClearTopButtomDanmuku();
-                }
-                else
-                {
-                    D_Top.Children.Remove(grid);
-                }
             }
             else
             {
                 D_Bottom.Children.Add(grid);
-                await Task.Delay(5000);
-                if (state == MediaPlaybackState.Paused)
-                {
-                    ClearTopButtomDanmuku();
-                }
-                else
-                {
-                    D_Bottom.Children.Remove(grid);
-                }
             }
         }
         /// <summary>
         /// 清除顶部及底部弹幕
         /// </summary>
-        private async void ClearTopButtomDanmuku()
+        private void ClearTopButtomDanmuku()
         {
-            //一定要检查是否正在循环，多个while死循环会爆CPU
-            if (!Handling)
-            {
-                Handling = true;
-                await Task.Run(async () =>
-                {
-                    while (true)
-                    {
-                        if (IsPlaying)
-                        {
-                            await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-                            {
-                                D_Bottom.Children.Clear();
-                                D_Top.Children.Clear();
-                            });
-                            break;
-                        }
-                        //循环速度不要太快，否则也会爆CPU
-                        await Task.Delay(200);
-                    }
-                });
-                Handling = false;
-            }
+            ClearDanmaku(D_Bottom);
+            ClearDanmaku(D_Top);
         }
         /// <summary>
-        /// 设置弹幕上下间距
+        /// 清除Stack中的弹幕
         /// </summary>
-        /// <param name="value"></param>
-        public void SetSpacing(double value)
+        /// <param name="panel"></param>
+        private void ClearDanmaku(StackPanel panel)
         {
-            Jianju.Height = new GridLength(value, GridUnitType.Pixel);
+            foreach (Grid item in panel.Children)
+            {
+                if (item.Tag is int span)
+                {
+                    if (span >= 5000)
+                    {
+                        panel.Children.Remove(item);
+                    }
+                }
+            }
+            foreach (Grid item in panel.Children)
+            {
+                if (item.Tag is int span)
+                {
+                    if (span < 5000)
+                    {
+                        item.Tag = span + 500;
+                    }
+                }
+            }
         }
         /// <summary>
         /// 读取弹幕屏幕中的弹幕
         /// </summary>
         /// <returns></returns>
-        public List<DanmakuViewModel> GetScreenDanmu()
+        public List<DanmakuViewModel> GetScreenDanmaku()
         {
-            List<DanmakuViewModel> list = new List<DanmakuViewModel>();
-            foreach (Grid item in D_Top.Children)
-            {
-                list.Add(item.DataContext as DanmakuViewModel);
-            }
-            foreach (Grid item in D_Bottom.Children)
-            {
-                list.Add(item.DataContext as DanmakuViewModel);
-            }
-            foreach (Grid item in grid_Danmu.Children)
-            {
-                list.Add(item.DataContext as DanmakuViewModel);
-            }
-            return list;
+            return D_Top.Children.Concat(D_Bottom.Children)
+                .Concat(DanmakuGrid.Children)
+                .Select(grid=>(grid as Grid).DataContext as DanmakuViewModel)
+                .ToList();
         }
         /// <summary>
         /// 移除当前屏幕中的弹幕
         /// </summary>
-        public void RemoveDanmu(DanmakuViewModel model)
+        public void RemoveDanmaku(DanmakuViewModel model)
         {
-            foreach (Grid item in grid_Danmu.Children)
+            foreach (Grid item in DanmakuGrid.Children)
             {
                 if (item.DataContext== model)
                 {
-                    grid_Danmu.Children.Remove(item);
+                    DanmakuGrid.Children.Remove(item);
                 }
             }
             foreach (Grid item in D_Bottom.Children)
@@ -325,7 +374,7 @@ namespace bilibili2.Controls
                 switch (mode)
                 {
                     case DanmakuMode.Roll:
-                        grid_Danmu.Visibility = Visibility.Visible;
+                        DanmakuGrid.Visibility = Visibility.Visible;
                         break;
                     case DanmakuMode.Top:
                         D_Top.Visibility = Visibility.Visible;
@@ -342,7 +391,7 @@ namespace bilibili2.Controls
                 switch (mode)
                 {
                     case DanmakuMode.Roll:
-                        grid_Danmu.Visibility = Visibility.Collapsed;
+                        DanmakuGrid.Visibility = Visibility.Collapsed;
                         break;
                     case DanmakuMode.Top:
                         D_Top.Visibility = Visibility.Collapsed;

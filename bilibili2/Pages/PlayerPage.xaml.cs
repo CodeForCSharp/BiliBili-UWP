@@ -157,7 +157,7 @@ namespace bilibili2.Pages
            
             await PlayVideo(VideoList[PlayP]);
             Is = true;
-            timer.Interval = new TimeSpan(0, 0, 1);
+            timer.Interval = new TimeSpan(0, 0, 0, 1);
             timer.Tick += Timer_Tick;
             timer.Start();
             player.Play();
@@ -568,36 +568,32 @@ namespace bilibili2.Pages
                 slider3.Maximum = naturalDuration.TotalSeconds;
                 slider.Value = position.TotalSeconds;
                 txt_Post.Text = $"{position.Hours:00}:{position.Minutes:00}:{position.Seconds:00}/{naturalDuration.Hours:00}:{ naturalDuration.Minutes:00}:{naturalDuration.Seconds:00}";
-               //sql.UpdateValue(Cid,Convert.ToInt32(mediaElement.Position.TotalSeconds));
-           });
-            if (player.PlaybackSession.PlaybackState ==  MediaPlaybackState.Playing && LoadDanmu)
+                //sql.UpdateValue(Cid,Convert.ToInt32(mediaElement.Position.TotalSeconds));
+            });
+            List<DanmakuViewModel> removed = new List<DanmakuViewModel>();
+            if (player.PlaybackSession.PlaybackState == MediaPlaybackState.Playing && LoadDanmu)
             {
                 if (DanMuPool != null)
                 {
-                    foreach (var item in DanMuPool)
+                    var send = DanMuPool
+                        .Where(item => Convert.ToInt32(player.PlaybackSession.Position.TotalSeconds) == Convert.ToInt32(item.Time.TotalSeconds))
+                        .Where(item => !DanDis_Dis(item.Text));
+                    foreach (var item in send)
                     {
-                        if (!DanDis_Dis(item.Text))
+                        if (item.Mode == 5)
                         {
-                            if (Convert.ToInt32(item.Time.TotalSeconds) == Convert.ToInt32(player.PlaybackSession.Position.TotalSeconds))
-                            {
-                                if (item.Mode == 5)
-                                {
-                                    danmu.AddTopButtomDanmu(item, true, false);
-                                }
-                                else
-                                {
-                                    if (item.Mode == 4)
-                                    {
-                                        danmu.AddTopButtomDanmu(item, false, false);
-                                    }
-                                    else
-                                    {
-                                        danmu.AddFloatDanmaku(item, false);
-                                    }
-                                }
-                            }
+                            danmu.AddTopButtomDanmaku(item, true, false);
+                        }
+                        else if (item.Mode == 4)
+                        {
+                            danmu.AddTopButtomDanmaku(item, false, false);
+                        }
+                        else
+                        {
+                            danmu.AddFloatDanmaku(item, false);
                         }
                     }
+                    send.ToList().ForEach(item => DanMuPool.Remove(item));
                 }
             }
         }
@@ -730,7 +726,6 @@ namespace bilibili2.Pages
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
              {
-                 danmu.state = player.PlaybackSession.PlaybackState;
                  switch (player.PlaybackSession.PlaybackState)
                  {
                     //case  MediaPlaybackState.None:
@@ -905,7 +900,7 @@ namespace bilibili2.Pages
                     }
                     if (modeInt == 4)
                     {
-                        danmu.AddTopButtomDanmu(new DanmakuViewModel
+                        danmu.AddTopButtomDanmaku(new DanmakuViewModel
                         {
                             Text = Send_text_Comment.Text,
                             Color =new SolidColorBrush(Converter.StringToColor(((ComboBoxItem)Send_cb_Color.SelectedItem).Tag.ToString())),
@@ -914,7 +909,7 @@ namespace bilibili2.Pages
                     }
                     if (modeInt == 5)
                     {
-                        danmu.AddTopButtomDanmu(new DanmakuViewModel
+                        danmu.AddTopButtomDanmaku(new DanmakuViewModel
                         {
                             Text = Send_text_Comment.Text,
                             Color =new SolidColorBrush(Converter.StringToColor(((ComboBoxItem)Send_cb_Color.SelectedItem).Tag.ToString())),
@@ -1015,7 +1010,7 @@ namespace bilibili2.Pages
             grid_setting_SelectVideo.Visibility = Visibility.Collapsed;
             grid_setting_Danmu.Visibility = Visibility.Collapsed;
             grid_setting_DanmuDis.Visibility = Visibility.Visible;
-            foreach (var item in danmu.GetScreenDanmu())
+            foreach (var item in danmu.GetScreenDanmaku())
             {
                 list_DisDanmu.Items.Add(item);
             }
@@ -1046,8 +1041,8 @@ namespace bilibili2.Pages
         #region 设置
         private void slider_DanmuJianju_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            danmu.SetSpacing(slider_DanmuJianju.Value);
-            setting.SetSettingValue("DanmuJianju", slider_DanmuJianju.Value);
+            //danmu.SetSpacing(slider_DanmuJianju.Value);
+            //setting.SetSettingValue("DanmuJianju", slider_DanmuJianju.Value);
         }
         private void tw_AutoFull_Toggled(object sender, RoutedEventArgs e)
         {
@@ -1150,12 +1145,12 @@ namespace bilibili2.Pages
         {
             DanDis_Add(txt_Dis.Text, false);
             txt_Dis.Text = "";
-            var s= danmu.GetScreenDanmu();
+            var s= danmu.GetScreenDanmaku();
             foreach (var item in s)
             {
                 if (DanDis_Dis(item.Text))
                 {
-                    danmu.RemoveDanmu(item);
+                    danmu.RemoveDanmaku(item);
                 }
             }
           
@@ -1170,7 +1165,7 @@ namespace bilibili2.Pages
             foreach (DanmakuViewModel item in list_DisDanmu.SelectedItems)
             {
                 DanDis_Add(item.Id, true);
-                danmu.RemoveDanmu(item);
+                danmu.RemoveDanmaku(item);
                 list_DisDanmu.Items.Remove(item);
               
             }

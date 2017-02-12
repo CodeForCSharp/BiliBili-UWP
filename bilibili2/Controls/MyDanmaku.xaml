@@ -9,23 +9,11 @@
     d:DesignHeight="300"
     d:DesignWidth="400">
     <Grid>
-        
-        <Grid x:Name="grid_Danmu">
-            <Grid.RowDefinitions>
-                <RowDefinition  x:Name="dan1"/>
-                <RowDefinition  x:Name="dan2"/>
-                <RowDefinition  x:Name="dan3"/>
-                <RowDefinition  x:Name="dan4"/>
-                <RowDefinition  x:Name="dan5"/>
-                <RowDefinition  x:Name="dan6"/>
-                <RowDefinition x:Name="dan7"/>
-                <RowDefinition  x:Name="dan8"/>
-                <RowDefinition  x:Name="dan9"/>
-                <RowDefinition  x:Name="dan10"/>
-                <RowDefinition x:Name="Jianju" Height="0"/>
-            </Grid.RowDefinitions>
-            
-        </Grid>
+        <Grid
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            x:Name="DanmakuGrid"
+            SizeChanged="DanmakuGrid_SizeChanged"/>
         <Grid x:Name="grid_Danmu2"  >
             <StackPanel x:Name="D_Top" VerticalAlignment="Top" />
             <StackPanel x:Name="D_Bottom" VerticalAlignment="Bottom"/>
