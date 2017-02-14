@@ -128,6 +128,9 @@
       <DependentUpon>MyLiveControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\OrientedSize.cs" />
+    <Compile Include="Controls\RegionPageFragment.xaml.cs">
+      <DependentUpon>RegionPageFragment.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\WrapPanel.cs" />
     <Compile Include="Controls\MessageShow.xaml.cs">
       <DependentUpon>MessageShow.xaml</DependentUpon>
@@ -135,7 +138,6 @@
     <Compile Include="Model\BannerModel.cs" />
     <Compile Include="Model\HomeAVModel.cs" />
     <Compile Include="Model\HomeLiveModel.cs" />
-    <Compile Include="Model\LiveAreasModel.cs" />
     <Compile Include="Pages\AllLivePage.xaml.cs">
       <DependentUpon>AllLivePage.xaml</DependentUpon>
     </Compile>
@@ -193,6 +195,9 @@
     <Compile Include="Class\ViewModel.cs" />
     <Compile Include="Pages\MessagePage.xaml.cs">
       <DependentUpon>MessagePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PartionPage.xaml.cs">
+      <DependentUpon>PartionPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\PlayerPage.xaml.cs">
       <DependentUpon>PlayerPage.xaml</DependentUpon>
@@ -372,6 +377,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\RegionPageFragment.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\AllLivePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -445,6 +454,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\MessagePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\PartionPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

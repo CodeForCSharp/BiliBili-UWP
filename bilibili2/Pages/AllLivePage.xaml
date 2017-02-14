@@ -60,38 +60,36 @@
             RelativePanel.Below="BtnBack"
             RelativePanel.AlignLeftWithPanel="True"
             RelativePanel.AlignRightWithPanel="True"/>
-        <localControl:AdaptiveGridView
+        <GridView
+            Name="AreasPanel"
             RelativePanel.Below="PrLoad"
             RelativePanel.AlignLeftWithPanel="True"
             RelativePanel.AlignRightWithPanel="True"
             RelativePanel.AlignBottomWithPanel="True"
-            DesiredWidth="110"
-            ItemHeight="130"
-            MaxWidth="440"
             SelectionMode="None"
-            ScrollViewer.VerticalScrollMode="Disabled"
+            ScrollViewer.VerticalScrollBarVisibility="Hidden"
             ScrollViewer.HorizontalScrollMode="Disabled"
-            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-            ScrollViewer.VerticalScrollBarVisibility="Disabled"
             ItemsSource="{x:Bind Areas}"
             IsItemClickEnabled="True"
-            ItemClick="AdaptiveGridView_ItemClick">
-            <localControl:AdaptiveGridView.ItemTemplate>
+            ItemClick="AdaptiveGridView_ItemClick"
+            SizeChanged="GridView_SizeChanged">
+            <GridView.ItemTemplate>
                 <DataTemplate x:DataType="model:LiveAreasViewModel">
-                    <StackPanel>
+                    <StackPanel
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
                         <controls:ImageEx
-                            Height="90"
-                            Width="90"
+                            Height="45"
+                            Width="45"
                             Margin="5"
                             Source="{x:Bind Icon}"/>
                         <TextBlock
                             Margin="5"
                             HorizontalAlignment="Center"
-                            FontSize="16"
                             Text="{x:Bind Name}"/>
                     </StackPanel>
                 </DataTemplate>
-            </localControl:AdaptiveGridView.ItemTemplate>
-        </localControl:AdaptiveGridView>
+            </GridView.ItemTemplate>
+        </GridView>
     </RelativePanel>
 </Page>

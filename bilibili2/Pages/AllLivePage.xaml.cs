@@ -52,17 +52,18 @@ namespace bilibili2.Pages
         {
             PrLoad.Visibility = Visibility.Visible;
             var result = await wc.GetResults(new Uri($"http://live.bilibili.com/AppIndex/areas?_device=wp&_ulv=10000&appkey={ApiHelper._appKey}&build=434000&platform=android&scale=xxhdpi"));
-            var model = JsonConvert.DeserializeObject<LiveAreasModel>(result);
-            if (model.Code == 0)
+            var model = JObject.Parse(result);
+            if (model["code"].Value<int>() == 0)
             {
-                foreach(var item in model.Data)
+                var vms = model["data"].Select(token => new LiveAreasViewModel
                 {
-                    Areas.Add(new LiveAreasViewModel
-                    {
-                        Icon = item.EntranceIcon.Src,
-                        Name = item.Name,
-                        Id = item.Id
-                    });
+                    Icon = token["entrance_icon"]["src"].Value<string>(),
+                    Name = token["name"].Value<string>(),
+                    Id =token["id"].Value<int>()
+                });
+                foreach(var vm in vms)
+                {
+                    Areas.Add(vm);
                 }
             }
             PrLoad.Visibility = Visibility.Collapsed;
@@ -73,6 +74,15 @@ namespace bilibili2.Pages
             if (e.ClickedItem is LiveAreasViewModel model)
             {
                 Frame.Navigate(typeof(LiveAreaPage), Tuple.Create(model.Id, model.Name));
+            }
+        }
+
+        private void GridView_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if(AreasPanel.ItemsPanelRoot is ItemsWrapGrid item)
+            {
+                item.ItemWidth = e.NewSize.Width / 4;
+                item.ItemHeight = 240;
             }
         }
     }

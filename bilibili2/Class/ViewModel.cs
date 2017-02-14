@@ -1091,6 +1091,22 @@ namespace bilibili2
         public string RowId { get; set; }
         public string Text { get; set; }
     }
+
+    public class PartionViewModel
+    {
+        public List<SubPartionViewModel> SubPartions { get; set; }
+        public int Tid { get; set; }
+        public int Reid { get; set; }
+        public string Name { get; set; }
+        public string Icon { get; set; }
+    }
+
+    public class SubPartionViewModel
+    {
+        public int Tid { get; set; }
+        public int Reid { get; set; }
+        public string Name { get; set; }
+    }
     public class MessageModel
     {
         public int code { get; set; }
