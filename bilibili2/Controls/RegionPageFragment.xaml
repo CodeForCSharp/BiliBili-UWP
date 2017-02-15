@@ -10,26 +10,29 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
-
-    <RelativePanel>
-        <GridView>
-            <GridView.ItemTemplate>
-                <DataTemplate x:DataType="model:PartionViewModel">
-                    <StackPanel
+    <GridView
+        IsItemClickEnabled="True"
+        SelectionMode="None"
+        Name="PartionPanel"
+        ItemClick="PartionPanel_ItemClick"
+        SizeChanged="PartionPanel_SizeChanged"
+        ItemsSource="{x:Bind Partions}">
+        <GridView.ItemTemplate>
+            <DataTemplate x:DataType="model:PartionViewModel">
+                <StackPanel
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center">
-                        <controls:ImageEx
+                    <controls:ImageEx
                             Height="45"
                             Width="45"
                             Margin="5"
                             Source="{x:Bind Icon}"/>
-                        <TextBlock
+                    <TextBlock
                             Margin="5"
                             HorizontalAlignment="Center"
                             Text="{x:Bind Name}"/>
-                    </StackPanel>
-                </DataTemplate>
-            </GridView.ItemTemplate>
-        </GridView>
-    </RelativePanel>
+                </StackPanel>
+            </DataTemplate>
+        </GridView.ItemTemplate>
+    </GridView>
 </UserControl>
