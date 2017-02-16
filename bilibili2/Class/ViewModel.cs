@@ -1106,6 +1106,25 @@ namespace bilibili2
         public int Tid { get; set; }
         public int Reid { get; set; }
         public string Name { get; set; }
+        public string Icon { get; set; }
+        public int Index { get; set; }
+    }
+
+    public class RegionBannerViewModel
+    {
+        public string Image { get; set; }
+        public int Id { get; set; }
+        public string Uri { get; set; }
+        public string Title { get; set; }
+    }
+
+    public class RegionItemViewModel
+    {
+        public string Title { get; set; }
+        public string Cover { get; set; }
+        public string Param { get; set; }
+        public string Play { get; set; }
+        public string Danmaku { get; set; }
     }
     public class MessageModel
     {

@@ -5,9 +5,140 @@
     xmlns:local="using:bilibili2.Pages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
-
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
-    </Grid>
+    mc:Ignorable="d"
+    xmlns:localControl="using:bilibili2.Controls"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:model="using:bilibili2">
+    <Page.Resources>
+        <SolidColorBrush x:Name="bg" x:Key="BG" Color="#FFDF85A0" />
+        <DataTemplate x:DataType="model:RegionItemViewModel" x:Key="RegionItemTemplate">
+            <RelativePanel>
+                <controls:ImageEx
+                                                    Margin="5"
+                                                    Name="CoverPanel"
+                                                    RelativePanel.AlignLeftWithPanel="True"
+                                                    RelativePanel.AlignRightWithPanel="True"
+                                                    RelativePanel.AlignTopWithPanel="True"
+                                                    Height="135"
+                                                    Width="240"
+                                                    Source="{x:Bind Cover}"/>
+                <TextBlock
+                                                    Name="TitlePanel"
+                                                    Margin="5"
+                                                    RelativePanel.AlignLeftWithPanel="True"
+                                                    RelativePanel.AlignRightWithPanel="True"
+                                                    RelativePanel.Below="CoverPanel"
+                                                    Text="{x:Bind Title}"
+                                                    TextWrapping="Wrap"
+                                                    TextTrimming="CharacterEllipsis"
+                                                    MaxLines="2"/>
+                <Image
+                                                    Name="PlayIconPanel"
+                                                    Margin="5"
+                                                    RelativePanel.AlignLeftWithPanel="True"
+                                                    RelativePanel.AlignBottomWithPanel="True"
+                                                    Height="15"
+                                                    Width="15"
+                                                    Source="ms-appx:///Assets/Icon/ic_info_views2.png"/>
+                <TextBlock
+                                                    Name="PlayPanel"
+                                                    Margin="5"
+                                                    RelativePanel.RightOf="PlayIconPanel"
+                                                    Foreground="Gray"
+                                                    FontSize="13"
+                                                    Text="{x:Bind Play}"/>
+                <Image
+                                                    Name="DanmakuIconPanel"
+                                                    Margin="5"
+                                                    RelativePanel.LeftOf="DanmakuPanel"
+                                                    Height="15"
+                                                    Width="15"
+                                                    Source="ms-appx:///Assets/Icon/ic_info_danmakus2.png"/>
+                <TextBlock
+                                                    Name="DanmakuPanel"
+                                                    RelativePanel.AlignRightWithPanel="True"
+                                                    RelativePanel.AlignBottomWithPanel="True"
+                                                    Margin="5"
+                                                    Foreground="Gray"
+                                                    FontSize="13"
+                                                    Text="{x:Bind Danmaku}"/>
+            </RelativePanel>
+        </DataTemplate>
+    </Page.Resources>
+    <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <AppBarButton
+            Width="48"
+            Height="48"
+            Icon="Back"
+            Foreground="White"
+            Background="{StaticResource BG}"/>
+        <RelativePanel
+            Background="{StaticResource BG}"
+            Height="48">
+            <TextBlock
+                Foreground="White"
+                Name="RegionNamePanel"
+                RelativePanel.AlignVerticalCenterWithPanel="True"/>
+        </RelativePanel>
+        <Pivot>
+            <PivotItem>
+                <localControl:AdaptiveGridView
+                    ItemTemplate="{StaticResource RegionItemTemplate}">
+                    <localControl:AdaptiveGridView.HeaderTemplate>
+                        <DataTemplate>
+                            <RelativePanel>
+                                <FlipView>
+                                    <FlipView.ItemTemplate>
+                                        <DataTemplate x:DataType="model:RegionBannerViewModel">
+                                            <controls:ImageEx
+                                                Height="150"
+                                                Source="{x:Bind Image}"/>
+                                        </DataTemplate>
+                                    </FlipView.ItemTemplate>
+                                </FlipView>
+                                <localControl:AdaptiveGridView>
+                                    <localControl:AdaptiveGridView.ItemTemplate>
+                                        <DataTemplate x:DataType="model:SubPartionViewModel">
+                                            <StackPanel>
+                                                <Image
+                                                    Source="{x:Bind Icon}"
+                                                    Height="45"
+                                                    Width="45"
+                                                    HorizontalAlignment="Center"/>
+                                                <TextBlock
+                                                    Text="{x:Bind Name}"
+                                                    HorizontalAlignment="Center"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </localControl:AdaptiveGridView.ItemTemplate>
+                                </localControl:AdaptiveGridView>
+                                <Image
+                                    Height="30"
+                                    Width="30"
+                                    Source="ms-appx:///Assets/Icon/ic_header_hot.png"/>
+                                <TextBlock
+                                    Text="热门推荐"/>
+                                <localControl:AdaptiveGridView
+                                    ItemTemplate="{StaticResource RegionItemTemplate}"/>
+                                <Image
+                                    Height="30"
+                                    Width="30"
+                                    Source="ms-appx:///Assets/Icon/ic_header_new.png"/>
+                                <TextBlock
+                                    Text="最新视频"/>
+                                <localControl:AdaptiveGridView
+                                    ItemTemplate="{StaticResource RegionItemTemplate}"/>
+                                <Image
+                                    Height="30"
+                                    Width="30"
+                                    Source="ms-appx:///Assets/Icon/ic_header_ding.png"/>
+                                <TextBlock
+                                    Text="全区动态"/>
+                            </RelativePanel>
+                        </DataTemplate>
+                    </localControl:AdaptiveGridView.HeaderTemplate>
+                </localControl:AdaptiveGridView>
+            </PivotItem>
+        </Pivot>
+    </RelativePanel>
 </Page>

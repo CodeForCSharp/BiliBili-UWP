@@ -364,8 +364,11 @@
     <Content Include="Assets\Icon\ic_category_t96.png" />
     <Content Include="Assets\Icon\ic_category_t98.png" />
     <Content Include="Assets\Icon\ic_category_up.png" />
+    <Content Include="Assets\Icon\ic_header_ding.png" />
+    <Content Include="Assets\Icon\ic_header_hot.png" />
     <Content Include="Assets\Icon\ic_header_indicator_rank.png" />
     <Content Include="Assets\Icon\ic_header_movie_all.png" />
+    <Content Include="Assets\Icon\ic_header_new.png" />
     <Content Include="Assets\Icon\ic_info_danmakus2.png" />
     <Content Include="Assets\Icon\ic_info_views2.png" />
     <Content Include="Assets\Icon\ic_watching.png" />
