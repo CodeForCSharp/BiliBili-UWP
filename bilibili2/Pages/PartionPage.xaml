@@ -12,7 +12,7 @@
     <Page.Resources>
         <SolidColorBrush x:Name="bg" x:Key="BG" Color="#FFDF85A0" />
         <DataTemplate x:DataType="model:RegionItemViewModel" x:Key="RegionItemTemplate">
-            <RelativePanel>
+            <RelativePanel MaxWidth="250">
                 <controls:ImageEx
                                                     Margin="5"
                                                     Name="CoverPanel"
@@ -42,7 +42,8 @@
                                                     Source="ms-appx:///Assets/Icon/ic_info_views2.png"/>
                 <TextBlock
                                                     Name="PlayPanel"
-                                                    Margin="5"
+                                                    Margin="6"
+                    RelativePanel.AlignBottomWithPanel="True"
                                                     RelativePanel.RightOf="PlayIconPanel"
                                                     Foreground="Gray"
                                                     FontSize="13"
@@ -50,6 +51,7 @@
                 <Image
                                                     Name="DanmakuIconPanel"
                                                     Margin="5"
+                    RelativePanel.AlignBottomWithPanel="True"
                                                     RelativePanel.LeftOf="DanmakuPanel"
                                                     Height="15"
                                                     Width="15"
@@ -58,7 +60,7 @@
                                                     Name="DanmakuPanel"
                                                     RelativePanel.AlignRightWithPanel="True"
                                                     RelativePanel.AlignBottomWithPanel="True"
-                                                    Margin="5"
+                                                    Margin="6"
                                                     Foreground="Gray"
                                                     FontSize="13"
                                                     Text="{x:Bind Danmaku}"/>
@@ -67,12 +69,19 @@
     </Page.Resources>
     <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <AppBarButton
+            Name="BtnBack"
+            RelativePanel.AlignTopWithPanel="True"
+            RelativePanel.AlignLeftWithPanel="True"
             Width="48"
             Height="48"
             Icon="Back"
             Foreground="White"
-            Background="{StaticResource BG}"/>
+            Background="{StaticResource BG}"
+            Click="BtnBack_Click"/>
         <RelativePanel
+            RelativePanel.AlignRightWithPanel="True"
+            RelativePanel.AlignTopWithPanel="True"
+            RelativePanel.RightOf="BtnBack"
             Background="{StaticResource BG}"
             Height="48">
             <TextBlock
@@ -80,23 +89,51 @@
                 Name="RegionNamePanel"
                 RelativePanel.AlignVerticalCenterWithPanel="True"/>
         </RelativePanel>
-        <Pivot>
-            <PivotItem>
+        <Pivot
+            RelativePanel.Below="BtnBack"
+            RelativePanel.AlignRightWithPanel="True"
+            RelativePanel.AlignBottomWithPanel="True"
+            RelativePanel.AlignLeftWithPanel="True">
+            <Pivot.ItemContainerStyle>
+                <Style TargetType="PivotItem">
+                    <Setter Property="Margin" Value="0"/>
+                </Style>
+            </Pivot.ItemContainerStyle>
+            <PivotItem Header="推荐">
                 <localControl:AdaptiveGridView
-                    ItemTemplate="{StaticResource RegionItemTemplate}">
+                    SelectionMode="None"
+                    ItemHeight="220"
+                    DesiredWidth="250"
+                    x:Name="RecommendPanel"
+                    ItemTemplate="{StaticResource RegionItemTemplate}"
+                    ItemsSource="{x:Bind Dynamics}">
                     <localControl:AdaptiveGridView.HeaderTemplate>
-                        <DataTemplate>
+                        <DataTemplate x:DataType="model:RegionHeaderViewModel">
                             <RelativePanel>
-                                <FlipView>
+                                <FlipView
+                                    Height="300"
+                                    Name="BannerPanel"
+                                    RelativePanel.AlignLeftWithPanel="True"
+                                    RelativePanel.AlignRightWithPanel="True"
+                                    RelativePanel.AlignTopWithPanel="True"
+                                    ItemsSource="{x:Bind Banners}">
                                     <FlipView.ItemTemplate>
                                         <DataTemplate x:DataType="model:RegionBannerViewModel">
                                             <controls:ImageEx
-                                                Height="150"
+                                                Height="300"
                                                 Source="{x:Bind Image}"/>
                                         </DataTemplate>
                                     </FlipView.ItemTemplate>
                                 </FlipView>
-                                <localControl:AdaptiveGridView>
+                                <localControl:AdaptiveGridView
+                                    SelectionMode="None"
+                                    x:Name="SubPartionPanel"
+                                    RelativePanel.Below="BannerPanel"
+                                    RelativePanel.AlignLeftWithPanel="True"
+                                    RelativePanel.AlignRightWithPanel="True"
+                                     ItemsSource="{x:Bind SubPartions}"
+                                    DesiredWidth="50"
+                                    >
                                     <localControl:AdaptiveGridView.ItemTemplate>
                                         <DataTemplate x:DataType="model:SubPartionViewModel">
                                             <StackPanel>
@@ -113,26 +150,58 @@
                                     </localControl:AdaptiveGridView.ItemTemplate>
                                 </localControl:AdaptiveGridView>
                                 <Image
+                                    Name="HotIconPanel"
+                                    RelativePanel.Below="SubPartionPanel"
+                                    RelativePanel.AlignLeftWithPanel="True"
                                     Height="30"
                                     Width="30"
                                     Source="ms-appx:///Assets/Icon/ic_header_hot.png"/>
                                 <TextBlock
+                                    Margin="5"
+                                    RelativePanel.Below="SubPartionPanel"
+                                    RelativePanel.RightOf="HotIconPanel"
                                     Text="热门推荐"/>
                                 <localControl:AdaptiveGridView
+                                    SelectionMode="None"
+                                    ItemHeight="220"
+                                    DesiredWidth="250"
+                                    x:Name="HotPanel"
+                                    RelativePanel.Below="HotIconPanel"
+                                    RelativePanel.AlignLeftWithPanel="True"
+                                    RelativePanel.AlignRightWithPanel="True"
+                                    ItemsSource="{x:Bind Hots}"
                                     ItemTemplate="{StaticResource RegionItemTemplate}"/>
                                 <Image
+                                    Name="NewIconPanel"
+                                    RelativePanel.Below="HotPanel"
                                     Height="30"
                                     Width="30"
                                     Source="ms-appx:///Assets/Icon/ic_header_new.png"/>
                                 <TextBlock
+                                    RelativePanel.Below="HotPanel"
+                                    RelativePanel.RightOf="NewIconPanel"
+                                    Margin="5"
                                     Text="最新视频"/>
                                 <localControl:AdaptiveGridView
+                                    SelectionMode="None"
+                                    ItemHeight="220"
+                                    DesiredWidth="250"
+                                    x:Name="NewPanel"
+                                    RelativePanel.AlignLeftWithPanel="True"
+                                    RelativePanel.AlignRightWithPanel="True"
+                                    RelativePanel.Below="NewIconPanel"
+                                    ItemsSource="{x:Bind News}"
                                     ItemTemplate="{StaticResource RegionItemTemplate}"/>
                                 <Image
+                                    RelativePanel.Below="NewPanel"
+                                    Name="DynamicIconPanel"
                                     Height="30"
                                     Width="30"
                                     Source="ms-appx:///Assets/Icon/ic_header_ding.png"/>
                                 <TextBlock
+                                    Margin="5"
+                                    RelativePanel.Below="NewPanel"
+                                    RelativePanel.RightOf="DynamicIconPanel"
                                     Text="全区动态"/>
                             </RelativePanel>
                         </DataTemplate>

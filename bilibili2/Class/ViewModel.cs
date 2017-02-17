@@ -1126,6 +1126,14 @@ namespace bilibili2
         public string Play { get; set; }
         public string Danmaku { get; set; }
     }
+
+    public class RegionHeaderViewModel
+    {
+        public List<RegionBannerViewModel> Banners { get; set; }
+        public List<SubPartionViewModel> SubPartions { get; set; }
+        public List<RegionItemViewModel> Hots { get; set; }
+        public List<RegionItemViewModel> News { get; set; }
+    }
     public class MessageModel
     {
         public int code { get; set; }

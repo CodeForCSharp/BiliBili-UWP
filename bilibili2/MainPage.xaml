@@ -460,7 +460,7 @@
                                             </FlipView>
                                         </Grid>
                                     </Grid>
-                                    <Button x:Name="btn_live_Atton" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Margin="5" Background="{ThemeResource Bili-ForeColor}" Foreground="White" Content="关注主播" Click="btn_live_Atton_Click"/>
+                                    <Button x:Name="btn_live_Atton" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Margin="5" Background="{ThemeResource Bili-ForeColor}" Foreground="White" Content="关注主播"/>
                                     <Button x:Name="btn_Live_Search" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Margin="5" Background="{ThemeResource Bili-ForeColor}" Foreground="White" Content="搜索直播" Click="btn_Live_Search_Click"/>
                                     <Button x:Name="btn_live_All"  Grid.Row="1" Grid.Column="2" HorizontalAlignment="Stretch" Margin="5" Background="{ThemeResource Bili-ForeColor}" Foreground="White" Content="全部直播" Click="btn_live_All_Click"/>
                                     <Controls:MyLiveControl x:Name="liveinfo" Grid.Row="2" Grid.ColumnSpan="3"/>

@@ -46,6 +46,7 @@ namespace bilibili2.Controls
                 Tid = token["tid"].Value<int>(),
                 SubPartions = token["children"].Select(item => new SubPartionViewModel
                 {
+                    Icon = $"ms-appx:///Assets/Icon/ic_category_t{item["tid"].Value<int>()}.png",
                     Tid = item["tid"].Value<int>(),
                     Reid = item["reid"].Value<int>(),
                     Name = item["name"].Value<string>()
