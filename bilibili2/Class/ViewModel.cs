@@ -915,6 +915,7 @@ namespace bilibili2
     }
     public class LivePartitionViewModel
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Icon { get; set; }
         public List<LiveItemViewModel> Lives { get; set; }
@@ -1117,6 +1118,19 @@ namespace bilibili2
     {
         public string Name { get; set; }
         public string Key { get; set; }
+    }
+
+    public class LiveNavigationViewModel
+    {
+        public string Name { get; set; }
+        public string Icon { get; set; }
+        public int Index { get; set; }
+    }
+
+    public class LiveHomeHeaderViewModel
+    {
+        public List<LiveBannerViewModel> Banners { get; set; }
+        public List<LiveNavigationViewModel> Navigations { get; set; }
     }
     public class MessageModel
     {

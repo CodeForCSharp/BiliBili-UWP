@@ -55,8 +55,6 @@ namespace bilibili2
             SystemNavigationManager.GetForCurrentView().BackRequested += MainPage_BackRequested;
             home_Items.PlayEvent += Home_Items_PlayEvent;
             home_Items.ErrorEvent += Home_Items_ErrorEvent;
-            liveinfo.ErrorEvent += Home_Items_ErrorEvent;
-            liveinfo.PlayEvent += Liveinfo_PlayEvent;
             JyFeedbackControl.FeedbackImageRequested += async delegate
             {
                 var fileOpenPicker = new FileOpenPicker();
@@ -284,13 +282,6 @@ namespace bilibili2
             switch (pivot_Home.SelectedIndex)
             {
                 case 0:
-                 
-                    if (!liveinfo.isLoaded)
-                    {
-                        GetLiveBanner();
-                        liveinfo.GetLiveInfo();
-
-                    }
                     break;
                 case 1:
                     if (!LoadBan)
@@ -300,11 +291,6 @@ namespace bilibili2
                         await GetBanBanner();
                         await GetBanTJ();
                         LoadBan = true;
-                    }
-                    if (!liveinfo.isLoaded)
-                    {
-                        GetLiveBanner();
-                        liveinfo.GetLiveInfo();
                     }
                     break;
                 case 2:
@@ -494,11 +480,6 @@ namespace bilibili2
                 grid_c_left_Ban.Width = new GridLength(0, GridUnitType.Auto);
                 grid_c_right_Ban.Width = new GridLength(0, GridUnitType.Auto);
                 grid_c_center_Ban.Width = new GridLength(1, GridUnitType.Star);
-                fvLeft_Live.Visibility = Visibility.Collapsed;
-                fvRight_Live.Visibility = Visibility.Collapsed;
-                grid_c_left_Live.Width = new GridLength(0, GridUnitType.Auto);
-                grid_c_right_Live.Width = new GridLength(0, GridUnitType.Auto);
-                grid_c_center_Live.Width = new GridLength(1, GridUnitType.Star);
             }
             else
             {
@@ -512,11 +493,6 @@ namespace bilibili2
                 grid_c_left_Ban.Width = new GridLength(1, GridUnitType.Star);
                 grid_c_right_Ban.Width = new GridLength(1, GridUnitType.Star);
                 grid_c_center_Ban.Width = new GridLength(0, GridUnitType.Auto);
-                fvLeft_Live.Visibility = Visibility.Visible;
-                fvRight_Live.Visibility = Visibility.Visible;
-                grid_c_left_Live.Width = new GridLength(1, GridUnitType.Star);
-                grid_c_right_Live.Width = new GridLength(1, GridUnitType.Star);
-                grid_c_center_Live.Width = new GridLength(0, GridUnitType.Auto);
             }
 
             if (this.ActualWidth < 1000)
@@ -1615,90 +1591,7 @@ namespace bilibili2
         {
             infoFrame.Navigate(typeof(AllLivePage));
         }
-        //读取直播Banner
-        private async void GetLiveBanner()
-        {
-            try
-            {
-                wc = new WebClientClass();
-                string url = string.Format("http://live.bilibili.com/AppIndex/home?_device=android&_ulv=10000&access_key={0}&appkey={1}&build=434000&platform=android&scale=xxhdpi", ApiHelper.access_key, ApiHelper._appKey);
-                url += "&sign=" + ApiHelper.GetSign(url);
-                string results = await wc.GetResults(new Uri(url));
-                var model = JsonConvert.DeserializeObject<HomeLiveModel>(results);
-                if (model.Code == 0)
-                {
-                    var bannerModel = model.Data.Banner.Select(item => new LiveBannerViewModel
-                    {
-                        Img = item.Img,
-                        Link = item.Link,
-                        Remark = item.Remark,
-                        Title = item.Title
-                    });
-                    home_flipView_Live.ItemsSource = bannerModel;
-                    fvLeft_Live.ItemsSource = bannerModel;
-                    fvRight_Live.ItemsSource = bannerModel;
-                    this.home_flipView_Live.SelectedIndex = 0;
-
-                    if (fvLeft_Live.Visibility != Visibility.Collapsed || fvRight_Live.Visibility != Visibility.Collapsed)
-                    {
-                        this.fvLeft_Live.SelectedIndex = this.fvLeft_Live.Items.Count - 1;
-                        this.fvRight_Live.SelectedIndex = this.home_flipView_Live.SelectedIndex + 1;
-                    }
-                }
-            }
-            catch (Exception)
-            {
-            }
-        }
-        //直播Banner点击
-        private void btn_Banner_Live_Click(object sender, RoutedEventArgs e)
-        {
-            string ban = Regex.Match((home_flipView_Live.SelectedItem as LiveBannerViewModel).Link, @"^bilibili://live/(.*?)$").Groups[1].Value;
-            if (ban.Length != 0)
-            {
-                infoFrame.Navigate(typeof(LiveInfoPage), ban);
-                return;
-            }
-        }
-        //直播Banner选择改变
-        private void home_flipView_Live_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (home_flipView_Live.Items.Count == 0 || fvLeft_Live.Items.Count == 0 || fvRight_Live.Items.Count == 0)
-            {
-                return;
-            }
-            if (fvLeft_Live.Visibility == Visibility.Collapsed || fvRight_Live.Visibility == Visibility.Collapsed)
-            {
-                return;
-            }
-            if (this.home_flipView_Live.SelectedIndex == 0)
-            {
-                this.fvLeft_Live.SelectedIndex = this.fvLeft_Live.Items.Count - 1;
-                this.fvRight_Live.SelectedIndex = 1;
-            }
-            else if (this.home_flipView_Live.SelectedIndex == 1)
-            {
-                this.fvLeft_Live.SelectedIndex = 0;
-                this.fvRight_Live.SelectedIndex = this.fvRight_Live.Items.Count - 1;
-            }
-            else if (this.home_flipView_Live.SelectedIndex == this.home_flipView_Live.Items.Count - 1)
-            {
-                this.fvLeft_Live.SelectedIndex = this.fvLeft_Live.Items.Count - 2;
-                this.fvRight_Live.SelectedIndex = 0;
-            }
-            else if ((this.home_flipView_Live.SelectedIndex < (this.home_flipView_Live.Items.Count - 1)) && this.home_flipView_Live.SelectedIndex > -1)
-            {
-                this.fvLeft_Live.SelectedIndex = this.home_flipView_Live.SelectedIndex - 1;
-                this.fvRight_Live.SelectedIndex = this.home_flipView_Live.SelectedIndex + 1;
-            }
-            else
-            {
-                return;
-            }
-        }
-
-
-
+      
         #region 九幽反馈
         private UserInfo _userInfo;
         private readonly JyUserFeedbackSDKManager _jyUserFeedbackSdkManager = new JyUserFeedbackSDKManager();
@@ -1744,13 +1637,6 @@ namespace bilibili2
         }
         #endregion
 
-        #region 下拉刷新
-        private void pr_Live_RefreshInvoked(DependencyObject sender, object args)
-        {
-            GetLiveBanner();
-            liveinfo.GetLiveInfo();
-        }
-
         private async void pr_Bangumi_RefreshInvoked(DependencyObject sender, object args)
         {
             LoadBan = false;
@@ -1772,8 +1658,6 @@ namespace bilibili2
             User_ListView_Attention.Items.Clear();
             GetDt();
         }
-
-        #endregion
 
         private void btn_Live_Search_Click(object sender, RoutedEventArgs e)
         {
