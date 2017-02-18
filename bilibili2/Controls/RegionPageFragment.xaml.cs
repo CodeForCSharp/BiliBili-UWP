@@ -44,12 +44,13 @@ namespace bilibili2.Controls
                 Name = token["name"].Value<string>(),
                 Reid = token["reid"].Value<int>(),
                 Tid = token["tid"].Value<int>(),
-                SubPartions = token["children"].Select(item => new SubPartionViewModel
+                SubPartions = token["children"].Select((item,i) => new SubPartionViewModel
                 {
                     Icon = $"ms-appx:///Assets/Icon/ic_category_t{item["tid"].Value<int>()}.png",
                     Tid = item["tid"].Value<int>(),
                     Reid = item["reid"].Value<int>(),
-                    Name = item["name"].Value<string>()
+                    Name = item["name"].Value<string>(),
+                    Index = i+1
                 }).ToList()
             });
             foreach (var vm in vms)

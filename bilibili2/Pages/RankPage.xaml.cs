@@ -90,6 +90,7 @@ namespace bilibili2.Pages
                         case "B番":order = "bangumi";break;
                     }
                     url = $"http://app.bilibili.com/x/v2/rank?order={order}&pn=1&ps=20&appkey={ApiHelper._appKey}";
+                    url += ApiHelper.GetSign(url);
                 }
                 var result = await wc.GetResults(new Uri(url));
                 var model = JObject.Parse(result);

@@ -1,7 +1,6 @@
 ﻿using bilibili2.Class;
 using bilibili2.Model;
 using bilibili2.Pages;
-using bilibili2.PartPages;
 using JyUserFeedback;
 using JyUserFeedback.view;
 using JyUserInfo;
@@ -554,52 +553,6 @@ namespace bilibili2
                 top_txt_find.Visibility = Visibility.Collapsed;
             }
 
-        }
-        //打开分区
-        private void HyperlinkButton_Click(object sender, RoutedEventArgs e)
-        {
-            switch (int.Parse((sender as HyperlinkButton).Tag.ToString()))
-            {
-                case 0:
-                    pivot_Home.SelectedIndex = 0;
-                    break;
-                case 1:
-                    infoFrame.Navigate(typeof(FJPage));
-                    break;
-                case 2:
-                    infoFrame.Navigate(typeof(DHPage));
-                    break;
-                case 3:
-                    infoFrame.Navigate(typeof(YYPage));
-                    break;
-                case 4:
-                    infoFrame.Navigate(typeof(WDPage));
-                    break;
-                case 5:
-                    infoFrame.Navigate(typeof(KJPage));
-                    break;
-                case 6:
-                    infoFrame.Navigate(typeof(YXPage));
-                    break;
-                case 7:
-                    infoFrame.Navigate(typeof(GCPage));
-                    break;
-                case 8:
-                    infoFrame.Navigate(typeof(YLPage));
-                    break;
-                case 9:
-                    infoFrame.Navigate(typeof(DYPage));
-                    break;
-                case 10:
-                    infoFrame.Navigate(typeof(DSJPage));
-                    break;
-                case 11:
-                    infoFrame.Navigate(typeof(SSPage));
-                    break;
-                default:
-                    break;
-            }
-            //jinr.From = this.ActualWidth;
         }
         //子页面后退
         private void MainPage_BackEvent()
@@ -1246,39 +1199,6 @@ namespace bilibili2
                     break;
                 case "历史":
                     (infoFrame.Content as HistoryPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "番剧":
-                    (infoFrame.Content as FJPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "动画":
-                    (infoFrame.Content as DHPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "音乐":
-                    (infoFrame.Content as YYPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "舞蹈":
-                    (infoFrame.Content as WDPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "科技":
-                    (infoFrame.Content as KJPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "游戏":
-                    (infoFrame.Content as YXPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "鬼畜":
-                    (infoFrame.Content as GCPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "娱乐":
-                    (infoFrame.Content as YLPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "电影":
-                    (infoFrame.Content as DYPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "电视剧":
-                    (infoFrame.Content as DSJPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "时尚":
-                    (infoFrame.Content as SSPage).BackEvent += MainPage_BackEvent;
                     break;
                 case "消息中心":
                     (infoFrame.Content as MessagePage).BackEvent += MainPage_BackEvent;

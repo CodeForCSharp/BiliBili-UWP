@@ -132,6 +132,9 @@
     <Compile Include="Controls\RegionPageFragment.xaml.cs">
       <DependentUpon>RegionPageFragment.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SubPartionFragment.xaml.cs">
+      <DependentUpon>SubPartionFragment.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\WrapPanel.cs" />
     <Compile Include="Controls\MessageShow.xaml.cs">
       <DependentUpon>MessageShow.xaml</DependentUpon>
@@ -226,39 +229,6 @@
     </Compile>
     <Compile Include="Pages\WebViewPage.xaml.cs">
       <DependentUpon>WebViewPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PartPages\DHPage.xaml.cs">
-      <DependentUpon>DHPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PartPages\DSJPage.xaml.cs">
-      <DependentUpon>DSJPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PartPages\DYPage.xaml.cs">
-      <DependentUpon>DYPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PartPages\FJPage.xaml.cs">
-      <DependentUpon>FJPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PartPages\GCPage.xaml.cs">
-      <DependentUpon>GCPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PartPages\KJPage.xaml.cs">
-      <DependentUpon>KJPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PartPages\SSPage.xaml.cs">
-      <DependentUpon>SSPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PartPages\WDPage.xaml.cs">
-      <DependentUpon>WDPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PartPages\YLPage.xaml.cs">
-      <DependentUpon>YLPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PartPages\YXPage.xaml.cs">
-      <DependentUpon>YXPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PartPages\YYPage.xaml.cs">
-      <DependentUpon>YYPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Pages\VideoInfoPage.xaml.cs">
@@ -458,6 +428,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\SubPartionFragment.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\AllLivePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -575,50 +549,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\SettingPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PartPages\DHPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PartPages\DSJPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PartPages\DYPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PartPages\FJPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PartPages\GCPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PartPages\KJPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PartPages\SSPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PartPages\WDPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PartPages\YLPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PartPages\YXPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PartPages\YYPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

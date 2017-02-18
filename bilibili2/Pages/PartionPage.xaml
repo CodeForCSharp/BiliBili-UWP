@@ -90,13 +90,19 @@
                 RelativePanel.AlignVerticalCenterWithPanel="True"/>
         </RelativePanel>
         <Pivot
+            Background="{StaticResource BG}"
+            Name="PivotPanel"
             RelativePanel.Below="BtnBack"
             RelativePanel.AlignRightWithPanel="True"
             RelativePanel.AlignBottomWithPanel="True"
             RelativePanel.AlignLeftWithPanel="True">
+            <Pivot.Resources>
+                <Style BasedOn="{StaticResource WhiteHeaderStyle}"  TargetType="PivotHeaderItem"/>
+            </Pivot.Resources>
             <Pivot.ItemContainerStyle>
                 <Style TargetType="PivotItem">
                     <Setter Property="Margin" Value="0"/>
+                    <Setter Property="Background" Value="WhiteSmoke"/>
                 </Style>
             </Pivot.ItemContainerStyle>
             <PivotItem Header="推荐">
@@ -106,7 +112,9 @@
                     DesiredWidth="250"
                     x:Name="RecommendPanel"
                     ItemTemplate="{StaticResource RegionItemTemplate}"
-                    ItemsSource="{x:Bind Dynamics}">
+                    ItemsSource="{x:Bind Dynamics}"
+                    IsItemClickEnabled="True"
+                    ItemClick="RegionItem_ItemClick">
                     <localControl:AdaptiveGridView.HeaderTemplate>
                         <DataTemplate x:DataType="model:RegionHeaderViewModel">
                             <RelativePanel>
@@ -116,7 +124,8 @@
                                     RelativePanel.AlignLeftWithPanel="True"
                                     RelativePanel.AlignRightWithPanel="True"
                                     RelativePanel.AlignTopWithPanel="True"
-                                    ItemsSource="{x:Bind Banners}">
+                                    ItemsSource="{x:Bind Banners}"
+                                    Tapped="BannerPanel_Tapped">
                                     <FlipView.ItemTemplate>
                                         <DataTemplate x:DataType="model:RegionBannerViewModel">
                                             <controls:ImageEx
@@ -133,6 +142,8 @@
                                     RelativePanel.AlignRightWithPanel="True"
                                      ItemsSource="{x:Bind SubPartions}"
                                     DesiredWidth="50"
+                                    IsItemClickEnabled="True"
+                                    ItemClick="SubPartionPanel_ItemClick"
                                     >
                                     <localControl:AdaptiveGridView.ItemTemplate>
                                         <DataTemplate x:DataType="model:SubPartionViewModel">
@@ -170,7 +181,9 @@
                                     RelativePanel.AlignLeftWithPanel="True"
                                     RelativePanel.AlignRightWithPanel="True"
                                     ItemsSource="{x:Bind Hots}"
-                                    ItemTemplate="{StaticResource RegionItemTemplate}"/>
+                                    ItemTemplate="{StaticResource RegionItemTemplate}"
+                                    IsItemClickEnabled="True"
+                                    ItemClick="RegionItem_ItemClick"/>
                                 <Image
                                     Name="NewIconPanel"
                                     RelativePanel.Below="HotPanel"
@@ -191,7 +204,9 @@
                                     RelativePanel.AlignRightWithPanel="True"
                                     RelativePanel.Below="NewIconPanel"
                                     ItemsSource="{x:Bind News}"
-                                    ItemTemplate="{StaticResource RegionItemTemplate}"/>
+                                    ItemTemplate="{StaticResource RegionItemTemplate}"
+                                    IsItemClickEnabled="True"
+                                    ItemClick="RegionItem_ItemClick"/>
                                 <Image
                                     RelativePanel.Below="NewPanel"
                                     Name="DynamicIconPanel"

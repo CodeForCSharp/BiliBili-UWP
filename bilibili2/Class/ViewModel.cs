@@ -535,29 +535,6 @@ namespace bilibili2
             }
         }
     }
-    //首页信息
-    public class InfoModel
-    {
-        public object list { get; set; }
-        public string pic { get; set; }
-        public string title { get; set; }
-        public string play { get; set; }
-        public string author { get; set; }
-        public string video_review { get; set; }
-        public string description { get; set; }
-        public string mid { get; set; }
-        public string aid { get; set; }
-        public int num { get; set; }
-
-        //用于直播
-        public object data { get; set; }
-        public string room_id { get; set; }
-        public string online { get; set; }
-        public string uname { get; set; }
-        public string cover { get; set; }
-        public string face { get; set; }
-        public string roomid { get; set; }
-    }
     //热门搜索
     public class HotModel
     {
@@ -1121,6 +1098,7 @@ namespace bilibili2
     public class RegionItemViewModel
     {
         public string Title { get; set; }
+        public string Name { get; set; }
         public string Cover { get; set; }
         public string Param { get; set; }
         public string Play { get; set; }
@@ -1133,6 +1111,12 @@ namespace bilibili2
         public List<SubPartionViewModel> SubPartions { get; set; }
         public List<RegionItemViewModel> Hots { get; set; }
         public List<RegionItemViewModel> News { get; set; }
+    }
+
+    public class SubPartionSelectionViewModel
+    {
+        public string Name { get; set; }
+        public string Key { get; set; }
     }
     public class MessageModel
     {

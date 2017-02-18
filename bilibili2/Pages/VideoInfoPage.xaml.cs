@@ -60,7 +60,6 @@ namespace bilibili2
         bool Back = false;
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
             if (e.NavigationMode == NavigationMode.New||Back)
             {
                 video_Error_Null.Visibility = Visibility.Collapsed;

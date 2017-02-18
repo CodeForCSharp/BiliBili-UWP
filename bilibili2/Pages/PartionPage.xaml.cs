@@ -54,6 +54,17 @@ namespace bilibili2.Pages
                 partion = model;
                 SetHeaderAsync();
                 RegionNamePanel.Text = partion.Name;
+                foreach(var item in model.SubPartions)
+                {
+                    PivotPanel.Items.Add(new PivotItem
+                    {
+                        Header = item.Name,
+                        Content = new Controls.SubPartionFragment
+                        {
+                             SubPartion = item
+                        }
+                    });
+                }
             }
             base.OnNavigatedTo(e);
         }
@@ -100,6 +111,30 @@ namespace bilibili2.Pages
             if(Frame.CanGoBack)
             {
                 Frame.GoBack();
+            }
+        }
+
+        private void RegionItem_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            if (e.ClickedItem is RegionItemViewModel model)
+            {
+                Frame.Navigate(typeof(VideoInfoPage), model.Param);
+            }
+        }
+
+        private void BannerPanel_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (e.OriginalSource is RegionBannerViewModel model)
+            {
+                Frame.Navigate(typeof(WebViewPage), model.Uri);
+            }
+        }
+
+        private void SubPartionPanel_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            if(e.ClickedItem is SubPartionViewModel model)
+            {
+                PivotPanel.SelectedIndex = model.Index;
             }
         }
     }
