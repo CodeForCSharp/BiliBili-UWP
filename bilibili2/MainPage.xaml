@@ -538,74 +538,7 @@
                         </pr:PullToRefreshBox>
                     </PivotItem>
                     <PivotItem Margin="0">
-                        <pr:PullToRefreshBox x:Name="pr_Home" RefreshInvoked="pr_Home_RefreshInvoked">
-                            <ScrollViewer  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                                <StackPanel >
-                                    <Grid >
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition x:Name="grid_c_left" Width="*"/>
-                                            <ColumnDefinition x:Name="grid_c_center" Width="auto" />
-                                            <ColumnDefinition x:Name="grid_c_right" Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Grid  Grid.Column="0" MaxHeight="200">
-                                            <Grid.Background>
-                                                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                                                    <LinearGradientBrush.GradientStops>
-                                                        <GradientStopCollection>
-                                                            <GradientStop Offset="1" Color="Black"/>
-                                                            <GradientStop Offset="0.101" Color="Gray"/>
-                                                        </GradientStopCollection>
-                                                    </LinearGradientBrush.GradientStops>
-                                                </LinearGradientBrush>
-                                            </Grid.Background>
-                                            <FlipView x:Name="fvLeft" Opacity="0.5" IsEnabled="False">
-                                                <FlipView.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Image Source="{Binding Image}" Height="200" Width="640"/>
-                                                    </DataTemplate>
-                                                </FlipView.ItemTemplate>
-                                            </FlipView>
-                                        </Grid>
-                                        <Viewbox MaxWidth="640"  Grid.Column="1">
-                                            <FlipView  x:Name="home_flipView"  Height="200" Width="640" Grid.Column="1"   SelectionChanged="home_flipView_SelectionChanged"   Style="{StaticResource FlipViewStyle1}" VerticalAlignment="Top" >
-                                                <FlipView.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Grid>
-                                                            <Image Source="{Binding Image}"  Height="200"/>
-                                                            <HyperlinkButton Click="HyperlinkButton_Click_1">
-                                                                <Grid Width="640" Height="200" >
-                                                                    <TextBlock/>
-                                                                </Grid>
-                                                            </HyperlinkButton>
-                                                        </Grid>
-                                                    </DataTemplate>
-                                                </FlipView.ItemTemplate>
-                                            </FlipView>
-                                        </Viewbox>
-                                        <Grid Grid.Column="2" MaxHeight="200" >
-                                            <Grid.Background>
-                                                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                                                    <LinearGradientBrush.GradientStops>
-                                                        <GradientStopCollection>
-                                                            <GradientStop Offset="0.101" Color="Black"/>
-                                                            <GradientStop Offset="1" Color="Gray"/>
-                                                        </GradientStopCollection>
-                                                    </LinearGradientBrush.GradientStops>
-                                                </LinearGradientBrush>
-                                            </Grid.Background>
-                                            <FlipView x:Name="fvRight" Opacity="0.3" IsEnabled="False">
-                                                <FlipView.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Image Source="{Binding Image}" Height="200" Width="640"/>
-                                                    </DataTemplate>
-                                                </FlipView.ItemTemplate>
-                                            </FlipView>
-                                        </Grid>
-                                    </Grid>
-                                    <local:MyControl x:Name="home_Items"/>
-                                </StackPanel>
-                            </ScrollViewer>
-                        </pr:PullToRefreshBox>
+                        <local:AVRecommendFragment/>
                     </PivotItem>
                     <PivotItem Margin="0">
                         <Controls:RegionPageFragment/>

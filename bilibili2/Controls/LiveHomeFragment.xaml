@@ -59,11 +59,22 @@
             </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
-    <StackPanel>
-        <ProgressBar x:Name="pr_Load" Visibility="Collapsed"  Background="{x:Null}" IsIndeterminate="True"></ProgressBar>
+    <RelativePanel>
+        <ProgressBar 
+            RelativePanel.AlignLeftWithPanel="True"
+            RelativePanel.AlignTopWithPanel="True"
+            RelativePanel.AlignRightWithPanel="True"
+            x:Name="PrLoad" 
+            Visibility="Collapsed"  
+            Background="{x:Null}" 
+            IsIndeterminate="True"/>
         <ListView
+            RelativePanel.Below="PrLoad"
+            RelativePanel.AlignLeftWithPanel="True"
+            RelativePanel.AlignRightWithPanel="True"
+            RelativePanel.AlignBottomWithPanel="True"
             Name="HomeLivePanel"
-                SelectionMode="None">
+            SelectionMode="None">
             <ListView.HeaderTemplate>
                 <DataTemplate x:DataType="model:LiveHomeHeaderViewModel">
                     <RelativePanel>
@@ -97,8 +108,8 @@
                                     <StackPanel>
                                         <Image
                                             HorizontalAlignment="Center"
-                                            Height="30"
-                                            Width="30"
+                                            Height="40"
+                                            Width="40"
                                             Source="{x:Bind Icon}"/>
                                         <TextBlock
                                             HorizontalAlignment="Center"
@@ -152,16 +163,19 @@
                                 RelativePanel.AlignRightWithPanel="True"
                                 ScrollViewer.HorizontalScrollMode="Disabled"
                                 ScrollViewer.VerticalScrollMode="Disabled"
-                                ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                 ItemsSource="{x:Bind Lives}"
                                 ItemTemplate="{StaticResource GridItem}"
                                 BorderBrush="{ThemeResource Bili-Background}"
-                                ItemClick="gridview_Hot_ItemClick"
+                                ItemClick="Gridview_Hot_ItemClick"
                                 />
                     </RelativePanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-    </StackPanel>
+        <model:MessageShow
+            x:Name="MessagePanel"
+            Margin="10"
+            RelativePanel.AlignBottomWithPanel="True"
+            RelativePanel.AlignHorizontalCenterWithPanel="True"/>
+    </RelativePanel>
 </UserControl>

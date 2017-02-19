@@ -186,8 +186,8 @@
     <Compile Include="Pages\LoadPage.xaml.cs">
       <DependentUpon>LoadPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\MyControl.xaml.cs">
-      <DependentUpon>MyControl.xaml</DependentUpon>
+    <Compile Include="Controls\AVRecommendFragment.xaml.cs">
+      <DependentUpon>AVRecommendFragment.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
@@ -483,7 +483,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\MyControl.xaml">
+    <Page Include="Controls\AVRecommendFragment.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

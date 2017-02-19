@@ -46,7 +46,6 @@ namespace bilibili2.Pages
         DispatcherTimer time = new DispatcherTimer();
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
             GetSetting();
             grid_Error.Visibility = Visibility.Collapsed;
             pivot.SelectedIndex = 0;

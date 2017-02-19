@@ -21,7 +21,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace bilibili2
 {
-    public sealed partial class MyControl : UserControl
+    public sealed partial class AVRecommendFragment : UserControl
     {
         public delegate void PlayHandler(string aid);
         public event PlayHandler PlayEvent;
@@ -42,16 +42,17 @@ namespace bilibili2
                     new AVPartitionViewModel{ Icon ="ms-appx:///Assets/PartIcon/BDSJ.png",Name="电视剧",Uid=11,AVs =new ObservableCollection<AVItemViewModel>() ,Order =0},
                     new AVPartitionViewModel{ Icon ="ms-appx:///Assets/PartIcon/BSS.png",Name="时尚",Uid=155,AVs =new ObservableCollection<AVItemViewModel>(),Order =0 }
                 };
-        public MyControl()
+        public AVRecommendFragment()
         {
             this.InitializeComponent();
+            //http://app.bilibili.com/x/banner?plat=4&build=412001
         }
 
         public async void SetHomeInfo()
         {
             try
             {
-                pr_Load.Visibility = Visibility.Visible;
+                PrLoad.Visibility = Visibility.Visible;
                 foreach (var item in Partitions)
                 {
                     var url = $"http://api.bilibili.com/list?type=json&appkey={ApiHelper._appKey}&tid={item.Uid}&page=1&pagesize={10}&order={order[item.Order]}&ver=2&rnd={new Random().Next(1000, 9999)}";
@@ -80,7 +81,7 @@ namespace bilibili2
             }
             finally
             {
-                pr_Load.Visibility = Visibility.Collapsed;
+                PrLoad.Visibility = Visibility.Collapsed;
             }
         }
 

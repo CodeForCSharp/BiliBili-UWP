@@ -21,9 +21,6 @@ namespace bilibili2.Controls
             GetLiveInfo();
         }
         WebClientClass wc = new WebClientClass();
-        public delegate void PlayHandler(string aid);
-        public event PlayHandler PlayEvent;
-        public event PlayHandler ErrorEvent;
         private List<LiveNavigationViewModel> navigations = new List<LiveNavigationViewModel>
         {
             new LiveNavigationViewModel{ Icon ="ms-appx:///Assets/Icon/live_home_follow_anchor.png",Name="关注",Index=0 },
@@ -36,7 +33,7 @@ namespace bilibili2.Controls
         {
             try
             {
-                pr_Load.Visibility = Visibility.Visible;
+                PrLoad.Visibility = Visibility.Visible;
                 //&access_key={0}
                 string url = $"http://live.bilibili.com/AppIndex/home?_device=android&_ulv=10000&appkey={ApiHelper._appKey}&build=434000&platform=android&scale=xxhdpi";
                 url += "&sign=" + ApiHelper.GetSign(url);
@@ -72,22 +69,26 @@ namespace bilibili2.Controls
                 }
                 else
                 {
-                    ErrorEvent("读取直播失败" + model["message"]);
+                    MessagePanel.Show("读取直播失败" + model["message"],3000);
                 }
             }
             catch (Exception ex)
             {
-                ErrorEvent("读取直播失败" + ex.Message);
+                MessagePanel.Show("读取直播失败" + ex.Message,3000);
             }
             finally
             {
-                pr_Load.Visibility = Visibility.Collapsed;
+                PrLoad.Visibility = Visibility.Collapsed;
             }
         }
 
-        private void gridview_Hot_ItemClick(object sender, ItemClickEventArgs e)
+        private void Gridview_Hot_ItemClick(object sender, ItemClickEventArgs e)
         {
-            PlayEvent((e.ClickedItem as LiveItemViewModel).RoomId);
+            var frame = Window.Current.Content as Frame;
+            if (e.ClickedItem is LiveItemViewModel model)
+            {
+                frame.Navigate(typeof(LiveInfoPage), model.RoomId);
+            }
         }
 
         private void ButtonPanel_Click(object sender, RoutedEventArgs e)
@@ -98,7 +99,8 @@ namespace bilibili2.Controls
         private void BannerPanel_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             var frame = Window.Current.Content as Frame;
-            if(e.OriginalSource is LiveBannerViewModel model)
+            var image = sender as Image;
+            if( image.DataContext is LiveBannerViewModel model)
             {
                 frame.Navigate(typeof(WebViewPage),model.Link);
             }

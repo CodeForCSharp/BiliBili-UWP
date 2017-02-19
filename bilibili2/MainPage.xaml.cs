@@ -53,8 +53,6 @@ namespace bilibili2
             NavigationCacheMode = NavigationCacheMode.Required;
             pivot_Home.SelectedIndex = 2;
             SystemNavigationManager.GetForCurrentView().BackRequested += MainPage_BackRequested;
-            home_Items.PlayEvent += Home_Items_PlayEvent;
-            home_Items.ErrorEvent += Home_Items_ErrorEvent;
             JyFeedbackControl.FeedbackImageRequested += async delegate
             {
                 var fileOpenPicker = new FileOpenPicker();
@@ -84,8 +82,6 @@ namespace bilibili2
             {
                 GetFeedInfo();
                 GetLoadInfo();
-                SetHomeInfo();
-                home_Items.SetHomeInfo();
                 timer.Interval = new TimeSpan(0, 0, 5);
                 timer.Start();
                 timer.Tick += Timer_Tick;
@@ -470,11 +466,6 @@ namespace bilibili2
 
             if (this.ActualWidth <= 640)
             {
-                fvLeft.Visibility = Visibility.Collapsed;
-                fvRight.Visibility = Visibility.Collapsed;
-                grid_c_left.Width = new GridLength(0, GridUnitType.Auto);
-                grid_c_right.Width = new GridLength(0, GridUnitType.Auto);
-                grid_c_center.Width = new GridLength(1, GridUnitType.Star);
                 fvLeft_Ban.Visibility = Visibility.Collapsed;
                 fvRight_Ban.Visibility = Visibility.Collapsed;
                 grid_c_left_Ban.Width = new GridLength(0, GridUnitType.Auto);
@@ -483,11 +474,6 @@ namespace bilibili2
             }
             else
             {
-                fvLeft.Visibility = Visibility.Visible;
-                fvRight.Visibility = Visibility.Visible;
-                grid_c_left.Width = new GridLength(1, GridUnitType.Star);
-                grid_c_right.Width = new GridLength(1, GridUnitType.Star);
-                grid_c_center.Width = new GridLength(0, GridUnitType.Auto);
                 fvLeft_Ban.Visibility = Visibility.Visible;
                 fvRight_Ban.Visibility = Visibility.Visible;
                 grid_c_left_Ban.Width = new GridLength(1, GridUnitType.Star);
@@ -547,42 +533,6 @@ namespace bilibili2
             //string a = string.Empty;
             dh.TranslateX = 0;
         }
-        //首页Banner选择改变
-        private void home_flipView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (home_flipView.Items.Count == 0 || fvLeft.Items.Count == 0 || fvRight.Items.Count == 0)
-            {
-                return;
-            }
-            if (fvLeft.Visibility == Visibility.Collapsed || fvRight.Visibility == Visibility.Collapsed)
-            {
-                return;
-            }
-            if (this.home_flipView.SelectedIndex == 0)
-            {
-                this.fvLeft.SelectedIndex = this.fvLeft.Items.Count - 1;
-                this.fvRight.SelectedIndex = 1;
-            }
-            else if (this.home_flipView.SelectedIndex == 1)
-            {
-                this.fvLeft.SelectedIndex = 0;
-                this.fvRight.SelectedIndex = this.fvRight.Items.Count - 1;
-            }
-            else if (this.home_flipView.SelectedIndex == this.home_flipView.Items.Count - 1)
-            {
-                this.fvLeft.SelectedIndex = this.fvLeft.Items.Count - 2;
-                this.fvRight.SelectedIndex = 0;
-            }
-            else if ((this.home_flipView.SelectedIndex < (this.home_flipView.Items.Count - 1)) && this.home_flipView.SelectedIndex > -1)
-            {
-                this.fvLeft.SelectedIndex = this.home_flipView.SelectedIndex - 1;
-                this.fvRight.SelectedIndex = this.home_flipView.SelectedIndex + 1;
-            }
-            else
-            {
-                return;
-            }
-        }
         //番剧Banner选择改变
         private void home_flipView_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         {
@@ -619,53 +569,9 @@ namespace bilibili2
                 return;
             }
         }
-        //Banner的加载
-        public void SetListView(string results)
-        {
-            try
-            {
-                var model = JsonConvert.DeserializeObject<CodeModel>(results);
-                var ban = model.Data.Select(item => new BannerViewModel
-                {
-                    Image = item.Image,
-                    Title = item.Title,
-                    Type = item.Type,
-                    Value = item.Value
-                });
-                var li = from a in ban where a.Type != 1 select a;
-                home_flipView.ItemsSource = li;
-                fvLeft.ItemsSource = li;
-                fvRight.ItemsSource = li;
-                this.home_flipView.SelectedIndex = 0;
-                if (fvLeft.Visibility != Visibility.Collapsed || fvRight.Visibility != Visibility.Collapsed)
-                {
-                    this.fvLeft.SelectedIndex = this.fvLeft.Items.Count - 1;
-                    this.fvRight.SelectedIndex = this.home_flipView.SelectedIndex + 1;
-                }
-            }
-            catch (Exception)
-            {
-            }
-        }
 
         WebClientClass wc = new WebClientClass();
-        public async void SetHomeInfo()
-        {
-            try
-            {
-                // string banner = await wc.GetResults(new Uri("http://www.bilibili.com/index/slideshow.json"));
-                string banner = await wc.GetResults(new Uri("http://app.bilibili.com/x/banner?plat=4&build=412001"));
-                SetListView(banner);
-            }
-            catch (Exception ex)
-            {
-                messShow.Show("读取Banner失败！\r\n" + ex.Message, 3000);
-                //MessageDialog md = new MessageDialog("读取首页信息失败！\r\n"+ex.Message);
-                //await md.ShowAsync();
-            }
 
-            // GetZBInfo();
-        }
         //用户登录或跳转
         private void btn_UserInfo_Click(object sender, RoutedEventArgs e)
         {
@@ -1082,22 +988,7 @@ namespace bilibili2
         {
             infoFrame.Navigate(typeof(VideoInfoPage), (e.ClickedItem as GetAttentionUpdate).aid);
         }
-        //Banner点击
-        private void HyperlinkButton_Click_1(object sender, RoutedEventArgs e)
-        {
-            if (((BannerViewModel)home_flipView.SelectedItem).Type == 2)
-            {
-                infoFrame.Navigate(typeof(WebViewPage), ((BannerViewModel)home_flipView.SelectedItem).Value);
-                //jinr.From = this.ActualWidth;
-            }
-            if (((BannerViewModel)home_flipView.SelectedItem).Type == 3)
-            {
-                infoFrame.Navigate(typeof(BanInfoPage), ((BannerViewModel)home_flipView.SelectedItem).Value);
-                //KeyValuePair<string, bool> info = new KeyValuePair<string, bool>(((BannerModel)home_flipView.SelectedItem).value, true);
-                //this.Frame.Navigate(typeof(BangumiInfoPage), info);
-                // this.Frame.Navigate(typeof(WebViewPage), ((BannerModel)home_flipView.SelectedItem).value);
-            }
-        }
+
         //打开话题
         private void Find_btn_Topic_Click(object sender, RoutedEventArgs e)
         {
@@ -1644,12 +1535,6 @@ namespace bilibili2
             await GetBanBanner();
             await GetBanTJ();
             LoadBan = true;
-        }
-
-        private void pr_Home_RefreshInvoked(DependencyObject sender, object args)
-        {
-            SetHomeInfo();
-            home_Items.SetHomeInfo();
         }
 
         private void pr_Atton_RefreshInvoked(DependencyObject sender, object args)

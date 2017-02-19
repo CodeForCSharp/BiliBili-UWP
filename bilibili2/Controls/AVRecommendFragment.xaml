@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="bilibili2.MyControl"
+    x:Class="bilibili2.AVRecommendFragment"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:bilibili2"
@@ -39,10 +39,12 @@
         </DataTemplate>
 
     </UserControl.Resources>
-    <StackPanel>
-        <Border x:Name="ViewBox_num" Background="Gray" Width="200"></Border>
-        <Border x:Name="ViewBox2_num" Background="Gray" Width="200"></Border>
-        <ProgressBar x:Name="pr_Load" Visibility="Collapsed"  Background="{x:Null}" IsIndeterminate="True"></ProgressBar>
+    <RelativePanel>
+        <ProgressBar
+            Name="PrLoad"
+            Visibility="Collapsed" 
+            Background="{x:Null}"
+            IsIndeterminate="True"/>
         <ListView
                 SelectionMode="None"
                 ItemsSource="{x:Bind Partitions}">
@@ -107,5 +109,5 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-    </StackPanel>
+    </RelativePanel>
 </UserControl>
