@@ -111,5 +111,11 @@ namespace bilibili2.Class
                 };
             }
         }
+
+        public static string TimeToSimplifyTime(string time)
+        {
+            var date = DateTime.Parse(time);
+            return $"{date.Hour}:{date.Minute}";
+        }
     }
 }

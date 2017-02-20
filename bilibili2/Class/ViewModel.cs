@@ -16,9 +16,9 @@ namespace bilibili2
     public class BannerViewModel
     {
         public string Title { get; set; }
-        public int Type { get; set; }
+        public bool IsAd { get; set; }
         public string Image { get; set; }
-        public string Value { get; set; }
+        public string Uri { get; set; }
     }
     //视频详细信息
     public class VideoInfoModel
@@ -920,21 +920,21 @@ namespace bilibili2
         public string Icon { get; set; }
         public List<LiveItemViewModel> Lives { get; set; }
     }
-    public class AVPartitionViewModel
+    public class RecommendPartitionViewModel
     {
-        public int Order { get; set; }
-        public int Uid { get; set; }
+        public string Param { get; set; }
+        public string Type { get; set; }
         public string Name { get; set; }
         public string Icon { get; set; }
-        public ObservableCollection<AVItemViewModel> AVs { get; set; }
+        public ObservableCollection<object> Items { get; set; } = new ObservableCollection<object>();
     }
     public class AVItemViewModel
     {
-        public string Pic { get; set; }
+        public string Cover { get; set; }
+        public string Danmaku { get; set; }
         public string Play { get; set; }
-        public int VideoReview { get; set; }
         public string Title { get; set; }
-        public string Aid { get; set; }
+        public string Param { get; set; }
     }
     public class LiveAreasViewModel
     {
@@ -1131,6 +1131,34 @@ namespace bilibili2
     {
         public List<LiveBannerViewModel> Banners { get; set; }
         public List<LiveNavigationViewModel> Navigations { get; set; }
+    }
+
+    public class BangumiItemViewModel
+    {
+        public string Cover { get; set; }
+        public string Title { get; set; }
+        public string Index { get; set; }
+        public string Mtime { get; set; }
+        public string Param { get; set; }
+    }
+
+    public class ActivityViewModel
+    {
+        public string Title { get; set; }
+        public string Uri { get; set; }
+        public string Cover { get; set; }
+        public string Param { get; set; }
+    }
+
+    public class RecommendLiveViewModel
+    {
+        public string Title { get; set; }
+        public string Cover { get; set; }
+        public string Param { get; set; }
+        public string Area { get; set; }
+        public string AreaId { get; set; }
+        public string Name { get; set; }
+        public int Online { get; set; }
     }
     public class MessageModel
     {
