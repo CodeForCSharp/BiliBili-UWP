@@ -13,39 +13,164 @@
     d:DesignWidth="400"
     >
     <UserControl.Resources>
-        <DataTemplate x:Name="HomeItemTemplate" x:DataType="model:AVItemViewModel">
-            <Grid MaxWidth="200">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="125"></RowDefinition>
-                    <RowDefinition Height="36"></RowDefinition>
-                    <RowDefinition Height="22"></RowDefinition>
-                </Grid.RowDefinitions>
-                <Image Source="{x:Bind Pic}" Width="200" VerticalAlignment="Top" Height="125"></Image>
-                <Grid Height="20" Grid.Row="2">
-                    <StackPanel Orientation="Horizontal" Margin="5,0" >
-                        <Image Width="16" Height="16" Source="ms-appx:///Assets/Icon/ic_info_views2.png" Margin="0,3,5,0"></Image>
-                        <!--<TextBlock Text="播放：" FontSize="14"  Foreground="White"></TextBlock>-->
-                        <TextBlock Text="{x:Bind Play}" FontSize="13"  Foreground="Gray" VerticalAlignment="Center"></TextBlock>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="5,0" HorizontalAlignment="Right">
-                        <Image Width="16" Height="16" Source="ms-appx:///Assets/Icon/ic_info_danmakus2.png"  Margin="0,3,5,0"></Image>
-                        <TextBlock Text="{x:Bind VideoReview}" FontSize="13"  Foreground="Gray" VerticalAlignment="Center"></TextBlock>
-                    </StackPanel>
-                </Grid>
-                <StackPanel Grid.Row="1" Orientation="Vertical" Margin="5,0" VerticalAlignment="Center">
-                    <TextBlock Text="{x:Bind Title}" MaxWidth="320" TextWrapping="Wrap" MaxLines="2" TextTrimming="CharacterEllipsis" FontSize="13" ></TextBlock>
-                </StackPanel>
-            </Grid>
+        <DataTemplate x:Key="LiveItemTemplate" x:DataType="model:RecommendLiveViewModel">
+            <RelativePanel MaxWidth="250">
+                <controls:ImageEx
+                            Name="CoverPanel"
+                            RelativePanel.AlignTopWithPanel="True"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"
+                            Source="{x:Bind Cover}"
+                            Margin="5"/>
+                <TextBlock
+                            Name="TitlePanel"
+                            RelativePanel.Below="CoverPanel"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"
+                            RelativePanel.Above="NamePanel"
+                            Text="{x:Bind Title}"
+                            TextWrapping="Wrap"
+                            Margin="5"/>
+                <TextBlock
+                            FontSize="12"
+                            Margin="5"
+                            Name="NamePanel"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignBottomWithPanel="True"
+                            Text="{x:Bind Name}"
+                            Foreground="Gray"/>
+                <Image
+                            Margin="0,5"
+                            RelativePanel.AlignBottomWithPanel="True"
+                            RelativePanel.LeftOf="NumPanel"
+                            Source="ms-appx:///Assets/Icon/ic_watching.png"
+                            Height="15"
+                            Width="15"/>
+                <TextBlock
+                            FontSize="13"
+                            Margin="5"
+                            Foreground="Gray"
+                            Name="NumPanel"
+                            RelativePanel.AlignRightWithPanel="True"
+                            RelativePanel.AlignBottomWithPanel="True"
+                            Text="{x:Bind Online}"/>
+            </RelativePanel>
         </DataTemplate>
-
+        <DataTemplate x:DataType="model:RegionBannerViewModel" x:Key="TopicTemplate">
+            <controls:ImageEx
+                Width="270"
+                Height="150"
+                Source="{x:Bind Image}"/>
+        </DataTemplate>
+        <DataTemplate x:DataType="model:AVItemViewModel" x:Key="AVItemTemplate">
+            <RelativePanel MaxWidth="250">
+                <controls:ImageEx
+                                                    Margin="5"
+                                                    Name="CoverPanel"
+                                                    RelativePanel.AlignLeftWithPanel="True"
+                                                    RelativePanel.AlignRightWithPanel="True"
+                                                    RelativePanel.AlignTopWithPanel="True"
+                                                    Height="135"
+                                                    Width="240"
+                                                    Source="{x:Bind Cover}"/>
+                <TextBlock
+                                                    Name="TitlePanel"
+                                                    Margin="5"
+                                                    RelativePanel.AlignLeftWithPanel="True"
+                                                    RelativePanel.AlignRightWithPanel="True"
+                                                    RelativePanel.Below="CoverPanel"
+                                                    Text="{x:Bind Title}"
+                                                    TextWrapping="Wrap"
+                                                    TextTrimming="CharacterEllipsis"
+                                                    MaxLines="2"/>
+                <Image
+                                                    Name="PlayIconPanel"
+                                                    Margin="5"
+                                                    RelativePanel.AlignLeftWithPanel="True"
+                                                    RelativePanel.AlignBottomWithPanel="True"
+                                                    Height="15"
+                                                    Width="15"
+                                                    Source="ms-appx:///Assets/Icon/ic_info_views2.png"/>
+                <TextBlock
+                                                    Name="PlayPanel"
+                                                    Margin="6"
+                    RelativePanel.AlignBottomWithPanel="True"
+                                                    RelativePanel.RightOf="PlayIconPanel"
+                                                    Foreground="Gray"
+                                                    FontSize="13"
+                                                    Text="{x:Bind Play}"/>
+                <Image
+                                                    Name="DanmakuIconPanel"
+                                                    Margin="5"
+                    RelativePanel.AlignBottomWithPanel="True"
+                                                    RelativePanel.LeftOf="DanmakuPanel"
+                                                    Height="15"
+                                                    Width="15"
+                                                    Source="ms-appx:///Assets/Icon/ic_info_danmakus2.png"/>
+                <TextBlock
+                                                    Name="DanmakuPanel"
+                                                    RelativePanel.AlignRightWithPanel="True"
+                                                    RelativePanel.AlignBottomWithPanel="True"
+                                                    Margin="6"
+                                                    Foreground="Gray"
+                                                    FontSize="13"
+                                                    Text="{x:Bind Danmaku}"/>
+            </RelativePanel>
+        </DataTemplate>
+        <DataTemplate x:DataType="model:ActivityViewModel" x:Key="ActivityTemplate">
+            <StackPanel MaxWidth="270">
+                <controls:ImageEx
+                    Width="270"
+                    Height="150"
+                    Source="{x:Bind Cover}"
+                    />
+                <TextBlock
+                    Text="{x:Bind Title}"/>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:DataType="model:BangumiItemViewModel" x:Key="BangumiTemplate">
+            <RelativePanel MaxWidth="250">
+                <controls:ImageEx
+                    Margin="5"
+                    Name="CoverPanel"
+                    RelativePanel.AlignLeftWithPanel="True"
+                    RelativePanel.AlignRightWithPanel="True"
+                    RelativePanel.AlignTopWithPanel="True"
+                    Width="240"
+                    Source="{x:Bind Cover}"/>
+                <TextBlock
+                    Name="TitlePanel"
+                    RelativePanel.Below="CoverPanel"
+                    RelativePanel.AlignLeftWithPanel="True"
+                    RelativePanel.AlignRightWithPanel="True"
+                    Text="{x:Bind Title}"/>
+                <TextBlock
+                    RelativePanel.AlignBottomWithPanel="True"
+                    RelativePanel.AlignLeftWithPanel="True"
+                    Text="{x:Bind Index}"
+                    Foreground="Gray"/>
+                <TextBlock
+                    RelativePanel.AlignRightWithPanel="True"
+                    RelativePanel.AlignBottomWithPanel="True"
+                    Text="{x:Bind Mtime}"
+                    Foreground="Gray"/>
+            </RelativePanel>
+        </DataTemplate>
     </UserControl.Resources>
     <RelativePanel>
         <ProgressBar
+            RelativePanel.AlignTopWithPanel="True"
+            RelativePanel.AlignRightWithPanel="True"
+            RelativePanel.AlignLeftWithPanel="True"
             Name="PrLoad"
             Visibility="Collapsed" 
             Background="{x:Null}"
             IsIndeterminate="True"/>
         <ListView
+            Name="PartitionsPanel"
+            RelativePanel.Below="PrLoad"
+            RelativePanel.AlignLeftWithPanel="True"
+            RelativePanel.AlignRightWithPanel="True"
                 SelectionMode="None"
                 ItemsSource="{x:Bind Partitions}">
                 <ListView.ItemContainerStyle>
@@ -53,24 +178,33 @@
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                     </Style>
                 </ListView.ItemContainerStyle>
+            <ListView.HeaderTemplate>
+                <DataTemplate x:DataType="model:AVRecommendHeaderViewModel">
+                    <FlipView 
+                        ItemsSource="{x:Bind Banners}"
+                        Height="300">
+                        <FlipView.ItemTemplate>
+                            <DataTemplate x:DataType="model:BannerViewModel">
+                                <controls:ImageEx
+                                    Height="300"
+                                    Source="{x:Bind Image}"/>
+                            </DataTemplate>
+                        </FlipView.ItemTemplate>
+                    </FlipView>
+                </DataTemplate>
+            </ListView.HeaderTemplate>
                 <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="model:AVPartitionViewModel">
+                    <DataTemplate x:DataType="model:RecommendPartitionViewModel">
                         <RelativePanel>
-                            <Image
+                        <Image
                                 Margin="5"
                                 RelativePanel.AlignTopWithPanel="True"
                                 RelativePanel.AlignLeftWithPanel="True"
                                 Name="IconPanel"
                                 Height="25"
-                                Width="25">
-                                <Image.Source>
-                                    <BitmapImage
-                                        DecodePixelHeight="25"
-                                        DecodePixelWidth="25"
-                                        UriSource="{x:Bind Icon}"/>
-                                </Image.Source>
-                            </Image>
-                            <TextBlock
+                                Width="25"
+                            Source="{x:Bind Icon}"/>
+                        <TextBlock
                                 RelativePanel.RightOf="IconPanel"
                                 RelativePanel.AlignTopWithPanel="True"
                                 FontSize="16"
@@ -82,32 +216,39 @@
                                 RelativePanel.AlignRightWithPanel="True"
                                 RelativePanel.AlignTopWithPanel="True"
                                 Foreground="{StaticResource Bili-FontColor}"
-                                Tag="{x:Bind Uid}"
-                                Click="btn_Refresh_Click"
                                 >
                                 <SymbolIcon Symbol="Refresh"/>
                             </HyperlinkButton>
-                            <localControl:AdaptiveGridView
+                        <localControl:AdaptiveGridView
                                 Margin="5"
-                                DesiredWidth="210"
-                                ItemHeight="200"
+                                DesiredWidth="250"
+                                ItemHeight="220"
                                 IsItemClickEnabled="True"
                                 SelectionMode="None"
                                 RelativePanel.Below="IconPanel"
                                 RelativePanel.AlignLeftWithPanel="True"
                                 RelativePanel.AlignRightWithPanel="True"
                                 ScrollViewer.VerticalScrollMode="Disabled"
-                                ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                 ScrollViewer.HorizontalScrollMode="Disabled"
-                                ItemsSource="{x:Bind AVs}"
-                                ItemTemplate="{StaticResource HomeItemTemplate}"
-                                BorderBrush="{ThemeResource Bili-Background}"
-                                ItemClick="home_GridView_FJ_ItemClick"
-                                />
+                                ItemsSource="{x:Bind Items}"
+                                >
+                            <localControl:AdaptiveGridView.ItemTemplateSelector>
+                                <local:RecommendItemSelector 
+                                ActivityTemplate="{StaticResource ActivityTemplate}"
+                                AVItemTemplate="{StaticResource AVItemTemplate}"
+                                BangumiItemTemplate="{StaticResource BangumiTemplate}"
+                                LiveItemTemplate="{StaticResource LiveItemTemplate}"
+                                TopicTemplate="{StaticResource TopicTemplate}"/>
+                            </localControl:AdaptiveGridView.ItemTemplateSelector>
+                        </localControl:AdaptiveGridView>
                         </RelativePanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+        <local:MessageShow
+            x:Name="MessagePanel"
+            RelativePanel.AlignBottomWithPanel="True"
+            RelativePanel.AlignHorizontalCenterWithPanel="True"
+            Margin="10"/>
     </RelativePanel>
 </UserControl>

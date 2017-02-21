@@ -115,7 +115,12 @@ namespace bilibili2.Class
         public static string TimeToSimplifyTime(string time)
         {
             var date = DateTime.Parse(time);
-            return $"{date.Hour}:{date.Minute}";
+            var timeCalled = "";
+            if(date.Hour>0&&date.Hour<=2)
+            {
+                timeCalled = "凌晨";
+            }
+            return $"{timeCalled}{date.Hour}:{date.Minute:X2}";
         }
     }
 }

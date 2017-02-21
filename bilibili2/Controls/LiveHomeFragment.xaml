@@ -46,7 +46,7 @@
                             RelativePanel.LeftOf="NumPanel"
                             Source="ms-appx:///Assets/Icon/ic_watching.png"
                             Height="15"
-                            Width="22"/>
+                            Width="15"/>
                     <TextBlock
                             FontSize="13"
                             Margin="5"

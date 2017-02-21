@@ -1,5 +1,4 @@
 ﻿using bilibili2.Class;
-using bilibili2.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -26,140 +25,18 @@ namespace bilibili2
     public sealed partial class AVRecommendFragment : UserControl
     {
         private WebClientClass wc = new WebClientClass();
-        private ObservableCollection<BannerViewModel> Banners { get; } = new ObservableCollection<BannerViewModel>();
-        private List<RecommendPartitionViewModel> Partitions { get; } = new List<RecommendPartitionViewModel>
-                {
-                    new RecommendPartitionViewModel
-                    {
-                        Icon = "ms-appx:///Assets/Icon/ic_header_hot.png",
-                        Name ="热门推荐",
-                        Param ="",
-                        Type = "recommend"
-                    },
-                    new RecommendPartitionViewModel
-                    {
-                        Icon = "ms-appx:///Assets/Icon/ic_head_live.png",
-                        Name ="正在直播",
-                        Param="",
-                        Type="live"
-                    },
-                    new RecommendPartitionViewModel
-                    {
-                        Icon = "ms-appx:///Assets/Icon/ic_category_t13.png",
-                        Name ="番剧推荐",
-                        Param="13",
-                        Type="bangumi"
-                    },
-                    new RecommendPartitionViewModel
-                    {
-                        Icon ="ms-appx:///Assets/Icon/ic_category_t1.png",
-                        Name="动画区",
-                        Param="1",
-                        Type="region"
-                    },
-                    new RecommendPartitionViewModel
-                    {
-                        Icon ="ms-appx:///Assets/Icon/ic_category_t3.png",
-                        Name="音乐区",
-                        Param="3",
-                        Type="region"
-                    },
-                    new RecommendPartitionViewModel
-                    {
-                        Icon ="ms-appx:///Assets/Icon/ic_category_t129.png",
-                        Name="舞蹈区",
-                        Param="129",
-                        Type="region"
-                    },
-                    new RecommendPartitionViewModel
-                    {
-                        Icon ="ms-appx:///Assets/Icon/ic_category_t4.png",
-                        Name="游戏区",
-                        Param="4",
-                        Type="region"
-                    },
-                    new RecommendPartitionViewModel
-                    {
-                        Icon ="ms-appx:///Assets/Icon/ic_category_t119.png",
-                        Name="鬼畜区",
-                        Param="119",
-                        Type="region"
-                    },
-                    new RecommendPartitionViewModel
-                    {
-                        Icon ="ms-appx:///Assets/Icon/ic_category_t160.png",
-                        Name="生活区",
-                        Param="160",
-                        Type="region"
-                    },
-                    new RecommendPartitionViewModel
-                    {
-                        Icon ="ms-appx:///Assets/Icon/ic_category_t36.png",
-                        Name="科技区",
-                        Param="36",
-                        Type="region"
-                    },
-                    new RecommendPartitionViewModel
-                    {
-                        Icon ="ms-appx:///Assets/Icon/ic_category_t155.png",
-                        Name="时尚区",
-                        Param="155",
-                        Type="region"
-                    },
-                    new RecommendPartitionViewModel
-                    {
-                        Icon ="ms-appx:///Assets/Icon/ic_category_t165.png",
-                        Name="广告区",
-                        Param="165",
-                        Type="region"
-                    },
-                    new RecommendPartitionViewModel
-                    {
-                        Icon ="ms-appx:///Assets/Icon/ic_category_t5.png",
-                        Name="娱乐区",
-                        Param="5",
-                        Type="region"
-                    },
-                    new RecommendPartitionViewModel
-                    {
-                        Icon ="ms-appx:///Assets/Icon/ic_category_t11.png",
-                        Name="电视剧区",
-                        Param="11",
-                        Type="region"
-                    },
-                    new RecommendPartitionViewModel
-                    {
-                        Icon ="ms-appx:///Assets/Icon/ic_category_t23.png",
-                        Name="电影区",
-                        Param="23",
-                        Type="region"
-                    },
-                    new RecommendPartitionViewModel
-                    {
-                        Icon ="ms-appx:///Assets/Icon/ic_header_topic.png",
-                        Name="话题",
-                        Param="",
-                        Type="topic"
-                    },
-                    new RecommendPartitionViewModel
-                    {
-                        Icon ="ms-appx:///Assets/Icon/ic_header_activity_center.png",
-                        Name="活动中心",
-                        Param="",
-                        Type="activity"
-                    },
-                };
+        private ObservableCollection<RecommendPartitionViewModel> Partitions { get; } = new ObservableCollection<RecommendPartitionViewModel>();
         public AVRecommendFragment()
         {
             this.InitializeComponent();
-            //http://app.bilibili.com/x/banner?plat=4&build=412001
+            SetHomeInfo();
         }
 
         public async void SetHomeInfo()
         {
             try
             {
-                var url = $"http://app.bilibili.com/x/v2/show?_device=android&_ulv=10000&appkey={appkey}&build=434000&platform=android";
+                var url = $"http://app.bilibili.com/x/v2/show?_device=android&_ulv=10000&appkey={ApiHelper._appKey}&build=434000&platform=android";
                 url += $"&sign={ApiHelper.GetSign(url)}";
                 var result = await wc.GetResults(new Uri(url));
                 var model = JObject.Parse(result);
@@ -183,14 +60,14 @@ namespace bilibili2
                             Danmaku = token["danmaku"].Value<int>().ToString(),
                             Play = token["play"].Value<int>().ToString(),
                             Param = token["param"].Value<string>()
-                        });
+                        }).Take(4);
                     var bangumis = model["data"]
                         .First(token => token["type"].Value<string>() == "bangumi")["body"]
                         .Select(token => new BangumiItemViewModel
                         {
                             Cover = token["cover"].Value<string>(),
                             Title = token["title"].Value<string>(),
-                            Index = token["index"].Value<string>(),
+                            Index = $"第{token["index"].Value<string>()}话",
                             Param = token["param"].Value<string>(),
                             Mtime = Converter.TimeToSimplifyTime(token["mtime"].Value<string>())
                         });
@@ -198,24 +75,106 @@ namespace bilibili2
                         .First(token => token["type"].Value<string>() == "live")["body"].
                         Select(token => new RecommendLiveViewModel
                         {
-                            Cover=token["cover"].Value<string>()
+                            Cover = token["cover"].Value<string>(),
+                            Title = token["title"].Value<string>(),
+                            Area = token["area"].Value<string>(),
+                            AreaId = token["area_id"].Value<int>().ToString(),
+                            Name = token["name"].Value<string>(),
+                            Online = token["online"].Value<int>(),
+                            Param = token["param"].Value<string>()
                         });
                     var regions = model["data"]
                         .Where(token => token["type"].Value<string>() == "region")
-                        .Select(token => token["body"].Select(item =>new AVItemViewModel
+                        .Select(token => new
+                        {
+                            Title = token["title"].Value<string>(),
+                            Key = token["param"].Value<string>(),
+                            Items = token["body"].Select(item => new AVItemViewModel
+                            {
+                                Cover = item["cover"].Value<string>(),
+                                Title = item["title"].Value<string>(),
+                                Danmaku = item["danmaku"].Value<int>().ToString(),
+                                Play = item["play"].Value<int>().ToString(),
+                                Param = item["param"].Value<string>()
+                            })
+                        });
+                    var activities = model["data"]
+                        .First(token => token["type"].Value<string>() == "activity")["body"]
+                        .Select(token => new ActivityViewModel
                         {
                             Cover = token["cover"].Value<string>(),
                             Title = token["title"].Value<string>(),
-                            Danmaku = token["danmaku"].Value<int>().ToString(),
-                            Play = token["play"].Value<int>().ToString(),
+                            Uri = token["uri"].Value<string>(),
                             Param = token["param"].Value<string>()
-                        }));
+                        });
+                    var topics = model["data"]
+                        .Where(token => token["banner"] != null&&token["banner"]["bottom"]!=null)
+                        .Select(token => token["banner"]["bottom"].Select(item => new RegionBannerViewModel
+                        {
+                            Image = item["image"].Value<string>(),
+                            Title = item["title"].Value<string>(),
+                            Uri = item["uri"].Value<string>(),
+                            Id = item["id"].Value<int>()
+                        }))
+                        .Aggregate((a, b) => a.Concat(b));
+                    PartitionsPanel.Header = new AVRecommendHeaderViewModel { Banners = banners.ToList() };
+                    Partitions.Add(new RecommendPartitionViewModel
+                    {
+                        Icon = "ms-appx:///Assets/Icon/ic_header_hot.png",
+                        Name = "热门推荐",
+                        Param = "",
+                        Type = "recommend",
+                        Items = new ObservableCollection<object>(recommends)
+                    });
+                    Partitions.Add(new RecommendPartitionViewModel
+                    {
+                        Icon = "ms-appx:///Assets/Icon/ic_head_live.png",
+                        Name = "正在直播",
+                        Param = "",
+                        Type = "live",
+                        Items =new ObservableCollection<object>(lives)
+                    });
+                    Partitions.Add(new RecommendPartitionViewModel
+                    {
+                        Icon = "ms-appx:///Assets/Icon/ic_category_t13.png",
+                        Name = "番剧推荐",
+                        Param = "13",
+                        Type = "bangumi",
+                        Items=new ObservableCollection<object>(bangumis)
+                    });
+                    foreach(var region in regions)
+                    {
+                        Partitions.Add(new RecommendPartitionViewModel
+                        {
+                            Icon = $"ms-appx:///Assets/Icon/ic_category_t{region.Key}.png",
+                            Name = region.Title,
+                            Param = region.Key,
+                            Type = "region",
+                            Items = new ObservableCollection<object>(region.Items)
+                        });
+                    }
+                    Partitions.Add(new RecommendPartitionViewModel
+                    {
+                        Icon = "ms-appx:///Assets/Icon/ic_header_topic.png",
+                        Name = "话题",
+                        Param = "",
+                        Type = "topic",
+                        Items = new ObservableCollection<object>(topics)
+                    });
+                    Partitions.Add(new RecommendPartitionViewModel
+                    {
+                        Icon = "ms-appx:///Assets/Icon/ic_header_activity_center.png",
+                        Name = "活动中心",
+                        Param = "",
+                        Type = "activity",
+                        Items =new ObservableCollection<object>(activities)
+                    });
                 }
                 PrLoad.Visibility = Visibility.Visible;           
             }
             catch (Exception ex)
             {
-                ErrorEvent(ex.Message);
+                MessagePanel.Show(ex.Message,3000);
             }
             finally
             {
@@ -223,15 +182,15 @@ namespace bilibili2
             }
         }
 
-        private void items_listview_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            Frame frame = Window.Current.Content as Frame;
-            frame.Navigate(typeof(VideoInfoPage));
-        }
-        private void home_GridView_FJ_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            PlayEvent((e.ClickedItem as AVItemViewModel).Aid);
-        }
+        //private void items_listview_ItemClick(object sender, ItemClickEventArgs e)
+        //{
+        //    Frame frame = Window.Current.Content as Frame;
+        //    frame.Navigate(typeof(VideoInfoPage));
+        //}
+        //private void home_GridView_FJ_ItemClick(object sender, ItemClickEventArgs e)
+        //{
+        //    PlayEvent((e.ClickedItem as AVItemViewModel).Aid);
+        //}
     }
 
     public class RecommendItemSelector : DataTemplateSelector
@@ -247,9 +206,9 @@ namespace bilibili2
             {
                 case AVItemViewModel av:
                     return AVItemTemplate;
-                case LiveItemViewModel live:
+                case RecommendLiveViewModel live:
                     return LiveItemTemplate;
-                case BanTopicViewModel topic:
+                case RegionBannerViewModel topic:
                     return TopicTemplate;
                 case BangumiItemViewModel bangumi:
                     return BangumiItemTemplate;

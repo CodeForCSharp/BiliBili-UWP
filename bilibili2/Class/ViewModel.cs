@@ -926,7 +926,7 @@ namespace bilibili2
         public string Type { get; set; }
         public string Name { get; set; }
         public string Icon { get; set; }
-        public ObservableCollection<object> Items { get; set; } = new ObservableCollection<object>();
+        public ObservableCollection<object> Items { get; set; }
     }
     public class AVItemViewModel
     {
@@ -1160,6 +1160,12 @@ namespace bilibili2
         public string Name { get; set; }
         public int Online { get; set; }
     }
+
+    public class AVRecommendHeaderViewModel
+    {
+        public List<BannerViewModel> Banners { get; set; }
+    }
+
     public class MessageModel
     {
         public int code { get; set; }

@@ -139,8 +139,6 @@
     <Compile Include="Controls\MessageShow.xaml.cs">
       <DependentUpon>MessageShow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\BannerModel.cs" />
-    <Compile Include="Model\HomeAVModel.cs" />
     <Compile Include="Pages\AllLivePage.xaml.cs">
       <DependentUpon>AllLivePage.xaml</DependentUpon>
     </Compile>
