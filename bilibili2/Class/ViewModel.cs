@@ -1165,7 +1165,34 @@ namespace bilibili2
     {
         public List<BannerViewModel> Banners { get; set; }
     }
+    public interface ISuggestion
+    {
+        string Icon { get; set; }
+        string Type { get; set; }
+        string Value { get; set; }
+    }
+    public class SuggestionViewModel : ISuggestion
+    {
+        public string Icon { get; set; }
+        public string Type { get; set; }
+        public string Value { get; set; }
+    }
 
+    public class SuggestionUpViewModel : ISuggestion
+    {
+        public int Mid { get; set; }
+        public string Icon { get; set; }
+        public string Value { get; set; }
+        public string Type { get; set; }
+    }
+
+    public class SuggestionBanViewModel : ISuggestion
+    {
+        public string Icon { get; set; }
+        public string Type { get; set; }
+        public string Value { get; set; }
+        public string Spid { get; set; }
+    }
     public class MessageModel
     {
         public int code { get; set; }

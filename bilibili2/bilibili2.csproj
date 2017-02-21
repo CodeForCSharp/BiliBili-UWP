@@ -16,11 +16,11 @@
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <PackageCertificateKeyFile>bilibili2_StoreKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>bilibili2_TemporaryKey.pfx</PackageCertificateKeyFile>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
-    <PackageCertificateThumbprint>D654141A85F7BAB9F0513747AE2ABE0E1A35EB76</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>ECCE36EC535E272006A83B6064C28F3BF5E39581</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -97,7 +97,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Data\region.json" />
-    <None Include="bilibili2_StoreKey.pfx" />
+    <None Include="Bilibili UWP.pfx" />
+    <None Include="bilibili2_TemporaryKey.pfx" />
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
@@ -119,6 +120,9 @@
     <Compile Include="Controls\AdaptiveGridView.cs" />
     <Compile Include="Controls\AdaptiveGridView.Properties.cs" />
     <Compile Include="Controls\BilibiliLoadControl.cs" />
+    <Compile Include="Controls\FindFragment.xaml.cs">
+      <DependentUpon>FindFragment.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\LoadControl.xaml.cs">
       <DependentUpon>LoadControl.xaml</DependentUpon>
     </Compile>
@@ -239,7 +243,6 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="bilibili2_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\BadgeLogo.scale-100.png" />
@@ -257,6 +260,7 @@
     <Content Include="Assets\Icon\bili_default_image_tv.9.png" />
     <Content Include="Assets\Icon\DM.png" />
     <Content Include="Assets\Icon\DY.png" />
+    <Content Include="Assets\Icon\ic_btn_rank_all.png" />
     <Content Include="Assets\Icon\ic_category_t1.png" />
     <Content Include="Assets\Icon\ic_category_t11.png" />
     <Content Include="Assets\Icon\ic_category_t119.png" />
@@ -338,9 +342,13 @@
     <Content Include="Assets\Icon\ic_header_movie_all.png" />
     <Content Include="Assets\Icon\ic_header_new.png" />
     <Content Include="Assets\Icon\ic_header_topic.png" />
+    <Content Include="Assets\Icon\ic_header_topic_center.png" />
     <Content Include="Assets\Icon\ic_head_live.png" />
+    <Content Include="Assets\Icon\ic_hint_search.png" />
     <Content Include="Assets\Icon\ic_info_danmakus2.png" />
     <Content Include="Assets\Icon\ic_info_views2.png" />
+    <Content Include="Assets\Icon\ic_photo_random.png" />
+    <Content Include="Assets\Icon\ic_search_history.png" />
     <Content Include="Assets\Icon\ic_watching.png" />
     <Content Include="Assets\Icon\live_home_all_category.png" />
     <Content Include="Assets\Icon\live_home_clip_video.png" />
@@ -400,6 +408,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\FindFragment.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\LoadControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -586,6 +598,15 @@
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Bilibili UWP.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

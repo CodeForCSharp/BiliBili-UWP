@@ -1402,27 +1402,6 @@ namespace bilibili2
             public string name { get; set; }
             public string value { get; set; }
         }
-        //话题点击
-        private void list_Topic_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            if (Regex.IsMatch(((TopicModel)e.ClickedItem).link, "/video/av(.*)?[/|+](.*)?"))
-            {
-                string a = Regex.Match(((TopicModel)e.ClickedItem).link, "/video/av(.*)?[/|+](.*)?").Groups[1].Value;
-                this.infoFrame.Navigate(typeof(VideoInfoPage), a);
-            }
-            else
-            {
-                if (Regex.IsMatch(((TopicModel)e.ClickedItem).link, @"live.bilibili.com/(.*?)"))
-                {
-                    string a = Regex.Match(((TopicModel)e.ClickedItem).link + "a", "live.bilibili.com/(.*?)a").Groups[1].Value;
-                    // livePlayVideo(a);
-                }
-                else
-                {
-                    this.infoFrame.Navigate(typeof(WebViewPage), ((TopicModel)e.ClickedItem).link);
-                }
-            }
-        }
 
         private async void top_txt_find_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
