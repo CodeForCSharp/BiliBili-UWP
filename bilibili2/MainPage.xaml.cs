@@ -1,9 +1,5 @@
 ﻿using bilibili2.Class;
 using bilibili2.Pages;
-using JyUserFeedback;
-using JyUserFeedback.view;
-using JyUserInfo;
-using JyUserInfo.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -50,19 +46,8 @@ namespace bilibili2
         {
             this.InitializeComponent();
             NavigationCacheMode = NavigationCacheMode.Required;
-            pivot_Home.SelectedIndex = 2;
+            PivotHome.SelectedIndex = 1;
             SystemNavigationManager.GetForCurrentView().BackRequested += MainPage_BackRequested;
-            JyFeedbackControl.FeedbackImageRequested += async delegate
-            {
-                var fileOpenPicker = new FileOpenPicker();
-                fileOpenPicker.FileTypeFilter.Add(".png");
-                fileOpenPicker.FileTypeFilter.Add(".jpg");
-                var file = await fileOpenPicker.PickSingleFileAsync();
-                if (file != null)
-                {
-                    _jyUserFeedbackSdkManager.UploadPicture(ApiHelper.JyAppkey, ApiHelper.JySecret, file);
-                }
-            };
             ChangeTitbarColor();
             //this.RequestedTheme = ElementTheme.Dark;
         }
@@ -79,7 +64,6 @@ namespace bilibili2
         {
             if (e.NavigationMode == NavigationMode.New)
             {
-                GetFeedInfo();
                 GetLoadInfo();
                 timer.Interval = new TimeSpan(0, 0, 5);
                 timer.Start();
@@ -203,61 +187,8 @@ namespace bilibili2
                     }
                 }
             }
-            //Frame rootFrame = Window.Current.Content as Frame;
-
         }
 
-        //首页调整页面
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            pivot_Home.SelectedIndex = Convert.ToInt32((sender as Button).Tag);
-        }
-        //更新界面
-        public void UpdateUI()
-        {
-            btn_Bangumi.Foreground = new SolidColorBrush(new Color() { A = 178, G = 255, B = 255, R = 255 });
-            btn_Find.Foreground = new SolidColorBrush(new Color() { A = 178, G = 255, B = 255, R = 255 });
-            btn_Home.Foreground = new SolidColorBrush(new Color() { A = 178, G = 255, B = 255, R = 255 });
-            btn_Live.Foreground = new SolidColorBrush(new Color() { A = 178, G = 255, B = 255, R = 255 });
-            btn_Update.Foreground = new SolidColorBrush(new Color() { A = 178, G = 255, B = 255, R = 255 });
-            btn_Part.Foreground = new SolidColorBrush(new Color() { A = 178, G = 255, B = 255, R = 255 });
-            btn_Bangumi.FontWeight = FontWeights.Normal;
-            btn_Find.FontWeight = FontWeights.Normal;
-            btn_Home.FontWeight = FontWeights.Normal;
-            btn_Live.FontWeight = FontWeights.Normal;
-            btn_Update.FontWeight = FontWeights.Normal;
-            btn_Part.FontWeight = FontWeights.Normal;
-            switch (pivot_Home.SelectedIndex)
-            {
-                case 0:
-                    btn_Live.Foreground = new SolidColorBrush(Colors.White);
-                    btn_Live.FontWeight = FontWeights.Bold;
-                    break;
-                case 1:
-                    btn_Bangumi.Foreground = new SolidColorBrush(Colors.White);
-                    btn_Bangumi.FontWeight = FontWeights.Bold;
-                    break;
-                case 2:
-                    btn_Home.Foreground = new SolidColorBrush(Colors.White);
-                    btn_Home.FontWeight = FontWeights.Bold;
-                    break;
-                case 3:
-                    btn_Part.Foreground = new SolidColorBrush(Colors.White);
-                    btn_Part.FontWeight = FontWeights.Bold;
-                    break;
-                case 4:
-                    btn_Update.Foreground = new SolidColorBrush(Colors.White);
-                    btn_Update.FontWeight = FontWeights.Bold;
-                    break;
-                case 5:
-                    btn_Find.Foreground = new SolidColorBrush(Colors.White);
-                    btn_Find.FontWeight = FontWeights.Bold;
-                    break;
-                default:
-                    break;
-            }
-
-        }
         //打开汉堡菜单
         private void btn_OpenMenu_Click(object sender, RoutedEventArgs e)
         {
@@ -270,66 +201,6 @@ namespace bilibili2
                 sp_View.IsPaneOpen = true;
             }
         }
-        // pivot改变
-        private async void pivot_Home_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //UpdateUI();
-            switch (pivot_Home.SelectedIndex)
-            {
-                case 0:
-                    break;
-                case 1:
-                    if (!LoadBan)
-                    {
-                        LoadBan = false;
-                        await GetBanUpdate();
-                        await GetBanBanner();
-                        await GetBanTJ();
-                        LoadBan = true;
-                    }
-                    break;
-                case 2:
-                    if (!LoadBan)
-                    {
-                        LoadBan = false;
-                        await GetBanUpdate();
-                        await GetBanBanner();
-                        await GetBanTJ();
-                        LoadBan = true;
-                    }
-                    break;
-                case 3:
-                    if (!LoadDT)
-                    {
-                        GetDt();
-                    }
-                    if (!LoadBan)
-                    {
-                        LoadBan = false;
-                        await GetBanUpdate();
-                        await GetBanBanner();
-                        await GetBanTJ();
-                        LoadBan = true;
-                    }
-                    break;
-                case 4:
-                    if (!LoadDT)
-                    {
-                        GetDt();
-                    }
-                    break;
-                case 5:
-                    if (!LoadHot)
-                    {
-                        GetHotKeyword();
-                    }
-                    break;
-                default:
-                    break;
-            }
-
-        }
-
         //侧滑来源http://www.cnblogs.com/hebeiDGL/p/4775377.html
         #region  从屏幕左侧边缘滑动屏幕时，打开 SplitView 菜单
 
@@ -463,23 +334,6 @@ namespace bilibili2
                     break;
             }
 
-            if (this.ActualWidth <= 640)
-            {
-                fvLeft_Ban.Visibility = Visibility.Collapsed;
-                fvRight_Ban.Visibility = Visibility.Collapsed;
-                grid_c_left_Ban.Width = new GridLength(0, GridUnitType.Auto);
-                grid_c_right_Ban.Width = new GridLength(0, GridUnitType.Auto);
-                grid_c_center_Ban.Width = new GridLength(1, GridUnitType.Star);
-            }
-            else
-            {
-                fvLeft_Ban.Visibility = Visibility.Visible;
-                fvRight_Ban.Visibility = Visibility.Visible;
-                grid_c_left_Ban.Width = new GridLength(1, GridUnitType.Star);
-                grid_c_right_Ban.Width = new GridLength(1, GridUnitType.Star);
-                grid_c_center_Ban.Width = new GridLength(0, GridUnitType.Auto);
-            }
-
             if (this.ActualWidth < 1000)
             {
                 top_txt_Header.HorizontalAlignment = HorizontalAlignment.Left;
@@ -487,17 +341,6 @@ namespace bilibili2
             else
             {
                 top_txt_Header.HorizontalAlignment = HorizontalAlignment.Center;
-            }
-
-            if (this.ActualWidth < 640)
-            {
-                //double i = (double)test.ActualWidth;
-                test.Width = double.NaN;
-            }
-            else
-            {
-                int i = Convert.ToInt32(pivot_Home.ActualWidth / 500);
-                test.Width = pivot_Home.ActualWidth / i - 20;
             }
         }
         //打开搜索框
@@ -531,42 +374,6 @@ namespace bilibili2
             //int i=  infoFrame.BackStackDepth;
             //string a = string.Empty;
             dh.TranslateX = 0;
-        }
-        //番剧Banner选择改变
-        private void home_flipView_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
-        {
-            if (home_flipView_Ban.Items.Count == 0 || fvLeft_Ban.Items.Count == 0 || fvRight_Ban.Items.Count == 0)
-            {
-                return;
-            }
-            if (fvLeft_Ban.Visibility == Visibility.Collapsed || fvRight_Ban.Visibility == Visibility.Collapsed)
-            {
-                return;
-            }
-            if (this.home_flipView_Ban.SelectedIndex == 0)
-            {
-                this.fvLeft_Ban.SelectedIndex = this.fvLeft_Ban.Items.Count - 1;
-                this.fvRight_Ban.SelectedIndex = 1;
-            }
-            else if (this.home_flipView_Ban.SelectedIndex == 1)
-            {
-                this.fvLeft_Ban.SelectedIndex = 0;
-                this.fvRight_Ban.SelectedIndex = this.fvRight_Ban.Items.Count - 1;
-            }
-            else if (this.home_flipView_Ban.SelectedIndex == this.home_flipView_Ban.Items.Count - 1)
-            {
-                this.fvLeft_Ban.SelectedIndex = this.fvLeft_Ban.Items.Count - 2;
-                this.fvRight_Ban.SelectedIndex = 0;
-            }
-            else if ((this.home_flipView_Ban.SelectedIndex < (this.home_flipView_Ban.Items.Count - 1)) && this.home_flipView_Ban.SelectedIndex > -1)
-            {
-                this.fvLeft_Ban.SelectedIndex = this.home_flipView_Ban.SelectedIndex - 1;
-                this.fvRight_Ban.SelectedIndex = this.home_flipView_Ban.SelectedIndex + 1;
-            }
-            else
-            {
-                return;
-            }
         }
 
         WebClientClass wc = new WebClientClass();
@@ -649,79 +456,6 @@ namespace bilibili2
                 }
             }
         }
-
-        bool LoadDT = false;
-        int DT_PageNum = 1;
-        //加载动态
-        private async void GetDt()
-        {
-            UserClass getLogin = new UserClass();
-            if (getLogin.IsLogin())
-            {
-                try
-                {
-                    pr_Load_DT.Visibility = Visibility.Visible;
-                    DT_0.Visibility = Visibility.Collapsed;
-                    DT_1.Visibility = Visibility.Collapsed;
-                    DT_Info.Visibility = Visibility.Visible;
-                    DT_noLoad.Visibility = Visibility.Collapsed;
-                    user_GridView_Bangumi.ItemsSource = await getLogin.GetUserBangumi();
-                    if (user_GridView_Bangumi.Items.Count == 0)
-                    {
-                        DT_0.Visibility = Visibility.Visible;
-                    }
-                    List<GetAttentionUpdate> list_Attention = await getLogin.GetUserAttentionUpdate(DT_PageNum);
-                    DT_PageNum++;
-                    //User_ListView_Attention.ItemsSource = list_Attention;
-                    foreach (GetAttentionUpdate item in list_Attention)
-                    {
-                        User_ListView_Attention.Items.Add(item);
-                    }
-                    if (User_ListView_Attention.Items.Count == 0)
-                    {
-                        DT_1.Visibility = Visibility.Visible;
-                    }
-                    LoadDT = true;
-                }
-                catch (Exception)
-                {
-                    messShow.Show("读取动态失败", 3000);
-                }
-                finally
-                {
-                    pr_Load_DT.Visibility = Visibility.Collapsed;
-                }
-            }
-            else
-            {
-                DT_Info.Visibility = Visibility.Collapsed;
-                DT_noLoad.Visibility = Visibility.Visible;
-                LoadDT = false;
-                DT_PageNum = 1;
-            }
-        }
-        //读取搜索热词
-        bool LoadHot = false;
-        public async void GetHotKeyword()
-        {
-            try
-            {
-
-                WebClientClass wc = new WebClientClass();
-                string results = await wc.GetResults(new Uri("http://www.bilibili.com/search?action=hotword&main_ver=v1"));
-                HotModel model = JsonConvert.DeserializeObject<HotModel>(results);
-                List<HotModel> ban = JsonConvert.DeserializeObject<List<HotModel>>(model.list.ToString());
-
-                list_Hot.ItemsSource = ban;
-                LoadHot = true;
-            }
-            catch (Exception ex)
-            {
-                messShow.Show("读取搜索热词失败\r\n" + ex.Message, 3000);
-                LoadHot = false;
-            }
-
-        }
         //汉堡菜单的点击
         private void list_Menu_ItemClick(object sender, ItemClickEventArgs e)
         {
@@ -786,7 +520,6 @@ namespace bilibili2
                     infoFrame.Navigate(typeof(SettingPage));
                     break;
                 case "Feedback":
-                    Feedback();
                     break;
                 default:
                     break;
@@ -947,41 +680,7 @@ namespace bilibili2
             }
              ChangeTitbarColor();
         }
-        //动态加载更多
-        bool Moreing = true;
-        private async void sc_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
-        {
-            if (sc.VerticalOffset == sc.ScrollableHeight)
-            {
-                if (User_load_more.Content.ToString() == "没有更多了...")
-                {
-                    return;
-                }
-                if (Moreing)
-                {
-                    Moreing = false;
-                    User_load_more.IsEnabled = false;
-                    User_load_more.Content = "加载中..";
-                    List<GetAttentionUpdate> list_Attention = await new UserClass().GetUserAttentionUpdate(DT_PageNum);
-                    //User_ListView_Attention.ItemsSource = list_Attention;
-                    DT_PageNum++;
-                    foreach (GetAttentionUpdate item in list_Attention)
-                    {
-                        User_ListView_Attention.Items.Add(item);
-                    }
-                    User_load_more.IsEnabled = true;
-                    User_load_more.Content = "加载更多";
-                    if (list_Attention.Count == 0)
-                    {
-                        User_load_more.IsEnabled = false;
-                        User_load_more.Content = "没有更多了...";
-                    }
 
-                    Moreing = true;
-                }
-            }
-
-        }
         //点击动态
         private void User_ListView_Attention_ItemClick(object sender, ItemClickEventArgs e)
         {
@@ -991,17 +690,7 @@ namespace bilibili2
         //打开话题
         private void Find_btn_Topic_Click(object sender, RoutedEventArgs e)
         {
-            //if (this.ActualWidth > 500)
-            //{
-            //    sp_Find.IsPaneOpen = true;
-            //    GetTopic();
-            //}
-            //else
-            //{
                 infoFrame.Navigate(typeof(TopicPage));
-                //jinr.From = this.ActualWidth;
-            //}
-
         }
         //infoFrame跳转
         private void infoFrame_Navigated(object sender, NavigationEventArgs e)
@@ -1056,9 +745,6 @@ namespace bilibili2
                     (infoFrame.Content as SettingPage).BackEvent += MainPage_BackEvent;
                     (infoFrame.Content as SettingPage).ChangeTheme += MainPage_ChangeTheme;
                     (infoFrame.Content as SettingPage).ChangeDrak += MainPage_ChangeDrak;
-                    (infoFrame.Content as SettingPage).Feedback += delegate {
-                        Feedback();
-                    };
                     break;
                 case "播放器":
                     (infoFrame.Content as PlayerPage).BackEvent += MainPage_BackEvent;
@@ -1074,12 +760,6 @@ namespace bilibili2
                     break;
                 case "直播间":
                     (infoFrame.Content as LiveInfoPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "dili":
-                    (infoFrame.Content as DiliDiliPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "dili-info":
-                    (infoFrame.Content as DiliInfo).BackEvent += MainPage_BackEvent;
                     break;
                 case "搜索直播":
                     (infoFrame.Content as SearchLivePage).BackEvent += MainPage_BackEvent;
@@ -1107,14 +787,6 @@ namespace bilibili2
         {
             ChangeTheme();
         }
-
-        //试试手气
-        private void Find_btn_Random_Click(object sender, RoutedEventArgs e)
-        {
-            infoFrame.Navigate(typeof(VideoInfoPage), new Random().Next(2000000, 4999999).ToString());
-            //jinr.From = this.ActualWidth;
-            //storyboardPopIn.Begin();
-        }
         //infoFrame跳转动画
         private void infoFrame_Navigating(object sender, NavigatingCancelEventArgs e)
         {
@@ -1127,252 +799,6 @@ namespace bilibili2
                 tc.Add(edge);
                 infoFrame.ContentTransitions = tc;
             }
-        }
-        //点击排行榜
-        private void Find_btn_Rank_Click(object sender, RoutedEventArgs e)
-        {
-            infoFrame.Navigate(typeof(RankPage));
-        }
-        //番剧时间表点击
-        private void Ban_btn_Timeline_Click(object sender, RoutedEventArgs e)
-        {
-            //if (this.ActualWidth > 500)
-            //{
-            //    B_Timeline.Visibility = Visibility.Visible;
-            //    gridview_List.Visibility = Visibility.Collapsed;
-            //    sp_Bangumi.IsPaneOpen = true;
-            //    GetBangumiTimeLine();
-            //}
-            //else
-            //{
-                infoFrame.Navigate(typeof(BanTimelinePage));
-            //}
-        }
-        //索引点击
-        private void gridview_List_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            infoFrame.Navigate(typeof(BanByTagPage), new string[] { (e.ClickedItem as TagModel).tag_id.ToString(), (e.ClickedItem as TagModel).tag_name });
-        }
-        //索引表点击
-        private void Ban_btn_Tag_Click(object sender, RoutedEventArgs e)
-        {
-            //if (this.ActualWidth > 500)
-            //{
-            //    B_Timeline.Visibility = Visibility.Collapsed;
-            //    gridview_List.Visibility = Visibility.Visible;
-            //    sp_Bangumi.IsPaneOpen = true;
-            //    GetTagInfo();
-            //}
-            //else
-            //{
-                infoFrame.Navigate(typeof(BanTagPage));
-            //}
-        }
-        //追番点击
-        private void user_GridView_Bangumi_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            infoFrame.Navigate(typeof(BanInfoPage), (e.ClickedItem as GetUserBangumi).season_id);
-        }
-        //番剧最近更新
-        bool LoadBan = false;
-        private async Task GetBanUpdate()
-        {
-            try
-            {
-                wc = new WebClientClass();
-                string results = await wc.GetResults(new Uri("http://bangumi.bilibili.com/api/app_index_page"));
-                BannumiIndexModel model = JsonConvert.DeserializeObject<BannumiIndexModel>(results);
-                JObject json = JObject.Parse(model.result.ToString());
-                List<BannumiIndexModel> ban = JsonConvert.DeserializeObject<List<BannumiIndexModel>>(json["latestUpdate"]["list"].ToString());
-                GridView_Bangumi_NewUpdate.ItemsSource = ban;
-                // LoadBan = true;
-            }
-            catch (Exception ex)
-            {
-                messShow.Show("读取番剧最近更新失败\r\n" + ex.Message, 3000);
-                //LoadBan = false;
-            }
-        }
-        //番剧更新点击
-        private void GridView_Bangumi_NewUpdate_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            infoFrame.Navigate(typeof(BanInfoPage), (e.ClickedItem as BannumiIndexModel).season_id);
-        }
-        //读取我的追番
-        private void Ban_btn_MyBan_Click(object sender, RoutedEventArgs e)
-        {
-            if (new UserClass().IsLogin())
-            {
-                infoFrame.Navigate(typeof(UserBangumiPage), UserClass.Uid);
-            }
-            else
-            {
-                messShow.Show("请先登录", 3000);
-            }
-        }
-        //读取番剧Banner
-        private async Task GetBanBanner()
-        {
-            try
-            {
-                wc = new WebClientClass();
-                string results = await wc.GetResults(new Uri("http://bangumi.bilibili.com/api/app_index_page_v2?rnd" + new Random().Next(1000, 9999)));
-                BanBannerModel model = JsonConvert.DeserializeObject<BanBannerModel>(results);
-                if (model.code == 0)
-                {
-                    JObject jo = JObject.Parse(results);
-                    List<BanBannerModel> list = JsonConvert.DeserializeObject<List<BanBannerModel>>(jo["result"]["banners"].ToString());
-                    home_flipView_Ban.ItemsSource = list;
-                    fvLeft_Ban.ItemsSource = list;
-                    fvRight_Ban.ItemsSource = list;
-                    this.home_flipView_Ban.SelectedIndex = 0;
-                    if (fvLeft_Ban.Visibility != Visibility.Collapsed || fvRight_Ban.Visibility != Visibility.Collapsed)
-                    {
-                        this.fvLeft_Ban.SelectedIndex = this.fvLeft_Ban.Items.Count - 1;
-                        this.fvRight_Ban.SelectedIndex = this.home_flipView_Ban.SelectedIndex + 1;
-                    }
-                }
-                else
-                {
-                    messShow.Show("读取番剧Banner失败！" + model.message, 3000);
-                }
-            }
-            catch (Exception ex)
-            {
-                messShow.Show("读取番剧Banner失败！" + ex.Message, 3000);
-                //throw;
-            }
-
-        }
-        //读取番剧推荐
-        string Page_BanTJ = "-1";
-        private async Task GetBanTJ()
-        {
-            try
-            {
-                Ban_TJ_more.Text = "正在加载...";
-                wc = new WebClientClass();
-                string uri = "http://bangumi.bilibili.com/api/bangumi_recommend?_device=wp&appkey=84956560bc028eb7&build=434000&cursor=" + Page_BanTJ + "&pagesize=10&platform=android&ts=" + ApiHelper.GetTimeSpen;
-                uri += "&sign=" + ApiHelper.GetSign(uri);
-                string results = await wc.GetResults(new Uri(uri));
-                BanTJModel model = JsonConvert.DeserializeObject<BanTJModel>(results);
-                if (model.code == 0)
-                {
-                    JObject jo = JObject.Parse(results);
-                    List<BanTJModel> list = JsonConvert.DeserializeObject<List<BanTJModel>>(model.result.ToString());
-                    foreach (BanTJModel item in list)
-                    {
-                        list_Ban_TJ.Items.Add(item);
-                    }
-                    if (list.Count != 0)
-                    {
-                        Page_BanTJ = (list[list.Count - 1] as BanTJModel).cursor;
-                        Ban_TJ_more.Text = "加载更多";
-                    }
-                    else
-                    {
-                        Ban_TJ_more.Text = "没有更多了...";
-                    }
-                }
-                else
-                {
-                    messShow.Show("读取番剧推荐失败！" + model.message, 3000);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                messShow.Show("读取番剧推荐失败！" + ex.Message, 3000);
-                // throw;
-            }
-
-        }
-        //番剧Banner点击
-        private void btn_Banner_Ban_Click(object sender, RoutedEventArgs e)
-        {
-            string tag = Regex.Match((home_flipView_Ban.SelectedItem as BanBannerModel).link, @"^http://bangumi.bilibili.com/anime/category/(.*?)$").Groups[1].Value;
-            if (tag.Length != 0)
-            {
-                infoFrame.Navigate(typeof(BanByTagPage), new string[] { tag, (home_flipView_Ban.SelectedItem as BanBannerModel).title });
-                return;
-            }
-            string ban = Regex.Match((home_flipView_Ban.SelectedItem as BanBannerModel).link, @"^http://bangumi.bilibili.com/anime/(.*?)$").Groups[1].Value;
-            if (ban.Length != 0)
-            {
-                infoFrame.Navigate(typeof(BanInfoPage), ban);
-                return;
-            }
-            infoFrame.Navigate(typeof(WebViewPage), (home_flipView_Ban.SelectedItem as BanBannerModel).link);
-        }
-        //番剧推荐加载更多
-        bool LoadBaning = false;
-        private async void sc_Ban_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
-        {
-            if (sc_Ban.VerticalOffset == sc_Ban.ScrollableHeight)
-            {
-                if (!LoadBaning && Ban_TJ_more.Text != "没有更多了...")
-                {
-                    LoadBaning = true;
-                    await GetBanTJ();
-                    LoadBaning = false;
-                }
-            }
-        }
-        //番剧推荐点击
-        private void list_Ban_TJ_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            //妈蛋，B站就一定要返回个链接么,就不能返回个类型加参数吗
-            string tag = Regex.Match((e.ClickedItem as BanTJModel).link, @"^http://bangumi.bilibili.com/anime/category/(.*?)$").Groups[1].Value;
-            if (tag.Length != 0)
-            {
-                infoFrame.Navigate(typeof(BanByTagPage), new string[] { tag, (e.ClickedItem as BanTJModel).title });
-                return;
-            }
-            string ban = Regex.Match((e.ClickedItem as BanTJModel).link, @"^http://bangumi.bilibili.com/anime/(.*?)$").Groups[1].Value;
-            if (ban.Length != 0)
-            {
-                infoFrame.Navigate(typeof(BanInfoPage), ban);
-                return;
-            }
-            //
-            string aid = Regex.Match((e.ClickedItem as BanTJModel).link, @"^http://www.bilibili.com/video/av(.*?)/$").Groups[1].Value;
-            if (aid.Length != 0)
-            {
-                infoFrame.Navigate(typeof(VideoInfoPage), aid);
-                return;
-            }
-            infoFrame.Navigate(typeof(WebViewPage), (e.ClickedItem as BanTJModel).link);
-        }
-        //搜索
-        private void txt_auto_Find_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
-        {
-            if (sender.Text.Length == 0)
-            {
-                //top_txt_find.Visibility = Visibility.Collapsed;
-                //top_btn_find.Visibility = Visibility.Visible;
-                //mainFrame.Navigate(typeof(SeasonPage));
-            }
-            else
-            {
-                this.infoFrame.Navigate(typeof(SearchPage), txt_auto_Find.Text);
-            }
-        }
-        //搜索文字改变
-        private async void txt_auto_Find_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
-        {
-            if (sender.Text.Length != 0)
-            {
-                sender.ItemsSource = await GetSugges(sender.Text);
-            }
-            else
-            {
-                sender.ItemsSource = null;
-            }
-        }
-        //搜索点击待选框
-        private void txt_auto_Find_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
-        {
-            txt_auto_Find.Text = args.SelectedItem as string;
         }
 
         public async Task<ObservableCollection<String>> GetSugges(string text)
@@ -1432,99 +858,6 @@ namespace bilibili2
         private void top_txt_find_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
         {
             top_txt_find.Text = args.SelectedItem as string;
-        }
-        //搜索热词点击
-        private void list_Hot_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            infoFrame.Navigate(typeof(SearchPage), (e.ClickedItem as HotModel).keyword);
-        }
-        //dilidili点击
-        private void btn_dilidili_Click(object sender, RoutedEventArgs e)
-        {
-            infoFrame.Navigate(typeof(DiliDiliPage));
-        }
-
-        private void list_AttLive_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            infoFrame.Navigate(typeof(LiveInfoPage),(e.ClickedItem as GetAttentionLive).roomid);
-        }
-        //刷新动态
-        private void btn_refresh_Atton_Click(object sender, RoutedEventArgs e)
-        {
-            DT_PageNum = 1;
-            User_ListView_Attention.Items.Clear();
-            GetDt();
-        }
-        //打开全部直播
-        private void btn_live_All_Click(object sender, RoutedEventArgs e)
-        {
-            infoFrame.Navigate(typeof(AllLivePage));
-        }
-      
-        #region 九幽反馈
-        private UserInfo _userInfo;
-        private readonly JyUserFeedbackSDKManager _jyUserFeedbackSdkManager = new JyUserFeedbackSDKManager();
-        private async void Feedback()
-        {
-            if (_userInfo==null)
-            {
-                var userInfo = await JyUserInfoManager.QuickLogin(ApiHelper.JyAppkey);
-                if (userInfo.isLoginSuccess)
-                {
-                    _userInfo = userInfo;
-                    _jyUserFeedbackSdkManager.ShowFeedBack(Feedback_Grid, false, ApiHelper.JyAppkey, _userInfo.U_Key);
-                    bor_HasFeedback.Visibility = Visibility.Collapsed;
-                }
-                else
-                {
-                    await new MessageDialog("打开反馈失败，请重试").ShowAsync();
-                }
-            }
-            else
-            {
-                _jyUserFeedbackSdkManager.ShowFeedBack(Feedback_Grid, false, ApiHelper.JyAppkey, _userInfo.U_Key);
-            }
-        }
-        private async void GetFeedInfo()
-        {
-        
-            var userInfo = await JyUserInfoManager.QuickLogin(ApiHelper.JyAppkey);
-            if (userInfo.isLoginSuccess)
-            {
-                _userInfo = userInfo;
-                var newFeedBackRemindCount = await _jyUserFeedbackSdkManager.GetNewFeedBackRemindCount(ApiHelper.JyAppkey, _userInfo.U_Key);
-                if (newFeedBackRemindCount!=0)
-                {
-                    bor_HasFeedback.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    bor_HasFeedback.Visibility = Visibility.Collapsed;
-                }
-            }
-
-        }
-        #endregion
-
-        private async void pr_Bangumi_RefreshInvoked(DependencyObject sender, object args)
-        {
-            LoadBan = false;
-            await GetBanUpdate();
-            await GetBanBanner();
-            await GetBanTJ();
-            LoadBan = true;
-        }
-
-        private void pr_Atton_RefreshInvoked(DependencyObject sender, object args)
-        {
-            DT_PageNum = 1;
-            User_ListView_Attention.Items.Clear();
-            GetDt();
-        }
-
-        private void btn_Live_Search_Click(object sender, RoutedEventArgs e)
-        {
-            infoFrame.Navigate(typeof(SearchLivePage));
         }
     }
 }

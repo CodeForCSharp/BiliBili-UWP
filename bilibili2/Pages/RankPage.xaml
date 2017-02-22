@@ -13,7 +13,7 @@
     <Page.Resources>
         <SolidColorBrush x:Key="BG" x:Name="bg" Color="#FFDF85A0"/>
     </Page.Resources>
-    <RelativePanel Background="{StaticResource BG}">
+    <RelativePanel>
         <AppBarButton
             Name="BtnBack"
             RelativePanel.AlignTopWithPanel="True"
@@ -51,7 +51,8 @@
             RelativePanel.AlignLeftWithPanel="True"
             RelativePanel.AlignRightWithPanel="True"
             ItemsSource="{x:Bind Regions}"
-            SelectionChanged="Pivot_SelectionChanged">
+            SelectionChanged="Pivot_SelectionChanged"
+            Style="{StaticResource PivotHeaderWithBackground}">
             <Pivot.Resources>
                 <Style BasedOn="{StaticResource WhiteHeaderStyle}"  TargetType="PivotHeaderItem"/>
             </Pivot.Resources>
@@ -68,7 +69,6 @@
             <Pivot.ItemTemplate>
                 <DataTemplate x:DataType="model:RegionRankViewModel">
                     <ListView
-                        Background="WhiteSmoke"
                         IsItemClickEnabled="True"
                         SelectionMode="None"
                         ItemClick="ListView_ItemClick"

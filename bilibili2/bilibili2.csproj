@@ -119,6 +119,12 @@
     <Compile Include="Class\WebClientClass.cs" />
     <Compile Include="Controls\AdaptiveGridView.cs" />
     <Compile Include="Controls\AdaptiveGridView.Properties.cs" />
+    <Compile Include="Controls\AttentionFragment.xaml.cs">
+      <DependentUpon>AttentionFragment.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\BangumiFragment.xaml.cs">
+      <DependentUpon>BangumiFragment.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\BilibiliLoadControl.cs" />
     <Compile Include="Controls\FindFragment.xaml.cs">
       <DependentUpon>FindFragment.xaml</DependentUpon>
@@ -160,12 +166,6 @@
     </Compile>
     <Compile Include="Pages\CommentPage.xaml.cs">
       <DependentUpon>CommentPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\DiliDiliPage.xaml.cs">
-      <DependentUpon>DiliDiliPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\DiliInfo.xaml.cs">
-      <DependentUpon>DiliInfo.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\DownloadPage.xaml.cs">
       <DependentUpon>DownloadPage.xaml</DependentUpon>
@@ -215,9 +215,6 @@
     </Compile>
     <Compile Include="Pages\SearchPage.xaml.cs">
       <DependentUpon>SearchPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\TestPlayerPage.xaml.cs">
-      <DependentUpon>TestPlayerPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\TopicPage.xaml.cs">
       <DependentUpon>TopicPage.xaml</DependentUpon>
@@ -336,6 +333,7 @@
     <Content Include="Assets\Icon\ic_category_t98.png" />
     <Content Include="Assets\Icon\ic_category_up.png" />
     <Content Include="Assets\Icon\ic_header_activity_center.png" />
+    <Content Include="Assets\Icon\ic_header_black_list_center.png" />
     <Content Include="Assets\Icon\ic_header_ding.png" />
     <Content Include="Assets\Icon\ic_header_hot.png" />
     <Content Include="Assets\Icon\ic_header_indicator_rank.png" />
@@ -408,6 +406,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\AttentionFragment.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\BangumiFragment.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\FindFragment.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -457,14 +463,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\CommentPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\DiliDiliPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\DiliInfo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -529,10 +527,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\SearchPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\TestPlayerPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

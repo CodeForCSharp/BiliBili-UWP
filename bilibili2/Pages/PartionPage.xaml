@@ -90,7 +90,7 @@
                 RelativePanel.AlignVerticalCenterWithPanel="True"/>
         </RelativePanel>
         <Pivot
-            Background="{StaticResource BG}"
+            Style="{StaticResource PivotHeaderWithBackground}"
             Name="PivotPanel"
             RelativePanel.Below="BtnBack"
             RelativePanel.AlignRightWithPanel="True"

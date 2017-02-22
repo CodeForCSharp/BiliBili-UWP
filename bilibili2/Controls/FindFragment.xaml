@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignHeight="300"
-    d:DesignWidth="400"
+    d:DesignWidth="440"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:wrap="using:Microsoft.Toolkit.Uwp.UI.Controls.WrapPanel"
     xmlns:model="using:bilibili2">
@@ -20,11 +20,13 @@
                     Name="IconPanel"
                     Source="{x:Bind Icon}"
                     Width="25"
-                    Height="25"/>
+                    Height="25"
+                    Margin="5"/>
                 <TextBlock
                     RelativePanel.AlignTopWithPanel="True"
                     RelativePanel.RightOf="IconPanel"
-                    Text="{x:Bind Value}"/>
+                    Text="{x:Bind Value}"
+                    Margin="5"/>
                 <TextBlock
                     RelativePanel.AlignTopWithPanel="True"
                     RelativePanel.AlignRightWithPanel="True"
@@ -71,7 +73,7 @@
                 </ItemsPanelTemplate>
             </GridView.ItemsPanel>
             <GridView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="model:HotSearchViewModel">
                     <Border 
                                 Background="{ThemeResource Bili-MenuBack}" 
                                 CornerRadius="16" >
@@ -79,7 +81,7 @@
                                     Margin="5"
                                     Foreground="Gray" 
                                     FontSize="14"
-                                    Text="{Binding keyword}"/>
+                                    Text="{x:Bind Keyword}"/>
                     </Border>
                 </DataTemplate>
             </GridView.ItemTemplate>
@@ -88,17 +90,23 @@
             RelativePanel.AlignLeftWithPanel="True"
             RelativePanel.AlignRightWithPanel="True"
             RelativePanel.Below="TagHot"
-                    Name="BtnTopic" 
-                    Background="White"
-                    Height="36"
-                    Margin="5"
-                    Click="BtnTopic_Click">
-            <StackPanel Orientation="Horizontal">
+            Name="BtnTopic" 
+            Background="White"
+            Foreground="Black"
+            Height="44"
+            Margin="5"
+            Click="BtnTopic_Click"
+            HorizontalAlignment="Stretch"
+            HorizontalContentAlignment="Left">
+            <StackPanel 
+                Orientation="Horizontal">
                 <Image 
+                    Margin="5"
                     Width="25"
                     Height="25"
                     Source="ms-appx:///Assets/Icon/ic_header_topic_center.png"/>
                 <TextBlock 
+                    Margin="5"
                     FontSize="14" 
 					Text="话题中心"/>
             </StackPanel>
@@ -107,17 +115,23 @@
             RelativePanel.AlignLeftWithPanel="True"
             RelativePanel.AlignRightWithPanel="True"
             RelativePanel.Below="BtnTopic"
-                    Name="BtnActvity" 
-                    Background="White"
-                    Height="36"
-                    Margin="5"
-                    Click="BtnActvity_Click">
-            <StackPanel Orientation="Horizontal">
+            Name="BtnActvity" 
+            Background="White"
+            Height="44"
+            Margin="5"
+            Click="BtnActvity_Click"
+            Foreground="Black"
+            HorizontalAlignment="Stretch"
+            HorizontalContentAlignment="Left">
+            <StackPanel 
+                Orientation="Horizontal">
                 <Image 
+                    Margin="5"
                     Width="25"
                     Height="25"
                     Source="ms-appx:///Assets/Icon/ic_header_activity_center.png"/>
                 <TextBlock 
+                    Margin="5"
                     FontSize="14" 
 					Text="活动中心"/>
             </StackPanel>
@@ -126,51 +140,73 @@
             RelativePanel.AlignLeftWithPanel="True"
             RelativePanel.AlignRightWithPanel="True"
             RelativePanel.Below="BtnActvity"
-                    Name="BtnRank" 
-                    Background="White" 
-                    Height="36" 
-                    Margin="5" 
-                    Click="BtnRank_Click">
-            <StackPanel Orientation="Horizontal">
+            Name="BtnRank" 
+            Background="White" 
+            Height="44" 
+            Margin="5" 
+            Click="BtnRank_Click"
+            Foreground="Black"
+            HorizontalAlignment="Stretch"
+            HorizontalContentAlignment="Left">
+            <StackPanel 
+                Orientation="Horizontal">
                 <Image 
+                    Margin="5"
                     Height="25"
                     Width="25"
                     Source="ms-appx:///Assets/Icon/ic_btn_rank_all.png"/>
                 <TextBlock
+                    Margin="5"
                     FontSize="14"
 					Text="排行榜"/>
             </StackPanel>
-                </HyperlinkButton>
-                <HyperlinkButton 
+        </HyperlinkButton>
+        <HyperlinkButton 
             RelativePanel.AlignLeftWithPanel="True"
             RelativePanel.AlignRightWithPanel="True"
             RelativePanel.Below="BtnRank"
-                    Name="BtnRandom" 
-                    Background="White"
-                    Height="36"
-                    Margin="5" 
-                    Click="BtnRandom_Click">
-            <StackPanel>
+            Name="BtnRandom" 
+            Background="White"
+            Height="44"
+            Margin="5" 
+            Click="BtnRandom_Click"
+            Foreground="Black"
+            HorizontalAlignment="Stretch"
+            HorizontalContentAlignment="Left">
+            <StackPanel 
+                Orientation="Horizontal">
                 <Image 
+                    Margin="5"
                     Height="25"
                     Width="25"
                     Source="ms-appx:///Assets/Icon/ic_photo_random.png"/>
                 <TextBlock 
+                    Margin="5"
                     FontSize="14"
 				    Text="试试手气"/>
             </StackPanel>
-                </HyperlinkButton>
+        </HyperlinkButton>
         <HyperlinkButton 
             RelativePanel.AlignLeftWithPanel="True"
             RelativePanel.AlignRightWithPanel="True"
             RelativePanel.Below="BtnRandom"
             Name="BtnBlackHouse"
             Background="White" 
-            Height="36" 
+            Height="44" 
             Margin="5" 
-            Click="BtnBlackHouse_Click">
-            <StackPanel>
+            Click="BtnBlackHouse_Click"
+            Foreground="Black"
+            HorizontalAlignment="Stretch"
+            HorizontalContentAlignment="Left">
+            <StackPanel
+                Orientation="Horizontal">
+                <Image 
+                    Margin="5"
+                    Height="25"
+                    Width="25"
+                    Source="ms-appx:///Assets/Icon/ic_header_black_list_center.png"/>
                 <TextBlock
+                    Margin="5"
                     FontSize="14"
 					Text="小黑屋"/>
             </StackPanel>

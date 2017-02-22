@@ -64,7 +64,6 @@ namespace bilibili2.Pages
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
             if (e.NavigationMode == NavigationMode.New)
             {
                 Topics.Reset();

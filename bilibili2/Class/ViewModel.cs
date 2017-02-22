@@ -1191,8 +1191,15 @@ namespace bilibili2
         public string Icon { get; set; }
         public string Type { get; set; }
         public string Value { get; set; }
-        public string Spid { get; set; }
+        public int Spid { get; set; }
     }
+
+    public class HotSearchViewModel
+    {
+        public string Keyword { get; set; }
+        public string Status { get; set; }
+    }
+
     public class MessageModel
     {
         public int code { get; set; }

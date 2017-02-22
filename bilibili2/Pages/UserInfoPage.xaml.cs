@@ -60,7 +60,6 @@ namespace bilibili2.Pages
             btn_Attention.Visibility = Visibility.Collapsed;
             btn_CannelAttention.Visibility = Visibility.Collapsed;
             user_GridView_FovBox.ItemsSource = null;
-            bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
             sp.IsPaneOpen = false;
             if (e.Parameter == null)
             {

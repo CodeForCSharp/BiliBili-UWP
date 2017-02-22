@@ -1,7 +1,5 @@
 ﻿{
   "dependencies": {
-    "JyFeedBack": "1.0.2.5",
-    "JyUpdateAndBulletinSDK": "1.0.10",
     "Microsoft.ApplicationInsights": "2.2.0",
     "Microsoft.ApplicationInsights.PersistenceChannel": "1.2.3",
     "Microsoft.ApplicationInsights.WindowsApps": "1.1.1",
