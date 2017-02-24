@@ -57,7 +57,6 @@ namespace bilibili2.Class
                 using (var request = new HttpRequestMessage(HttpMethod.Get, _uri))
                 {
                     request.Headers.TryAppendWithoutValidation("Range", $"bytes={Position}-{Position + count}");
-
                     using (var response = await _client.SendRequestAsync(request, HttpCompletionOption.ResponseHeadersRead))
                     {
                         response.EnsureSuccessStatusCode();

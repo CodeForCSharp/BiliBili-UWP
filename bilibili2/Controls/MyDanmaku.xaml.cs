@@ -209,7 +209,10 @@ namespace bilibili2.Controls
                 {
                     DanmakuGrid.Children.Remove(grid);
                     storyBoards.Remove(justintimeStoryboard);
-                    isOccupied[i] = false;
+                    if (i < isOccupied.Length)
+                    {
+                        isOccupied[i] = false;
+                    }
                 };
                 storyBoards.Add(justintimeStoryboard);
                 justintimeStoryboard.Begin();

@@ -35,7 +35,7 @@ namespace bilibili2.Controls
             {
                 PrLoad.Visibility = Visibility.Visible;
                 //&access_key={0}
-                string url = $"http://live.bilibili.com/AppIndex/home?_device=android&_ulv=10000&appkey={ApiHelper._appKey}&build=434000&platform=android&scale=xxhdpi";
+                string url = $"http://live.bilibili.com/AppNewIndex/common?_device=android&_ulv=10000&appkey={ApiHelper._appKey}&build=434000&platform=android&scale=xxhdpi";
                 url += "&sign=" + ApiHelper.GetSign(url);
                 string results = await wc.GetResults(new Uri(url));
                 var model = JObject.Parse(results);

@@ -43,20 +43,20 @@ namespace bilibili2.Class
         {
             var date = DateTime.Parse(dateString);
             var today = DateTime.Now;
-            var spanDays = (today-date).TotalDays;
-            if (spanDays<1&&spanDays>=0)
+            var spanDays = (today-today.TimeOfDay-date).TotalDays;
+            if (spanDays<0&&spanDays>=-1)
             {
                 return "今天";
             }
-            else if(spanDays<0&&spanDays>=-1)
+            else if(spanDays<-1&&spanDays>=-2)
             {
                 return "明天";
             }
-            else if(spanDays<2&&spanDays>=1)
+            else if(spanDays<1&&spanDays>=0)
             {
                 return "昨天";
             }
-            else if(spanDays<3&&spanDays>=2)
+            else if(spanDays<2&&spanDays>=1)
             {
                 return "前天";
             }
@@ -116,11 +116,21 @@ namespace bilibili2.Class
         {
             var date = DateTime.Parse(time);
             var timeCalled = "";
-            if(date.Hour>0&&date.Hour<=2)
+            var now = DateTime.Now;
+            var pivot = now - now.TimeOfDay;
+            var spanDays = (pivot-date).TotalDays;
+            if(spanDays<0&&spanDays>=-1)
             {
-                timeCalled = "凌晨";
+                if (date.Hour > 0 && date.Hour <= 4)
+                {
+                    timeCalled = "凌晨";
+                }
             }
-            return $"{timeCalled}{date.Hour}:{date.Minute:X2}";
+            else if(spanDays>=0&spanDays<1)
+            {
+                timeCalled = "昨天";
+            }
+            return $"{timeCalled}{date.Hour}:{date.Minute:D2}";
         }
     }
 }

@@ -5,11 +5,194 @@
     xmlns:local="using:bilibili2.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d"
     d:DesignHeight="300"
-    d:DesignWidth="400">
-
-    <Grid>
-
-    </Grid>
+    d:DesignWidth="400"
+    xmlns:model="using:bilibili2">
+    <ListView>
+        <ListView.Header>
+            <Grid
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="120"/>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Viewbox
+            Margin="5"
+                Grid.Row="0"
+                Grid.Column="0">
+                    <RelativePanel>
+                        <Image 
+                RelativePanel.AlignBottomWithPanel="True"
+                    Source="ms-appx:///Assets/Icon/bangumi_home_index_jp_bg.png"/>
+                        <Image
+                    Margin="25,0,0,0"
+                RelativePanel.AlignBottomWithPanel="True"
+                    Source="ms-appx:///Assets/Icon/bangumi_home_index_jp_ic.png"/>
+                    </RelativePanel>
+                </Viewbox>
+                <Viewbox
+            Margin="5"
+            Grid.Row="0"
+            Grid.Column="1">
+                    <RelativePanel>
+                        <Image 
+                    RelativePanel.AlignBottomWithPanel="True"
+                    Source="ms-appx:///Assets/Icon/bangumi_home_index_cn_bg.png"/>
+                        <Image
+                    Margin="25,0,0,0"
+                    RelativePanel.AlignBottomWithPanel="True"
+                    Source="ms-appx:///Assets/Icon/bangumi_home_index_cn_ic.png"/>
+                    </RelativePanel>
+                </Viewbox>
+                <HyperlinkButton
+                Grid.Row="1"
+                Grid.Column="0"
+                HorizontalAlignment="Stretch">
+                    <StackPanel
+                    Orientation="Horizontal">
+                        <Image 
+                        Height="20"
+                        Width="20"
+                        Source="ms-appx:///Assets/Icon/bangumi_follow_ic_timeline.png"/>
+                        <TextBlock
+                        Margin="10,0,0,0"
+                        Foreground="Gray"
+                        FontSize="13"
+                        Text="时间表"/>
+                    </StackPanel>
+                </HyperlinkButton>
+                <HyperlinkButton
+                Grid.Row="1"
+                Grid.Column="1"
+                HorizontalAlignment="Stretch">
+                    <StackPanel
+                    Orientation="Horizontal">
+                        <Image
+                    Height="20"
+                    Width="20"
+                    Source="ms-appx:///Assets/Icon/bangumi_follow_ic_index.png"/>
+                        <TextBlock
+                    Margin="10,0,0,0"
+                    Foreground="Gray"
+                    FontSize="13"
+                    Text="索引"/>
+                    </StackPanel>
+                </HyperlinkButton>
+                <Image/>
+            </Grid>
+        </ListView.Header>
+        <ListView.ItemTemplate>
+            <DataTemplate x:DataType="model:BangumiRecommendViewModel">
+                <RelativePanel>
+                    <HyperlinkButton
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Left">
+                        <RelativePanel>
+                            <Image
+                                Margin="5"
+                                Name="RecommendIconPanel"
+                                RelativePanel.AlignTopWithPanel="True"
+                                RelativePanel.AlignLeftWithPanel="True"
+                                Height="30"
+                                Width="30"
+                                Source="{x:Bind Icon}"/>
+                            <TextBlock
+                                Margin="5"
+                                RelativePanel.AlignTopWithPanel="True"
+                                RelativePanel.RightOf="RecommendIconPanel"
+                                Text="{x:Bind Title}"/>
+                            <TextBlock
+                                RelativePanel.LeftOf="RightIconPanel"
+                                Foreground="Gray"
+                                FontSize="13"
+                                Text="{x:Bind More}"/>
+                            <Image
+                                Margin="5"
+                                Name="RightIconPanel"
+                                RelativePanel.AlignTopWithPanel="True"
+                                RelativePanel.AlignRightWithPanel="True"
+                                Height="20"
+                                Width="20"
+                                Source="ms-appx:///Assets/Icon/ic_chevron_right_gray.png"/>
+                        </RelativePanel>
+                    </HyperlinkButton>
+                    <local:AdaptiveGridView>
+                        <local:AdaptiveGridView.ItemTemplate>
+                            <DataTemplate x:DataType="model:BangumiItemViewModel">
+                                <RelativePanel MaxWidth="190">
+                                    <controls:ImageEx
+                                        Margin="5"
+                                        Name="CoverPanel"
+                                        RelativePanel.AlignLeftWithPanel="True"
+                                        RelativePanel.AlignTopWithPanel="True"
+                                        RelativePanel.AlignRightWithPanel="True"
+                                        Width="180"
+                                        Height="240"
+                                        Source="{x:Bind Cover}">
+                                        <controls:ImageEx.Foreground>
+                                            <LinearGradientBrush
+                                                EndPoint="0,0.5"
+                                                StartPoint="0,0">
+                                                <GradientStop
+                                                    Color="#4C000000"
+                                                    Offset="1"/>
+                                                <GradientStop 
+                                                    Color="Transparent"/>
+                                            </LinearGradientBrush>
+                                        </controls:ImageEx.Foreground>
+                                    </controls:ImageEx>
+                                    <TextBlock
+                                        RelativePanel.AlignTopWithPanel="True"
+                                        RelativePanel.AlignLeftWithPanel="True"
+                                        Canvas.ZIndex="1"
+                                        Margin="5,220,0,0"
+                                        FontSize="14"
+                                        Name="StatusPanel"
+                                        Text="{x:Bind Favourites}"
+                                        Foreground="White"
+                                        />
+                                    <TextBlock
+                                        Margin="5"
+                                        Name="TitlePanel"
+                                        RelativePanel.Below="CoverPanel"
+                                        RelativePanel.AlignLeftWithPanel="True"
+                                        RelativePanel.AlignRightWithPanel="True"
+                                        Text="{x:Bind Title}"/>
+                                    <TextBlock
+                                        Margin="5"
+                                        RelativePanel.Below="TitlePanel"
+                                        RelativePanel.AlignLeftWithPanel="True"
+                                        RelativePanel.AlignRightWithPanel="True"
+                                        Foreground="Gray"
+                                        Text="{x:Bind Status}"/>
+                                </RelativePanel>
+                            </DataTemplate>
+                        </local:AdaptiveGridView.ItemTemplate>
+                    </local:AdaptiveGridView>
+                    <RelativePanel>
+                        <Border>
+                            <TextBlock/>
+                        </Border>
+                        <controls:ImageEx
+                            Width="480"
+                            Height="150"
+                            Source="{x:Bind BannerCover}"/>
+                        <TextBlock
+                            Text="{x:Bind BannerTitle}"/>
+                        <TextBlock
+                            Foreground="Gray"
+                            FontSize="14"
+                            Text="{x:Bind BannerDesc}"/>
+                    </RelativePanel>
+                </RelativePanel>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
 </UserControl>

@@ -246,6 +246,16 @@
     <Content Include="Assets\BadgeLogo.scale-200.png" />
     <Content Include="Assets\bg1.png" />
     <Content Include="Assets\bili_img_4180877.jpg" />
+    <Content Include="Assets\Icon\bangumi_follow_ic_domestic_recommend.png" />
+    <Content Include="Assets\Icon\bangumi_follow_ic_index.png" />
+    <Content Include="Assets\Icon\bangumi_follow_ic_recommend.png" />
+    <Content Include="Assets\Icon\bangumi_follow_ic_timeline.png" />
+    <Content Include="Assets\Icon\bangumi_home_follow_bangumi_guide.png" />
+    <Content Include="Assets\Icon\bangumi_home_index_cn_bg.png" />
+    <Content Include="Assets\Icon\bangumi_home_index_cn_ic.png" />
+    <Content Include="Assets\Icon\bangumi_home_index_jp_bg.png" />
+    <Content Include="Assets\Icon\bangumi_home_index_jp_ic.png" />
+    <Content Include="Assets\Icon\bangumi_home_login_guide.png" />
     <Content Include="Assets\Icon\bangumi_timeline_clock.png" />
     <Content Include="Assets\Icon\bangumi_timeline_weekday_1.png" />
     <Content Include="Assets\Icon\bangumi_timeline_weekday_2.png" />
@@ -332,6 +342,7 @@
     <Content Include="Assets\Icon\ic_category_t96.png" />
     <Content Include="Assets\Icon\ic_category_t98.png" />
     <Content Include="Assets\Icon\ic_category_up.png" />
+    <Content Include="Assets\Icon\ic_chevron_right_gray.png" />
     <Content Include="Assets\Icon\ic_header_activity_center.png" />
     <Content Include="Assets\Icon\ic_header_black_list_center.png" />
     <Content Include="Assets\Icon\ic_header_ding.png" />

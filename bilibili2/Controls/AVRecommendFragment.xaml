@@ -58,7 +58,6 @@
         </DataTemplate>
         <DataTemplate x:DataType="model:RegionBannerViewModel" x:Key="TopicTemplate">
             <controls:ImageEx
-                Width="270"
                 Height="150"
                 Source="{x:Bind Image}"/>
         </DataTemplate>
@@ -128,7 +127,7 @@
                     Text="{x:Bind Title}"/>
             </StackPanel>
         </DataTemplate>
-        <DataTemplate x:DataType="model:BangumiItemViewModel" x:Key="BangumiTemplate">
+        <DataTemplate x:DataType="model:RecommendBangumiViewModel" x:Key="BangumiTemplate">
             <RelativePanel MaxWidth="250">
                 <controls:ImageEx
                     Margin="5"
@@ -231,6 +230,7 @@
                                 ScrollViewer.VerticalScrollMode="Disabled"
                                 ScrollViewer.HorizontalScrollMode="Disabled"
                                 ItemsSource="{x:Bind Items}"
+                            ItemClick="AdaptiveGridView_ItemClick"
                                 >
                             <localControl:AdaptiveGridView.ItemTemplateSelector>
                                 <local:RecommendItemSelector 

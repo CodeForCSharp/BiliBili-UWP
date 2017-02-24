@@ -20,13 +20,11 @@ namespace bilibili2
 {
     class ApiHelper
     {
-        public const string JyAppkey = @"自行申请";
-        public const string JySecret = @"自行申请";
-
         public const string _appSecret = "94aba54af9065f71de72f5508f1cd42e";
         public const string _appKey = "84956560bc028eb7";
         public static string access_key = string.Empty;
-
+        public static string _buvid = "B3CC4714-C1D3-4010-918B-8E5253E123C16133infoc";
+        public static string _hwid = "03008c8c0300d6d1";
         public static string GetSign(string url)
         {
             string result;

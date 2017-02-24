@@ -1133,7 +1133,7 @@ namespace bilibili2
         public List<LiveNavigationViewModel> Navigations { get; set; }
     }
 
-    public class BangumiItemViewModel
+    public class RecommendBangumiViewModel
     {
         public string Cover { get; set; }
         public string Title { get; set; }
@@ -1198,6 +1198,28 @@ namespace bilibili2
     {
         public string Keyword { get; set; }
         public string Status { get; set; }
+    }
+
+    public class BangumiRecommendViewModel
+    {
+        public string Icon { get; set; }
+        public string Title { get; set; }
+        public string More { get; set; }
+        public string Items { get; set; }
+        public string BannerCover { get; set; }
+        public bool IsNew { get; set; }
+        public string BannerTitle { get; set; }
+        public string BannerDesc { get; set; }
+        public string Link { get; set; }
+    }
+
+    public class BangumiItemViewModel
+    {
+        public string Cover { get; set; }
+        public string Title { get; set; }
+        public string Status { get; set; }
+        public string Favourites { get; set; }
+        public int SeasonId { get; set; }
     }
 
     public class MessageModel

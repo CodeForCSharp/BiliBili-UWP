@@ -1,4 +1,5 @@
 ﻿using bilibili2.Class;
+using bilibili2.Pages;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -63,7 +64,7 @@ namespace bilibili2
                         }).Take(4);
                     var bangumis = model["data"]
                         .First(token => token["type"].Value<string>() == "bangumi")["body"]
-                        .Select(token => new BangumiItemViewModel
+                        .Select(token => new RecommendBangumiViewModel
                         {
                             Cover = token["cover"].Value<string>(),
                             Title = token["title"].Value<string>(),
@@ -182,15 +183,27 @@ namespace bilibili2
             }
         }
 
-        //private void items_listview_ItemClick(object sender, ItemClickEventArgs e)
-        //{
-        //    Frame frame = Window.Current.Content as Frame;
-        //    frame.Navigate(typeof(VideoInfoPage));
-        //}
-        //private void home_GridView_FJ_ItemClick(object sender, ItemClickEventArgs e)
-        //{
-        //    PlayEvent((e.ClickedItem as AVItemViewModel).Aid);
-        //}
+        private void AdaptiveGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var frame = Window.Current.Content as Frame;
+            switch (e.ClickedItem)
+            {
+                case AVItemViewModel av:
+                    frame.Navigate(typeof(VideoInfoPage), av.Param);
+                    break;
+                case RecommendLiveViewModel live:
+                    frame.Navigate(typeof(LiveInfoPage), live.Param);
+                    break;
+                case RegionBannerViewModel topic:
+                    frame.Navigate(typeof(WebViewPage), topic.Uri);
+                    break;
+                case RecommendBangumiViewModel bangumi:
+                    frame.Navigate(typeof(BanInfoPage), bangumi.Param);
+                    break;
+                case ActivityViewModel activity:
+                    break;
+            }
+        }
     }
 
     public class RecommendItemSelector : DataTemplateSelector
@@ -210,7 +223,7 @@ namespace bilibili2
                     return LiveItemTemplate;
                 case RegionBannerViewModel topic:
                     return TopicTemplate;
-                case BangumiItemViewModel bangumi:
+                case RecommendBangumiViewModel bangumi:
                     return BangumiItemTemplate;
                 case ActivityViewModel activity:
                     return ActivityTemplate;
