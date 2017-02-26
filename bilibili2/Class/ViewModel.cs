@@ -1205,7 +1205,7 @@ namespace bilibili2
         public string Icon { get; set; }
         public string Title { get; set; }
         public string More { get; set; }
-        public string Items { get; set; }
+        public List<BangumiItemViewModel> Items { get; set; }
         public string BannerCover { get; set; }
         public bool IsNew { get; set; }
         public string BannerTitle { get; set; }

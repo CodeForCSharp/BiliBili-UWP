@@ -20,7 +20,7 @@
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
-    <PackageCertificateThumbprint>ECCE36EC535E272006A83B6064C28F3BF5E39581</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>E30446FE8B5111040C47DD06F139149ECE52FD8D</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -97,8 +97,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Data\region.json" />
-    <None Include="Bilibili UWP.pfx" />
     <None Include="bilibili2_TemporaryKey.pfx" />
+    <None Include="BilibiliEx.pfx" />
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
@@ -611,7 +611,7 @@
     <DelaySign>false</DelaySign>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>Bilibili UWP.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>BilibiliEx.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

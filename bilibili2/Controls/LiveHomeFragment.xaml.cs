@@ -99,7 +99,7 @@ namespace bilibili2.Controls
         private void BannerPanel_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             var frame = Window.Current.Content as Frame;
-            var image = sender as Image;
+            var image = e.OriginalSource as Image;
             if( image.DataContext is LiveBannerViewModel model)
             {
                 frame.Navigate(typeof(WebViewPage),model.Link);

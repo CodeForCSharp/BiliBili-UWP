@@ -10,7 +10,14 @@
     d:DesignHeight="300"
     d:DesignWidth="400"
     xmlns:model="using:bilibili2">
-    <ListView>
+    <ListView
+        ItemsSource="{x:Bind Recommends}"
+        SelectionMode="None">
+        <ListView.ItemContainerStyle>
+            <Style TargetType="ListViewItem">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            </Style>
+        </ListView.ItemContainerStyle>
         <ListView.Header>
             <Grid
             HorizontalAlignment="Stretch"
@@ -92,16 +99,21 @@
             <DataTemplate x:DataType="model:BangumiRecommendViewModel">
                 <RelativePanel>
                     <HyperlinkButton
+                        Foreground="Black"
+                        Name="HyperlinkPanel"
+                        RelativePanel.AlignLeftWithPanel="True"
+                        RelativePanel.AlignRightWithPanel="True"
+                        RelativePanel.AlignTopWithPanel="True"
                         HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Left">
+                        HorizontalContentAlignment="Stretch">
                         <RelativePanel>
                             <Image
                                 Margin="5"
                                 Name="RecommendIconPanel"
                                 RelativePanel.AlignTopWithPanel="True"
                                 RelativePanel.AlignLeftWithPanel="True"
-                                Height="30"
-                                Width="30"
+                                Height="20"
+                                Width="20"
                                 Source="{x:Bind Icon}"/>
                             <TextBlock
                                 Margin="5"
@@ -109,6 +121,7 @@
                                 RelativePanel.RightOf="RecommendIconPanel"
                                 Text="{x:Bind Title}"/>
                             <TextBlock
+                                Margin="5"
                                 RelativePanel.LeftOf="RightIconPanel"
                                 Foreground="Gray"
                                 FontSize="13"
@@ -123,7 +136,14 @@
                                 Source="ms-appx:///Assets/Icon/ic_chevron_right_gray.png"/>
                         </RelativePanel>
                     </HyperlinkButton>
-                    <local:AdaptiveGridView>
+                    <local:AdaptiveGridView
+                        x:Name="ItemsPanel"
+                        RelativePanel.Below="HyperlinkPanel"
+                        RelativePanel.AlignLeftWithPanel="True"
+                        RelativePanel.AlignRightWithPanel="True"
+                        DesiredWidth="190"
+                        ItemsSource="{x:Bind Items}"
+                        SelectionMode="None">
                         <local:AdaptiveGridView.ItemTemplate>
                             <DataTemplate x:DataType="model:BangumiItemViewModel">
                                 <RelativePanel MaxWidth="190">
@@ -176,17 +196,33 @@
                             </DataTemplate>
                         </local:AdaptiveGridView.ItemTemplate>
                     </local:AdaptiveGridView>
-                    <RelativePanel>
-                        <Border>
-                            <TextBlock/>
+                    <RelativePanel
+                        RelativePanel.Below="ItemsPanel"
+                        RelativePanel.AlignHorizontalCenterWithPanel="True">
+                        <Border
+                            BorderBrush="White"
+                            BorderThickness="2">
+                            <TextBlock 
+                                Text="New!"/>
                         </Border>
                         <controls:ImageEx
+                            Name="BannerCoverPanel"
+                            RelativePanel.AlignRightWithPanel="True"
+                            RelativePanel.AlignTopWithPanel="True"
+                            RelativePanel.AlignLeftWithPanel="True"
                             Width="480"
                             Height="150"
                             Source="{x:Bind BannerCover}"/>
                         <TextBlock
+                            Name="BannerTitlePanel"
+                            RelativePanel.Below="BannerCoverPanel"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"
                             Text="{x:Bind BannerTitle}"/>
                         <TextBlock
+                            RelativePanel.Below="BannerTitlePanel"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"
                             Foreground="Gray"
                             FontSize="14"
                             Text="{x:Bind BannerDesc}"/>

@@ -35,7 +35,6 @@ namespace bilibili2.Pages
         {
             // if (e.NavigationMode == NavigationMode.New)
             // {
-            bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
                 webview_WebView.Navigate(new Uri((string)e.Parameter));
             //}
         }
