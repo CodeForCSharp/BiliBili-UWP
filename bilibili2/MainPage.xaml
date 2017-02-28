@@ -9,59 +9,17 @@
     mc:Ignorable="d"
     SizeChanged="Page_SizeChanged"
     >
-    <Page.Resources>
-        <Style x:Key="AutoSuggestBoxStyle1" TargetType="AutoSuggestBox">
-            <Setter Property="VerticalAlignment" Value="Top"/>
-            <Setter Property="IsTabStop" Value="False"/>
-            <Setter Property="TextBoxStyle" Value="{StaticResource AutoSuggestBoxTextBoxStyle}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="AutoSuggestBox">
-                        <Grid>
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup x:Name="Orientation">
-                                    <VisualState x:Name="Landscape"/>
-                                    <VisualState x:Name="Portrait"/>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                            <TextBox x:Name="TextBox"  ScrollViewer.BringIntoViewOnFocusChange="False" DesiredCandidateWindowAlignment="BottomEdge" Header="{TemplateBinding Header}" Margin="0" PlaceholderText="{TemplateBinding PlaceholderText}" Style="{TemplateBinding TextBoxStyle}" Width="{TemplateBinding Width}" Canvas.ZIndex="0" BorderBrush="{x:Null}"/>
-                            <Popup x:Name="SuggestionsPopup">
-                                <Border x:Name="SuggestionsContainer">
-                                    <Border.RenderTransform>
-                                        <TranslateTransform x:Name="UpwardTransform"/>
-                                    </Border.RenderTransform>
-                                    <ListView x:Name="SuggestionsList" BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" BorderThickness="{ThemeResource AutoSuggestListBorderThemeThickness}" Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}" DisplayMemberPath="{TemplateBinding DisplayMemberPath}" IsItemClickEnabled="True" ItemTemplate="{TemplateBinding ItemTemplate}" ItemContainerStyle="{TemplateBinding ItemContainerStyle}" ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}" MaxHeight="{ThemeResource AutoSuggestListMaxHeight}" Margin="{ThemeResource AutoSuggestListMargin}">
-                                        <ListView.ItemContainerTransitions>
-                                            <TransitionCollection/>
-                                        </ListView.ItemContainerTransitions>
-                                    </ListView>
-                                </Border>
-                            </Popup>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Page.Resources>
-    <Grid  Background="{ThemeResource Bili-Background}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
+    <RelativePanel  Background="{ThemeResource Bili-Background}">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="big">
                 <VisualState x:Name="wide1000">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="1001"/>
+                        <AdaptiveTrigger MinWindowWidth="500"/>
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="sp_View.DisplayMode" Value="Inline"/>
-                        <Setter Target="sp_View.IsPaneOpen" Value="true"/>
-                        <Setter Target="top_txt_Header.Margin" Value="5 0"/>
-                        <Setter Target="btn_OpenMenu.Visibility" Value="Collapsed"/>
-                        <Setter Target="top_User.Margin" Value="5 0"/>
-                        <Setter Target="btn_GoFind.Visibility" Value="Collapsed"/>
-                        <Setter Target="top_txt_find.Visibility" Value="Visible"/>
+                        <Setter Target="SpView.DisplayMode" Value="Inline"/>
+                        <Setter Target="SpView.IsPaneOpen" Value="True"/>
+                        <Setter Target="BtnOpenMenu.IsEnable" Value="False"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="narrow">
@@ -69,56 +27,120 @@
                         <AdaptiveTrigger MinWindowWidth="0"/>
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="sp_View.DisplayMode" Value="Overlay"/>
-                        <Setter Target="sp_View.IsPaneOpen" Value="False"/>
-                        <Setter Target="top_txt_Header.Margin" Value="48 0"/>
-                        <Setter Target="btn_OpenMenu.Visibility" Value="Visible"/>
-                        <Setter Target="top_User.Margin" Value="5 32 5 0"/>
-                        <Setter Target="btn_GoFind.Visibility" Value="Visible"/>
-                        <Setter Target="top_txt_find.Visibility" Value="Collapsed"/>
+                        <Setter Target="SpView.DisplayMode" Value="Overlay"/>
+                        <Setter Target="SpView.IsPaneOpen" Value="False"/>
+                        <Setter Target="BtnOpenMenu.IsEnable" Value="True"/>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-        <SplitView x:Name="sp_View" Grid.Row="1" OpenPaneLength="200"   PaneBackground="{ThemeResource Bili-MenuBack}"  DisplayMode="Overlay">
+        <RelativePanel
+            RelativePanel.AlignTopWithPanel="True"
+            RelativePanel.AlignRightWithPanel="True"
+            RelativePanel.AlignLeftWithPanel="True"
+            Name="TopPanel"
+            Background="#FFDF85A0">
+            <AppBarButton 
+            RelativePanel.AlignTopWithPanel="True"
+            RelativePanel.AlignLeftWithPanel="True"
+            Name="BtnOpenMenu"
+            Width="48"
+            Height="48"
+            Foreground="White" 
+            Click="BtnOpenMenu_Click">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE700;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <TextBlock 
+            RelativePanel.AlignVerticalCenterWithPanel="True"
+            RelativePanel.RightOf="BtnOpenMenu"
+            Margin="10,0,0,0"
+            Text="首页" 
+            FontSize="16" 
+            Name="TopTxtHeader" 
+            Foreground="White" />
+            <AppBarButton 
+            RelativePanel.AlignRightWithPanel="True"
+            RelativePanel.AlignTopWithPanel="True"
+            Name="BtnFind"
+            Icon="Find" 
+            Width="48"
+            Height="48" 
+            Foreground="White" 
+            Click="BtnFind_Click"/>
+            <AppBarButton 
+            RelativePanel.AlignTopWithPanel="True"
+            RelativePanel.LeftOf="BtnFind"
+            Icon="Download"
+            Width="48"
+            Height="48" 
+            Foreground="White"/>
+        </RelativePanel>
+        <SplitView
+            RelativePanel.AlignLeftWithPanel="True"
+            RelativePanel.AlignRightWithPanel="True"
+            RelativePanel.Below="TopPanel"
+            RelativePanel.AlignBottomWithPanel="True"
+            Name="SpView"
+            OpenPaneLength="200" 
+            PaneBackground="{ThemeResource Bili-MenuBack}" 
+            DisplayMode="Overlay">
             <SplitView.Pane>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="120"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Grid x:Name="menu_DarkBack" Background="{ThemeResource Bili-ForeColor-Dark}" >
-                        <StackPanel Orientation="Horizontal" Visibility="Collapsed" VerticalAlignment="Top" HorizontalAlignment="Right" Grid.ColumnSpan="2">
-                            <AppBarButton Height="48" Width="48"  Foreground="White">
-                                <AppBarButton.Icon>
-                                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE706;" />
-                                </AppBarButton.Icon>
-                            </AppBarButton>
-                        </StackPanel>
-                        <HyperlinkButton x:Name="btn_UserInfo" Click="btn_UserInfo_Click">
-                            <Grid x:Name="top_User" Margin="5 32 5 0" VerticalAlignment="Center">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <Ellipse Width="52" Height="52" Grid.Column="0" Margin="5 0"  VerticalAlignment="Center">
-                                    <Ellipse.Fill>
-                                        <ImageBrush x:Name="img_user" Stretch="Fill" ImageSource="Assets/other/NoAvatar.png"/>
-                                    </Ellipse.Fill>
-                                </Ellipse>
-                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                    <TextBlock x:Name="txt_UserName" Foreground="White" FontSize="18">
-										<Run Text="请登录"/>
-                                    </TextBlock>
-                                    <TextBlock x:Name="txt_Sign"   Visibility="Collapsed" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" MaxLines="1" Foreground="White" FontSize="14">
-										<Run Text="个人签名"/>
-                                    </TextBlock>
-                                </StackPanel>
-                            </Grid>
-                        </HyperlinkButton>
-
-                    </Grid>
-                    <ListView x:Name="list_Menu" Grid.Row="1" SelectionMode="None" IsItemClickEnabled="True" ItemClick="list_Menu_ItemClick" >
+                <RelativePanel>
+                    <ListView
+                        RelativePanel.AlignLeftWithPanel="True"
+                        RelativePanel.AlignRightWithPanel="True"
+                        RelativePanel.AlignBottomWithPanel="True"
+                        RelativePanel.AlignTopWithPanel="True"
+                        Name="ListMenu"
+                        SelectionMode="None" 
+                        IsItemClickEnabled="True"
+                        ItemClick="ListMenu_ItemClick" >
+                        <ListView.Header>
+                            <HyperlinkButton 
+                                Foreground="White"
+                                Background="#FFDF85A0"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Stretch"
+                                Name="BtnUserInfo" 
+                                Click="BtnUserInfo_Click">
+                                <RelativePanel>
+                                    <Ellipse
+                                        Name="UserImgPanel"
+                                        RelativePanel.AlignTopWithPanel="True"
+                                        RelativePanel.AlignLeftWithPanel="True"
+                                        Width="52" 
+                                        Height="52" 
+                                        Margin="10">
+                                        <Ellipse.Fill>
+                                            <ImageBrush
+                                                x:Name="ImgUser"
+                                                Stretch="Fill"
+                                                ImageSource="Assets/other/NoAvatar.png"/>
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                    <TextBlock
+                                        RelativePanel.AlignLeftWithPanel="True"
+                                        RelativePanel.AlignRightWithPanel="True"
+                                        RelativePanel.Below="UserImgPanel"
+                                        Name="TxtUserName" 
+                                        Margin="10"
+                                        Text="请登录"/>
+                                    <TextBlock 
+                                        RelativePanel.Below="TxtUserName"
+                                        RelativePanel.AlignLeftWithPanel="True"
+                                        RelativePanel.AlignRightWithPanel="True"
+                                        Name="TxtSign" 
+                                        Visibility="Collapsed" 
+                                        TextWrapping="Wrap" 
+                                        TextTrimming="CharacterEllipsis"
+                                        MaxLines="1" 
+                                        FontSize="14"
+                                        Text="个人签名"/>
+                                </RelativePanel>
+                            </HyperlinkButton>
+                        </ListView.Header>
                         <ListViewItem Background="#33555555" >
                             <StackPanel Orientation="Horizontal">
                                 <SymbolIcon Symbol="Home" Width="26" Height="26" Foreground="Gray"/>
@@ -162,29 +184,10 @@
                                 <TextBlock Text="应用设置" VerticalAlignment="Center" Margin="20,0" Foreground="Gray" />
                             </StackPanel>
                         </ListViewItem>
-                        <ListViewItem>
-                            <StackPanel Orientation="Horizontal" Tag="Feedback">
-                                <SymbolIcon Symbol="Mail" Width="26" Height="26" Foreground="Gray"/>
-                                <TextBlock Text="问题反馈" VerticalAlignment="Center" Margin="20,0,0,0" Foreground="Gray" />
-                                <Ellipse x:Name="bor_HasFeedback" Visibility="Collapsed" Fill="Red" Width="5" Height="5" VerticalAlignment="Top" Margin="3 8"/>
-                            </StackPanel>
-                        </ListViewItem>
                     </ListView>
-                </Grid>
+                </RelativePanel>
             </SplitView.Pane>
-            <Grid >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Grid  Background="{ThemeResource Bili-ForeColor}" Grid.Row="0" Height="48" x:Name="top_grid">
-                    <TextBlock Text="首页" FontSize="16" x:Name="top_txt_Header" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" />
-                    <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" HorizontalAlignment="Right" >
-                        <AppBarButton x:Name="btn_GoFind" Icon="Find" Width="48" Height="48" Foreground="White" Click="btn_GoFind_Click"/>
-                        <AutoSuggestBox x:Name="top_txt_find"   PlaceholderText="输入关键字或AV号" Visibility="Collapsed" Height="32"  Width="180" QueryIcon="Find" Grid.Column="2" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Right" Margin="5,0"  Style="{StaticResource AutoSuggestBoxStyle1}"  TextChanged="top_txt_find_TextChanged" QuerySubmitted="top_txt_find_QuerySubmitted" SuggestionChosen="top_txt_find_SuggestionChosen"/>
-                        <AppBarButton Icon="Download" Visibility="Collapsed" Width="48" Height="48" Foreground="White"></AppBarButton>
-                    </StackPanel>
-                </Grid>
+            <RelativePanel>
                 <Pivot 
                     Style="{StaticResource PivotHeaderWithBackground}"
                     Name="PivotHome"
@@ -216,34 +219,13 @@
                         <Controls:FindFragment/>
                     </PivotItem>
                 </Pivot>
-                <Border x:Name="bor_SS" Grid.Row="2" 
-					ManipulationMode="TranslateX" 
-					ManipulationCompleted="Border_ManipulationCompleted" 
-					ManipulationDelta="Border_ManipulationDelta"
-					Width="20" Opacity="0" Background="White" HorizontalAlignment="Left"/>
-            </Grid>
+            </RelativePanel>
         </SplitView>
-        <Border x:Name="grid_GG" Visibility="Collapsed" Height="auto" Grid.RowSpan="2" VerticalAlignment="Bottom" CornerRadius="10" HorizontalAlignment="Center" Background="#7F000000" Margin="0,30">
-            <TextBlock x:Name="txt_GG" Foreground="White" VerticalAlignment="Center" Margin="10,5">
-				<Run Text="信息不能为空"/>
-            </TextBlock>
-        </Border>
-        <AppBarButton x:Name="btn_OpenMenu" Grid.Row="1" Width="48" Height="48" Foreground="White" Click="btn_OpenMenu_Click">
-            <AppBarButton.Icon>
-                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE700;" />
-            </AppBarButton.Icon>
-        </AppBarButton>
-        <Frame x:Name="infoFrame" Grid.RowSpan="2"  Navigating="infoFrame_Navigating"  Navigated="infoFrame_Navigated" >
-            <Frame.Resources>
-                <Storyboard x:Name="storyboardPopOut" >
-                    <DoubleAnimation x:Name="tuic" From="0"  Duration="00:00:0.1"  Completed="StoryboardPopOut_Completed"
-						Storyboard.TargetName="dh"  Storyboard.TargetProperty="TranslateX"/>
-                </Storyboard>
-            </Frame.Resources>
-            <Frame.RenderTransform>
-                <CompositeTransform x:Name="dh"/>
-            </Frame.RenderTransform>
-        </Frame>
-        <local:MessageShow x:Name="messShow" Grid.RowSpan="4" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
-    </Grid>
+        <local:MessageShow
+            RelativePanel.AlignHorizontalCenterWithPanel="True"
+            RelativePanel.AlignBottomWithPanel="True"
+            x:Name="MessageShow" 
+            Margin="10"
+            />
+    </RelativePanel>
 </Page>

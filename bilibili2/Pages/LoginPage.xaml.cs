@@ -41,7 +41,6 @@ namespace bilibili2
         
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
             GetPass();
         }
 

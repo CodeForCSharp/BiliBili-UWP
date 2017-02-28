@@ -47,14 +47,7 @@ namespace bilibili2
             this.InitializeComponent();
             NavigationCacheMode = NavigationCacheMode.Required;
             PivotHome.SelectedIndex = 1;
-            SystemNavigationManager.GetForCurrentView().BackRequested += MainPage_BackRequested;
             ChangeTitbarColor();
-            //this.RequestedTheme = ElementTheme.Dark;
-        }
-
-        private void Liveinfo_PlayEvent(string aid)
-        {
-            infoFrame.Navigate(typeof(LiveInfoPage),aid);
         }
 
         string navInfo = string.Empty;
@@ -68,27 +61,25 @@ namespace bilibili2
                 timer.Interval = new TimeSpan(0, 0, 5);
                 timer.Start();
                 timer.Tick += Timer_Tick;
-
             }
             GetSetting();
             ChangeTheme();
             ChangeDrak();
-           
-            navInfo = infoFrame.GetNavigationState();
-            infoFrame.Tag = (SolidColorBrush)top_grid.Background;
         }
 
         private async void Timer_Tick(object sender, object e)
         {
             if (await HasMessage())
             {
-                await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
                     bor_HasMessage.Visibility = Visibility.Visible;
                 });
             }
             else
             {
-                await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
                     bor_HasMessage.Visibility = Visibility.Collapsed;
                 });
             }
@@ -98,7 +89,7 @@ namespace bilibili2
         {
             try
             {
-                 wc = new WebClientClass();
+                wc = new WebClientClass();
                 // http://message.bilibili.com/api/msg/query.room.list.do?access_key=a36a84cc8ef4ea2f92c416951c859a25&actionKey=appkey&appkey=c1b107428d337928&build=414000&page_size=100&platform=android&ts=1461404884000&sign=5e212e424761aa497a75b0fb7fbde775
                 string url = string.Format("http://message.bilibili.com/api/notify/query.notify.count.do?_device=wp&_ulv=10000&access_key={0}&actionKey=appkey&appkey={1}&build=434000&platform=android&ts={2}", ApiHelper.access_key, ApiHelper._appKey, ApiHelper.GetTimeSpen);
                 url += "&sign=" + ApiHelper.GetSign(url);
@@ -107,7 +98,7 @@ namespace bilibili2
                 if (model.code == 0)
                 {
                     MessageModel list = JsonConvert.DeserializeObject<MessageModel>(model.data.ToString());
-                    if (list.reply_me != 0||list.chat_me!=0|| list.notify_me!=0)
+                    if (list.reply_me != 0 || list.chat_me != 0 || list.notify_me != 0)
                     {
                         return true;
                     }
@@ -132,75 +123,10 @@ namespace bilibili2
         {
             if (!settings.SettingContains("PlayLocal"))
             {
-                settings.SetSettingValue("PlayLocal",true);
-            }
-        }
-        //首页错误
-        private void Home_Items_ErrorEvent(string aid)
-        {
-            messShow.Show("读取首页信息失败\r\n" + aid, 3000);
-        }
-        //首页跳转
-        private void Home_Items_PlayEvent(string aid)
-        {
-            infoFrame.Navigate(typeof(VideoInfoPage), aid);
-
-            //jinr.From = this.ActualWidth;
-            //storyboardPopIn.Begin();
-        }
-        //双击退出
-        bool IsClicks = false;
-        private async void MainPage_BackRequested(object sender, BackRequestedEventArgs e)
-        {
-            if (infoFrame.Content != null)
-            {
-                e.Handled = true;
-                if (infoFrame.CanGoBack)
-                {
-                    // e.Handled = true;
-                    infoFrame.GoBack();
-                }
-                else
-                {
-                    // e.Handled = true;
-                    tuic.To = this.ActualWidth;
-                    storyboardPopOut.Begin();
-                }
-            }
-            else
-            {
-                if (e.Handled == false)
-                {
-                    if (IsClicks)
-                    {
-                        Application.Current.Exit();
-                    }
-                    else
-                    {
-                        IsClicks = true;
-                        e.Handled = true;
-                        txt_GG.Text = "再按一次退出程序";
-                        grid_GG.Visibility = Visibility.Visible;
-                        await Task.Delay(1500);
-                        IsClicks = false;
-                        grid_GG.Visibility = Visibility.Collapsed;
-                    }
-                }
+                settings.SetSettingValue("PlayLocal", true);
             }
         }
 
-        //打开汉堡菜单
-        private void btn_OpenMenu_Click(object sender, RoutedEventArgs e)
-        {
-            if (sp_View.IsPaneOpen)
-            {
-                sp_View.IsPaneOpen = false;
-            }
-            else
-            {
-                sp_View.IsPaneOpen = true;
-            }
-        }
         //侧滑来源http://www.cnblogs.com/hebeiDGL/p/4775377.html
         #region  从屏幕左侧边缘滑动屏幕时，打开 SplitView 菜单
 
@@ -216,12 +142,12 @@ namespace bilibili2
             e.Handled = true;
 
             // 仅当 SplitView 处于 Overlay 模式时（窗口宽度最小时）
-            if (sp_View.DisplayMode == SplitViewDisplayMode.Overlay)
+            if (SpView.DisplayMode == SplitViewDisplayMode.Overlay)
             {
                 if (PaneRoot == null)
                 {
                     // 找到 SplitView 控件中，模板的父容器
-                    Grid grid = FindVisualChild<Grid>(sp_View);
+                    Grid grid = FindVisualChild<Grid>(SpView);
 
                     PaneRoot = grid.FindName("PaneRoot") as Grid;
 
@@ -243,10 +169,10 @@ namespace bilibili2
                 PaneRoot.Visibility = Visibility.Visible;
 
                 // 当在 Border 上向右滑动，并且滑动的总距离需要小于 Panel 的默认宽度。否则会脱离左侧窗口，继续向右拖动
-                if (e.Cumulative.Translation.X >= 0 && e.Cumulative.Translation.X < sp_View.OpenPaneLength)
+                if (e.Cumulative.Translation.X >= 0 && e.Cumulative.Translation.X < SpView.OpenPaneLength)
                 {
                     CompositeTransform ct = PaneRoot.RenderTransform as CompositeTransform;
-                    ct.TranslateX = (e.Cumulative.Translation.X - sp_View.OpenPaneLength);
+                    ct.TranslateX = (e.Cumulative.Translation.X - SpView.OpenPaneLength);
                 }
             }
         }
@@ -256,7 +182,7 @@ namespace bilibili2
             e.Handled = true;
 
             // 仅当 SplitView 处于 Overlay 模式时（窗口宽度最小时）
-            if (sp_View.DisplayMode == SplitViewDisplayMode.Overlay && PaneRoot != null)
+            if (SpView.DisplayMode == SplitViewDisplayMode.Overlay && PaneRoot != null)
             {
                 // 因为当 IsPaneOpen 为 true 时，会通过 VisualStateManager 把 PaneRoot.Visibility  设置为
                 // Visibility.Visible，所以这里把它改为 Visibility.Collapsed，以回到初始状态
@@ -267,9 +193,9 @@ namespace bilibili2
 
 
                 // 如果大于 MySplitView.OpenPaneLength 宽度的 1/2 ，则显示，否则隐藏
-                if ((sp_View.OpenPaneLength + ct.TranslateX) > sp_View.OpenPaneLength / 2)
+                if ((SpView.OpenPaneLength + ct.TranslateX) > SpView.OpenPaneLength / 2)
                 {
-                    sp_View.IsPaneOpen = true;
+                    SpView.IsPaneOpen = true;
 
                     // 因为上面设置 IsPaneOpen = true 会再次播放向右滑动的动画，所以这里使用 SkipToFill()
                     // 方法，直接跳到动画结束状态
@@ -318,7 +244,7 @@ namespace bilibili2
                     {
                         if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent(typeof(StatusBar).ToString()))
                         {
-                            StatusBar statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
+                            StatusBar statusBar = StatusBar.GetForCurrentView();
                             await statusBar.HideAsync();
                         }
                     }
@@ -326,74 +252,17 @@ namespace bilibili2
                 case ApplicationViewOrientation.Portrait:
                     if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent(typeof(StatusBar).ToString()))
                     {
-                        StatusBar statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
+                        StatusBar statusBar = StatusBar.GetForCurrentView();
                         await statusBar.ShowAsync();
                     }
                     break;
                 default:
                     break;
             }
-
-            if (this.ActualWidth < 1000)
-            {
-                top_txt_Header.HorizontalAlignment = HorizontalAlignment.Left;
-            }
-            else
-            {
-                top_txt_Header.HorizontalAlignment = HorizontalAlignment.Center;
-            }
         }
-        //打开搜索框
-        private void btn_GoFind_Click(object sender, RoutedEventArgs e)
-        {
-            if (top_txt_find.Visibility == Visibility.Collapsed)
-            {
-                btn_GoFind.Visibility = Visibility.Collapsed;
-                top_txt_find.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                btn_GoFind.Visibility = Visibility.Visible;
-                top_txt_find.Visibility = Visibility.Collapsed;
-            }
-
-        }
-        //子页面后退
-        private void MainPage_BackEvent()
-        {
-            tuic.To = this.ActualWidth;
-            storyboardPopOut.Begin();
-        }
-        //子页面后退动画完成
-        private void StoryboardPopOut_Completed(object sender, object e)
-        {
-            infoFrame.ContentTransitions = null;
-            infoFrame.Content = null;
-            infoFrame.SetNavigationState(navInfo);
-            //infoFrame.CacheSize = 0;
-            //int i=  infoFrame.BackStackDepth;
-            //string a = string.Empty;
-            dh.TranslateX = 0;
-        }
-
+        UserClass getLogin = new UserClass();
         WebClientClass wc = new WebClientClass();
 
-        //用户登录或跳转
-        private void btn_UserInfo_Click(object sender, RoutedEventArgs e)
-        {
-            if (txt_UserName.Text == "请登录")
-            {
-                infoFrame.Navigate(typeof(LoginPage));
-
-                //jinr.From = this.ActualWidth;
-                //storyboardPopIn.Begin();
-            }
-            else
-            {
-                infoFrame.Navigate(typeof(UserInfoPage));
-            }
-            //this.Frame.Navigate(typeof(LoginPage));
-        }
         //用户登录成功，读取用户信息
         private void MainPage_LoginEd()
         {
@@ -402,7 +271,6 @@ namespace bilibili2
         //读取用户信息
         private async void GetLoadInfo()
         {
-            UserClass getLogin = new UserClass();
             if (!getLogin.IsLogin())
             {
                 //设置是否存在
@@ -416,18 +284,18 @@ namespace bilibili2
                         GetLoginInfoModel model = await getLogin.GetUserInfo();
                         if (model != null)
                         {
-                            txt_UserName.Text = model.name;
-                            txt_Sign.Visibility = Visibility.Visible;
-                            txt_Sign.Text = model.RankStr;
-                            img_user.ImageSource = new BitmapImage(new Uri(model.face));
+                            TxtUserName.Text = model.name;
+                            TxtSign.Visibility = Visibility.Visible;
+                            TxtSign.Text = model.RankStr;
+                            ImgUser.ImageSource = new BitmapImage(new Uri(model.face));
                         }
-                        messShow.Show(result, 3000);
+                        MessageShow.Show(result, 3000);
                     }
                     else
                     {
-                        txt_UserName.Text = "请登录";
-                        txt_Sign.Visibility = Visibility.Collapsed;
-                        img_user.ImageSource = new BitmapImage(new Uri("ms-appx:///Assets/other/NoAvatar.png"));
+                        TxtUserName.Text = "请登录";
+                        TxtSign.Visibility = Visibility.Collapsed;
+                        ImgUser.ImageSource = new BitmapImage(new Uri("ms-appx:///Assets/other/NoAvatar.png"));
                     }
                 }
                 else
@@ -435,10 +303,9 @@ namespace bilibili2
                     container.Values["UserName"] = "";
                     container.Values["UserPass"] = "";
                     container.Values["AutoLogin"] = "";
-                    txt_UserName.Text = "请登录";
-                    txt_Sign.Visibility = Visibility.Collapsed;
-
-                    img_user.ImageSource = new BitmapImage(new Uri("ms-appx:///Assets/other/NoAvatar.png"));
+                    TxtUserName.Text = "请登录";
+                    TxtSign.Visibility = Visibility.Collapsed;
+                    ImgUser.ImageSource = new BitmapImage(new Uri("ms-appx:///Assets/other/NoAvatar.png"));
                 }
             }
             else
@@ -449,87 +316,12 @@ namespace bilibili2
                 GetLoginInfoModel model = await getLogin.GetUserInfo();
                 if (model != null)
                 {
-                    txt_UserName.Text = model.name;
-                    txt_Sign.Visibility = Visibility.Visible;
-                    txt_Sign.Text = model.RankStr;
-                    img_user.ImageSource = new BitmapImage(new Uri(model.face));
+                    TxtUserName.Text = model.name;
+                    TxtSign.Visibility = Visibility.Visible;
+                    TxtSign.Text = model.RankStr;
+                    ImgUser.ImageSource = new BitmapImage(new Uri(model.face));
                 }
             }
-        }
-        //汉堡菜单的点击
-        private void list_Menu_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            if ((e.ClickedItem as StackPanel).Tag == null)
-            {
-                return;
-            }
-            bool isLogin = new UserClass().IsLogin();
-            switch ((e.ClickedItem as StackPanel).Tag.ToString())
-            {
-                case "M_Drak_Light":
-                    if (RequestedTheme== ElementTheme.Dark)
-                    {
-                        settings.SetSettingValue("Drak", false);
-                        txt_D_L.Text = "夜间模式";
-                        font_D_L.Glyph = "\uE708";
-                        RequestedTheme = ElementTheme.Light;
-                    }
-                    else
-                    {
-                        settings.SetSettingValue("Drak", true);
-                        txt_D_L.Text = "日间模式";
-                        font_D_L.Glyph = "\uE706";
-                        RequestedTheme = ElementTheme.Dark;
-                    }
-                    ChangeTitbarColor();
-                    break;
-                case "Favbox":
-                    if (isLogin)
-                    {
-                        infoFrame.Navigate(typeof(FavPage));
-                    }
-                    else
-                    {
-                        messShow.Show("请先登录！", 3000);
-                    }
-                    break;
-                case "History":
-                    if (isLogin)
-                    {
-                        infoFrame.Navigate(typeof(HistoryPage));
-                    }
-                    else
-                    {
-                        messShow.Show("请先登录！", 3000);
-                    }
-                    break;
-                case "Message":
-                    if (isLogin)
-                    {
-                        infoFrame.Navigate(typeof(MessagePage));
-                    }
-                    else
-                    {
-                        messShow.Show("请先登录！", 3000);
-                    }
-                    break;
-                case "Download":
-                    infoFrame.Navigate(typeof(DownloadPage));
-                    break;
-                case "Setting":
-                    infoFrame.Navigate(typeof(SettingPage));
-                    break;
-                case "Feedback":
-                    break;
-                default:
-                    break;
-            }
-
-        }
-        //触发主题改变
-        private void MainPage_ChangeDrak()
-        {
-            ChangeDrak();
         }
 
         //改变主题
@@ -635,30 +427,18 @@ namespace bilibili2
                 default:
                     break;
             }
-            tuic.To = this.ActualWidth;
-            storyboardPopOut.Begin();
             ChangeTitbarColor();
         }
         private void ChangeTitbarColor()
         {
             if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {
-                // StatusBar.GetForCurrentView().HideAsync();
                 StatusBar statusBar = StatusBar.GetForCurrentView();
                 statusBar.ForegroundColor = Colors.White;
-                statusBar.BackgroundColor = ((SolidColorBrush)top_grid.Background).Color;
                 statusBar.BackgroundOpacity = 100;
             }
             //电脑标题栏颜色
-            var titleBar = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TitleBar;
-            titleBar.BackgroundColor = ((SolidColorBrush)top_grid.Background).Color;
-            titleBar.ForegroundColor = Color.FromArgb(255, 254, 254, 254);//Colors.White纯白用不了。。。
-            titleBar.ButtonHoverBackgroundColor = ((SolidColorBrush)menu_DarkBack.Background).Color;
-            titleBar.ButtonBackgroundColor = ((SolidColorBrush)top_grid.Background).Color;
-            titleBar.ButtonForegroundColor = Color.FromArgb(255, 254, 254, 254);
-            titleBar.InactiveBackgroundColor = ((SolidColorBrush)top_grid.Background).Color;
-            titleBar.ButtonInactiveBackgroundColor = ((SolidColorBrush)top_grid.Background).Color;
-            infoFrame.Tag = (SolidColorBrush)top_grid.Background;
+            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
         }
         private void ChangeDrak()
         {
@@ -678,102 +458,7 @@ namespace bilibili2
                 txt_D_L.Text = "夜间模式";
                 font_D_L.Glyph = "\uE708";
             }
-             ChangeTitbarColor();
-        }
-
-        //打开话题
-        private void Find_btn_Topic_Click(object sender, RoutedEventArgs e)
-        {
-                infoFrame.Navigate(typeof(TopicPage));
-        }
-        //infoFrame跳转
-        private void infoFrame_Navigated(object sender, NavigationEventArgs e)
-        {
-            switch ((e.Content as Page).Tag.ToString())
-            {
-                case "视频信息":
-                    (infoFrame.Content as VideoInfoPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "网页浏览":
-                    (infoFrame.Content as WebViewPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "登录":
-                    (infoFrame.Content as LoginPage).BackEvent += MainPage_BackEvent;
-                    (infoFrame.Content as LoginPage).LoginEd += MainPage_LoginEd;
-                    break;
-                case "话题":
-                    (infoFrame.Content as TopicPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "排行榜":
-                    (infoFrame.Content as RankPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "番剧信息":
-                    (infoFrame.Content as BanInfoPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "番剧更新时间表":
-                    (infoFrame.Content as BanTimelinePage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "番剧索引":
-                    (infoFrame.Content as BanTagPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "番剧Tag":
-                    (infoFrame.Content as BanByTagPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "全部追番":
-                    (infoFrame.Content as UserBangumiPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "用户中心":
-                    (infoFrame.Content as UserInfoPage).BackEvent += MainPage_BackEvent;
-                    (infoFrame.Content as UserInfoPage).ExitEvent += MainPage_ExitEvent;
-                    break;
-                case "查看评论":
-                    (infoFrame.Content as CommentPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "搜索结果":
-                    (infoFrame.Content as SearchPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "收藏夹":
-                    (infoFrame.Content as FavPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "设置":
-                    (infoFrame.Content as SettingPage).BackEvent += MainPage_BackEvent;
-                    (infoFrame.Content as SettingPage).ChangeTheme += MainPage_ChangeTheme;
-                    (infoFrame.Content as SettingPage).ChangeDrak += MainPage_ChangeDrak;
-                    break;
-                case "播放器":
-                    (infoFrame.Content as PlayerPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "历史":
-                    (infoFrame.Content as HistoryPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "消息中心":
-                    (infoFrame.Content as MessagePage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "全部直播":
-                    (infoFrame.Content as AllLivePage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "直播间":
-                    (infoFrame.Content as LiveInfoPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "搜索直播":
-                    (infoFrame.Content as SearchLivePage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "离线管理":
-                    (infoFrame.Content as DownloadPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "编辑资料":
-                    (infoFrame.Content as EditPage).BackEvent += MainPage_BackEvent;
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        private void MainPage_ExitEvent()
-        {
-            tuic.To = this.ActualWidth;
-            storyboardPopOut.Begin();
-            GetLoadInfo();
+            ChangeTitbarColor();
         }
 
         //主题更换
@@ -781,77 +466,92 @@ namespace bilibili2
         {
             ChangeTheme();
         }
-        //infoFrame跳转动画
-        private void infoFrame_Navigating(object sender, NavigatingCancelEventArgs e)
+
+        private void ListMenu_ItemClick(object sender, ItemClickEventArgs e)
         {
-            dh.TranslateX = 0;
-            EdgeUIThemeTransition edge = new EdgeUIThemeTransition();
-            if (e.NavigationMode == NavigationMode.New)
+            var tag = (e.ClickedItem as StackPanel).Tag as string;
+            if (string.IsNullOrEmpty(tag)) return;
+            bool isLogin = getLogin.IsLogin();
+            switch (tag)
             {
-                edge.Edge = EdgeTransitionLocation.Right;
-                TransitionCollection tc = new TransitionCollection();
-                tc.Add(edge);
-                infoFrame.ContentTransitions = tc;
+                case "M_Drak_Light":
+                    if (RequestedTheme == ElementTheme.Dark)
+                    {
+                        settings.SetSettingValue("Drak", false);
+                        txt_D_L.Text = "夜间模式";
+                        font_D_L.Glyph = "\uE708";
+                        RequestedTheme = ElementTheme.Light;
+                    }
+                    else
+                    {
+                        settings.SetSettingValue("Drak", true);
+                        txt_D_L.Text = "日间模式";
+                        font_D_L.Glyph = "\uE706";
+                        RequestedTheme = ElementTheme.Dark;
+                    }
+                    ChangeTitbarColor();
+                    break;
+                case "Favbox":
+                    if (isLogin)
+                    {
+                        Frame.Navigate(typeof(FavPage));
+                    }
+                    else
+                    {
+                        MessageShow.Show("请先登录！", 3000);
+                    }
+                    break;
+                case "History":
+                    if (isLogin)
+                    {
+                        Frame.Navigate(typeof(HistoryPage));
+                    }
+                    else
+                    {
+                        MessageShow.Show("请先登录！", 3000);
+                    }
+                    break;
+                case "Message":
+                    if (isLogin)
+                    {
+                        Frame.Navigate(typeof(MessagePage));
+                    }
+                    else
+                    {
+                        MessageShow.Show("请先登录！", 3000);
+                    }
+                    break;
+                case "Download":
+                    Frame.Navigate(typeof(DownloadPage));
+                    break;
+                case "Setting":
+                    Frame.Navigate(typeof(SettingPage));
+                    break;
+                default:
+                    break;
             }
         }
 
-        public async Task<ObservableCollection<String>> GetSugges(string text)
+        private void BtnUserInfo_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if (!getLogin.IsLogin())
             {
-                WebClientClass wc = new WebClientClass();
-                string results = await wc.GetResults(new Uri("http://s.search.bilibili.com/main/suggest?suggest_type=accurate&sub_type=tag&main_ver=v1&term=" + text));
-                JObject json = JObject.Parse(results);
-                // json["result"]["tag"].ToString();
-                List<SuggesModel> list = JsonConvert.DeserializeObject<List<SuggesModel>>(json["result"]["tag"].ToString());
-                ObservableCollection<String> suggestions = new ObservableCollection<string>();
-                foreach (SuggesModel item in list)
-                {
-                    suggestions.Add(item.value);
-                }
-                return suggestions;
-            }
-            catch (Exception)
-            {
-                return new ObservableCollection<string>();
-            }
-
-        }
-        public class SuggesModel
-        {
-            public string name { get; set; }
-            public string value { get; set; }
-        }
-
-        private async void top_txt_find_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
-        {
-            if (sender.Text.Length != 0)
-            {
-                sender.ItemsSource = await GetSugges(sender.Text);
+                Frame.Navigate(typeof(LoginPage));
             }
             else
             {
-                sender.ItemsSource = null;
+                Frame.Navigate(typeof(UserInfoPage));
             }
         }
 
-        private void top_txt_find_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        private void BtnOpenMenu_Click(object sender, RoutedEventArgs e)
         {
-            if (sender.Text.Length == 0)
-            {
-                //top_txt_find.Visibility = Visibility.Collapsed;
-                //top_btn_find.Visibility = Visibility.Visible;
-                //mainFrame.Navigate(typeof(SeasonPage));
-            }
-            else
-            {
-                infoFrame.Navigate(typeof(SearchPage), top_txt_find.Text);
-            }
+            SpView.IsPaneOpen = !SpView.IsPaneOpen;
         }
 
-        private void top_txt_find_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+        private void BtnFind_Click(object sender, RoutedEventArgs e)
         {
-            top_txt_find.Text = args.SelectedItem as string;
+
         }
     }
 }

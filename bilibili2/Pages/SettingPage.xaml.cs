@@ -52,7 +52,6 @@ namespace bilibili2
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
             GetSetting();
         }
         bool Geting = true;
@@ -285,7 +284,6 @@ namespace bilibili2
                         break;
                 }
                 ChangeTheme();
-                bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
             }
 
         }
@@ -371,7 +369,6 @@ namespace bilibili2
                 settings.SetSettingValue("Drak", false);
             }
             ChangeDrak();
-            bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
         }
 
         private void btn_DeleteGuanjianzi_Click(object sender, RoutedEventArgs e)

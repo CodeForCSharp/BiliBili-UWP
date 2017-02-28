@@ -56,8 +56,6 @@ namespace bilibili2.Pages
         //跳转，开始监视，需要判断是否已经监视，否则会出现N个通知
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-
-            bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
             if (e.Parameter!=null)
             {
                 pivot.SelectedIndex = (int)e.Parameter;
