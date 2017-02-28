@@ -4,11 +4,9 @@
     xmlns:local="using:bilibili2"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:WrapPanel="using:AppArrange.WrapPanel"
     xmlns:Controls="using:bilibili2.Controls"
     x:Class="bilibili2.MainPage"
     mc:Ignorable="d"
-    xmlns:pr="using:PullToRefresh.UWP"
     SizeChanged="Page_SizeChanged"
     >
     <Page.Resources>
@@ -43,22 +41,6 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-        </Style>
-        <Style x:Name="GridViewItemStyle" TargetType="GridViewItem">
-            <Setter Property="BorderBrush" Value="#33000000"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="VerticalAlignment" Value="Top"/>
-            <Setter Property="Background" Value="{ThemeResource Bili-List-Background}"/>
-        </Style>
-        <Style x:Key="grid_TJ" TargetType="GridViewItem">
-            <Setter Property="Background" Value="{ThemeResource Bili-List-Background}"/>
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="BorderBrush" Value="#7F808080"/>
-            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="MaxWidth" Value="640"/>
         </Style>
     </Page.Resources>
     <Grid  Background="{ThemeResource Bili-Background}">

@@ -81,8 +81,21 @@ namespace bilibili2
             if (rootFrame == null)
             {
                 // 创建要充当导航上下文的框架，并导航到第一页
-                rootFrame = new Frame();
-
+                var paneTransition = new Windows.UI.Xaml.Media.Animation.PaneThemeTransition
+                {
+                    Edge = EdgeTransitionLocation.Right
+                };
+                rootFrame = new Frame
+                {
+                    ContentTransitions = new Windows.UI.Xaml.Media.Animation.TransitionCollection
+                    {
+                        paneTransition
+                    }
+                };
+                rootFrame.Navigating += (sender, args) => 
+                {
+                    paneTransition.Edge = args.NavigationMode == NavigationMode.Back ? EdgeTransitionLocation.Left : EdgeTransitionLocation.Right;
+                };
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)

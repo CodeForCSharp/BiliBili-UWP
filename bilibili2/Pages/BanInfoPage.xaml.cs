@@ -69,8 +69,6 @@ namespace bilibili2.Pages
         //bool IsBan = false;
         protected  override void OnNavigatedTo(NavigationEventArgs e)
         {
-            
-            bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
             if (e.NavigationMode == NavigationMode.New)
             {
                 font_icon.Glyph = "\uE006";

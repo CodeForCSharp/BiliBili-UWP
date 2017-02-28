@@ -31,7 +31,6 @@ namespace bilibili2.Pages
             if (e.NavigationMode != NavigationMode.Back)
             {
                 GetBangumiTimeLine();
-                bg.Color = ((SolidColorBrush)Frame.Tag).Color;
             }
         }
         //时间表

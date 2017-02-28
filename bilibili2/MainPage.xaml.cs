@@ -681,12 +681,6 @@ namespace bilibili2
              ChangeTitbarColor();
         }
 
-        //点击动态
-        private void User_ListView_Attention_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            infoFrame.Navigate(typeof(VideoInfoPage), (e.ClickedItem as GetAttentionUpdate).aid);
-        }
-
         //打开话题
         private void Find_btn_Topic_Click(object sender, RoutedEventArgs e)
         {

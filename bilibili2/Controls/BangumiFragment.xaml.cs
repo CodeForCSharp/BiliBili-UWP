@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using bilibili2.Pages;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,6 +23,7 @@ namespace bilibili2.Controls
     public sealed partial class BangumiFragment : UserControl
     {
         ObservableCollection<BangumiRecommendViewModel> Recommends = new ObservableCollection<BangumiRecommendViewModel>();
+        Frame frame = Window.Current.Content as Frame;
         public BangumiFragment()
         {
             this.InitializeComponent();
@@ -79,6 +81,16 @@ namespace bilibili2.Controls
                 };
                 recommends.ForEach(item =>Recommends.Add(item));
             }
+        }
+
+        private void IndexHyperlink_Click(object sender, RoutedEventArgs e)
+        {
+            frame.Navigate(typeof(BanTagPage));
+        }
+
+        private void TimelineHyperlink_Click(object sender, RoutedEventArgs e)
+        {
+            frame.Navigate(typeof(BanTimelinePage));
         }
     }
 }

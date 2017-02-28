@@ -51,7 +51,6 @@ namespace bilibili2.Pages
         private int getType = 1;
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
             if (e.NavigationMode== NavigationMode.New)
             {
                 getTid = e.Parameter as string[];

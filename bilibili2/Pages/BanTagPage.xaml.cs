@@ -38,7 +38,6 @@ namespace bilibili2.Pages
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
             if (e.NavigationMode == NavigationMode.New)
             {
                 GetTagInfo();
@@ -52,7 +51,7 @@ namespace bilibili2.Pages
             {
                 PrLoadBan.Visibility = Visibility.Visible;
                 WebClientClass wc = new WebClientClass();
-                string url = $"http://bangumi.bilibili.com/api/tags?_device=wp&_ulv=10000&appkey=84956560bc028eb7&build=434000&page={1}&pagesize=60&platform=android&ts={ApiHelper.GetTimeSpen}000";
+                string url = $"http://bangumi.bilibili.com/api/tags?_device=android&_ulv=10000&appkey=84956560bc028eb7&build=434000&page={1}&pagesize=60&platform=android&ts={ApiHelper.GetTimeSpen}000";
                 url += $"&sign={ApiHelper.GetSign(url)}";
                 string results = await wc.GetResults(new Uri(url));
                 var model = JObject.Parse(results);
@@ -60,7 +59,7 @@ namespace bilibili2.Pages
                 {
                     var vms = model["result"].Select(token => new BanTagItemViewModel
                     {
-                        Cover = token["cover"].Value<string>(),
+                        Cover = token["cover"]?.Value<string>()??"",
                         TagId = token["tag_id"].Value<string>(),
                         TagName = token["tag_name"].Value<string>()
                     });
@@ -78,7 +77,6 @@ namespace bilibili2.Pages
             finally
             {
                 PrLoadBan.Visibility = Visibility.Collapsed;
-                // IsLoading = false;
             }
         }
 

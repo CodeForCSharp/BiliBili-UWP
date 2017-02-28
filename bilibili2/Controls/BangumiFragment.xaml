@@ -59,6 +59,8 @@
                     </RelativePanel>
                 </Viewbox>
                 <HyperlinkButton
+                    Name="TimelineHyperlink"
+                    Click="TimelineHyperlink_Click"
                 Grid.Row="1"
                 Grid.Column="0"
                 HorizontalAlignment="Stretch">
@@ -76,6 +78,8 @@
                     </StackPanel>
                 </HyperlinkButton>
                 <HyperlinkButton
+                    Name="IndexHyperlink"
+                    Click="IndexHyperlink_Click"
                 Grid.Row="1"
                 Grid.Column="1"
                 HorizontalAlignment="Stretch">
