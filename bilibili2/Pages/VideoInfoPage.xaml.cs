@@ -116,48 +116,6 @@ namespace bilibili2
 
         bool loadComment = false;
         bool loadAbout = false;
-        public void UpdateUI()
-        {
-            btn_About.Foreground = new SolidColorBrush(new Color() { A = 178, G = 255, B = 255, R = 255 });
-            btn_Coment.Foreground = new SolidColorBrush(new Color() { A = 178, G = 255, B = 255, R = 255 });
-            btn_info.Foreground = new SolidColorBrush(new Color() { A = 178, G = 255, B = 255, R = 255 });
-            btn_About.FontWeight = FontWeights.Normal;
-            btn_Coment.FontWeight = FontWeights.Normal;
-            btn_info.FontWeight = FontWeights.Normal;
-            switch (pivot.SelectedIndex)
-            {
-                case 0:
-                    btn_info.Foreground = new SolidColorBrush(Colors.White);
-                    btn_info.FontWeight = FontWeights.Bold;
-                    com_bar.Visibility = Visibility.Visible;
-                    btn_Sort.Visibility = Visibility.Collapsed;
-                    break;
-                case 1:
-                    btn_Coment.Foreground = new SolidColorBrush(Colors.White);
-                    btn_Coment.FontWeight = FontWeights.Bold;
-                    com_bar.Visibility = Visibility.Collapsed;
-                    btn_Sort.Visibility = Visibility.Visible;
-                    if (!loadComment)
-                    {
-                        GetVideoComment_New(aid,orderBy);
-                        loadComment = true;
-                    }
-                    break;
-                case 2:
-                    btn_About.Foreground = new SolidColorBrush(Colors.White);
-                    btn_About.FontWeight = FontWeights.Bold;
-                    com_bar.Visibility = Visibility.Collapsed;
-                    btn_Sort.Visibility = Visibility.Collapsed;
-                    if (!loadAbout)
-                    {
-                        GetRecommend();
-                        loadAbout = true;
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
 
         /// <summary>
         /// 读取视频信息

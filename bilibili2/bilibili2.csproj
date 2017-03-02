@@ -343,6 +343,12 @@
     <Content Include="Assets\Icon\ic_category_t98.png" />
     <Content Include="Assets\Icon\ic_category_up.png" />
     <Content Include="Assets\Icon\ic_chevron_right_gray.png" />
+    <Content Include="Assets\Icon\ic_coin.png" />
+    <Content Include="Assets\Icon\ic_coins_one.png" />
+    <Content Include="Assets\Icon\ic_coins_two.png" />
+    <Content Include="Assets\Icon\ic_collect.png" />
+    <Content Include="Assets\Icon\ic_collected.png" />
+    <Content Include="Assets\Icon\ic_download.png" />
     <Content Include="Assets\Icon\ic_header_activity_center.png" />
     <Content Include="Assets\Icon\ic_header_black_list_center.png" />
     <Content Include="Assets\Icon\ic_header_ding.png" />
@@ -358,6 +364,7 @@
     <Content Include="Assets\Icon\ic_info_views2.png" />
     <Content Include="Assets\Icon\ic_photo_random.png" />
     <Content Include="Assets\Icon\ic_search_history.png" />
+    <Content Include="Assets\Icon\ic_share_green.png" />
     <Content Include="Assets\Icon\ic_watching.png" />
     <Content Include="Assets\Icon\live_home_all_category.png" />
     <Content Include="Assets\Icon\live_home_clip_video.png" />
