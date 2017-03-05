@@ -4,8 +4,10 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
@@ -36,10 +38,29 @@ namespace bilibili2
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class VideoInfoPage : Page
+    public sealed partial class VideoInfoPage : Page,INotifyPropertyChanged
     {
-        public delegate void GoBackHandler();
-        public event GoBackHandler BackEvent;
+        private WebClientClass wc = new WebClientClass();
+
+        public void OnPropertyChanged([CallerMemberName]string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private VideoInfoViewModel info;
+        public VideoInfoViewModel Info
+        {
+            get
+            {
+                return info;
+            }
+            set
+            {
+                info = value;
+                OnPropertyChanged();
+            }
+        }
+
         public VideoInfoPage()
         {
             this.InitializeComponent();
@@ -51,71 +72,30 @@ namespace bilibili2
         private void DataTransferManager_DataRequested(DataTransferManager sender, DataRequestedEventArgs args)
         {
             DataRequest request = args.Request;
-            request.Data.Properties.Title = Video_Title.Text;
-            request.Data.Properties.Description = txt_Desc.Text+"\r\n——分享自BiliBili UWP";
-            request.Data.SetWebLink(new Uri("http://www.bilibili.com/video/av"+aid));
+            request.Data.Properties.Title = info.Title;
+            request.Data.Properties.Description = info.Desc + "\r\n——分享自BiliBili UWP";
+            request.Data.SetWebLink(new Uri($"http://www.bilibili.com/video/av{info}"));
         }
 
-        string aid = "";
-        bool Back = false;
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (e.NavigationMode == NavigationMode.New||Back)
+            if (e.NavigationMode == NavigationMode.New)
             {
-                video_Error_Null.Visibility = Visibility.Collapsed;
-                video_Error_User.Visibility = Visibility.Collapsed;
-                aid = "";
-                top_txt_Header.Text = "AV" + e.Parameter as string;
-                pivot.SelectedIndex = 0;
-                pageNum = 1;
-                loadComment = false;
-                loadAbout = false;
-                grid_tag.Children.Clear();
-                ListView_Comment_New.Items.Clear();
-                UpdateUI();
-                aid = e.Parameter as string;
-                GetVideoInfo(aid);
-               GetFavBox();
+                if(e.Parameter is string aid)
+                {
+                    top_txt_Header.Text = $"AV{aid}";
+                    GetVideoInfo(aid);
+                }
             }
-
         }
 
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-            //Video_Grid_Info.DataContext = null;
-            //Video_UP.DataContext = null;
-            //Video_data.DataContext = null;
-            //ListView_Comment_Hot.Items.Clear();
-        }
         private void btn_back_Click(object sender, RoutedEventArgs e)
         {
             if (this.Frame.CanGoBack)
             {
                 this.Frame.GoBack();
-            }
-            else
-            {
-                Video_Grid_Info.DataContext = null;
-                Video_UP.DataContext = null;
-                Video_data.DataContext = null;
-                ListView_Comment_Hot.Items.Clear();
-                BackEvent();
-            }
-             
+            }      
         }
-        private void pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            UpdateUI();
-            
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            pivot.SelectedIndex = Convert.ToInt32((sender as Button).Tag);
-        }
-
-        bool loadComment = false;
-        bool loadAbout = false;
 
         /// <summary>
         /// 读取视频信息
@@ -125,12 +105,10 @@ namespace bilibili2
         {
             try
             {
-                pr_Load.Visibility = Visibility.Visible;
-               
+                pr_Load.Visibility = Visibility.Visible;               
                 WebClientClass wc = new WebClientClass();
                 string uri = string.Format("http://app.bilibili.com/x/view?_device=wp&_ulv=10000&access_key={0}&aid={1}&appkey=84956560bc028eb7&build=434000&plat=4&platform=android&ts={2}",ApiHelper.access_key,aid,ApiHelper.GetTimeSpen);
                 uri += "&sign="+ApiHelper.GetSign(uri);
-                //string results = await wc.GetResults(new Uri("http://api.bilibili.com/view?type=json&appkey=84956560bc028eb7&id=" + aid + "&batch=1&"+ApiHelper.access_key+"&rnd=" + new Random().Next(1, 9999)));
                 string results = await wc.GetResults(new Uri(uri));
                 VideoModel model = new VideoModel();
                 model = JsonConvert.DeserializeObject<VideoModel>(results);
@@ -188,17 +166,6 @@ namespace bilibili2
                 {
                     txt_guanzhu.Text = "关注";
                 }
-                //只能读取第一个收藏夹信息 - -！
-                //if (AttentionModel.favorite == "1")
-                //{
-                //    btn_Favbox.Icon = new SymbolIcon(Symbol.SolidStar);
-                //    btn_Favbox.Label = "已收藏";
-                //}
-                //else
-                //{
-                //    btn_Favbox.Icon = new SymbolIcon(Symbol.OutlineStar);
-                //    btn_Favbox.Label = "收藏";
-                //}
 
                 GetVideoComment_Hot();
             }
@@ -907,6 +874,9 @@ namespace bilibili2
             }
         }
         bool canLoad = true;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private async void sv1_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
         {
             if (sv1.VerticalOffset == sv1.ScrollableHeight)
@@ -1117,9 +1087,8 @@ namespace bilibili2
                     com_bar.Visibility = Visibility.Visible;
                 }
             }
-
         }
-
-
     }
+
+   
 }

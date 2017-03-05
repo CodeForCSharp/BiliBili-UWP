@@ -1222,6 +1222,32 @@ namespace bilibili2
         public int SeasonId { get; set; }
     }
 
+    public class VideoInfoViewModel
+    {
+        public List<VideoTagViewModel> Tags { get; set; }
+        public string Title { get; set; }
+        public string Pic { get; set; }
+        public string Desc { get; set; }
+        public int Mid { get; set; }
+        public string Name { get; set; }
+        public string Face { get; set; }
+        public string View { get; set; }
+        public string Danmaku { get; set; }
+        public string Reply { get; set; }
+        public string Favorite { get; set; }
+        public string Coin { get; set; }
+        public string Share { get; set; }
+        public string PubDate { get; set; }
+        public List<RegionItemViewModel> Relates { get; set; }
+    }
+
+    public class VideoTagViewModel
+    {
+        public int TagId { get; set; }
+        public string TagName { get; set; }
+        public int Likes { get; set; }
+        public int Hates { get; set; }
+    }
     public class MessageModel
     {
         public int code { get; set; }

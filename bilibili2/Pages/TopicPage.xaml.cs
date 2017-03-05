@@ -27,8 +27,6 @@ namespace bilibili2.Pages
     /// </summary>
     public sealed partial class TopicPage : Page
     {
-        public delegate void GoBackHandler();
-        public event GoBackHandler BackEvent;
         IncrementalLoadingCollection<BanTopicViewModel> Topics { get; }
         WebClientClass wc = new WebClientClass();
         public TopicPage()
@@ -75,10 +73,6 @@ namespace bilibili2.Pages
             if (this.Frame.CanGoBack)
             {
                 this.Frame.GoBack();
-            }
-            else
-            {
-                BackEvent();
             }
         }
 

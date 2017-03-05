@@ -75,13 +75,13 @@
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="model:HotSearchViewModel">
                     <Border 
-                                Background="{ThemeResource Bili-MenuBack}" 
-                                CornerRadius="16" >
+                         Background="{ThemeResource Bili-MenuBack}" 
+                         CornerRadius="16" >
                         <TextBlock
-                                    Margin="5"
-                                    Foreground="Gray" 
-                                    FontSize="14"
-                                    Text="{x:Bind Keyword}"/>
+                             Margin="5"
+                             Foreground="Gray" 
+                             FontSize="14"
+                             Text="{x:Bind Keyword}"/>
                     </Border>
                 </DataTemplate>
             </GridView.ItemTemplate>

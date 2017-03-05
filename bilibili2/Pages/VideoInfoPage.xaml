@@ -4,10 +4,11 @@
     xmlns:local="using:bilibili2"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:WrapPanel="using:AppArrange.WrapPanel"
     x:Class="bilibili2.VideoInfoPage"
     mc:Ignorable="d"
-    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls">
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:wrap="using:Microsoft.Toolkit.Uwp.UI.Controls.WrapPanel"
+    xmlns:model="using:bilibili2">
     <Page.Resources>
         <SolidColorBrush x:Key="BG" x:Name="bg" Color="#FFDF85A0"></SolidColorBrush>
     </Page.Resources>
@@ -44,70 +45,345 @@
         </VisualStateManager.VisualStateGroups>
         <Pivot>
             <PivotItem Header="简介">
-                <RelativePanel>
-                    <controls:ImageEx/>
+                <Grid>
+                    <RelativePanel>
+                    <controls:ImageEx
+                        Name="PicPanel"
+                        RelativePanel.AlignLeftWithPanel="True"
+                        RelativePanel.AlignRightWithPanel="True"
+                        RelativePanel.AlignTopWithPanel="True"
+                        Source="{x:Bind Info.Pic}"
+                        />
+                    <TextBlock
+                        Name="TitlePanel"
+                        Text="{x:Bind Info.Title}"
+                        RelativePanel.AlignLeftWithPanel="True"
+                        RelativePanel.AlignRightWithPanel="True"
+                        RelativePanel.Below="PicPanel"/>
+                    <Image
+                        Name="PlayIconPanel"
+                        Height="20"
+                        Width="20"
+                        RelativePanel.Below="TitlePanel"
+                        RelativePanel.AlignLeftWithPanel="True"
+                        Source="ms-appx:///Assets/Icon/ic_info_views2.png"/>
+                    <TextBlock
+                        Foreground="Gray"
+                        FontSize="14"
+                        Name="PlayPanel"
+                        RelativePanel.Below="TitlePanel"
+                        RelativePanel.RightOf="PlayIconPanel"
+                        Text="{x:Bind Info.View}"
+                        />
+                    <Image
+                        Name="DanmakuIconPanel"
+                        RelativePanel.RightOf="PlayPanel"
+                        RelativePanel.Below="TitlePanel"
+                        Height="20"
+                        Width="20"/>
+                    <TextBlock
+                        FontSize="14"
+                        Text="{x:Bind Info.Danmaku}"
+                        RelativePanel.RightOf="DanmakuIconPanel"
+                        RelativePanel.Below="TitlePanel"
+                        Foreground="Gray"/>
                     <TextBlock/>
-                    <Image/>
-                    <TextBlock/>
-                    <Image/>
-                    <TextBlock/>
-                    <TextBlock/>
-                    <Grid>
-                        <HyperlinkButton>
-                            <StackPanel>
-                                <Border>
-                                    <TextBlock/>
-                                </Border>
-                                <Image/>
-                                <TextBlock/>
-                            </StackPanel>
-                        </HyperlinkButton>
-                        <HyperlinkButton>
-                            <StackPanel>
-                                <Border>
-                                    <TextBlock/>
-                                </Border>
-                                <Image/>
-                                <TextBlock/>
-                            </StackPanel>
-                        </HyperlinkButton>
-                        <HyperlinkButton>
-                            <StackPanel>
-                                <Border>
-                                    <TextBlock/>
-                                </Border>
-                                <Image/>
-                                <TextBlock/>
-                            </StackPanel>
-                        </HyperlinkButton>
-                        <HyperlinkButton>
-                            <StackPanel>
-                                <Image/>
-                                <TextBlock/>
-                            </StackPanel>
-                        </HyperlinkButton>
-                    </Grid>
-                    <Border/>
-                    <controls:ImageEx/>
-                    <TextBlock/>
-                    <TextBlock/>
-                    <HyperlinkButton>
-                        <TextBlock/>
+                    <Grid
+                        Name="ButtonPanel"
+                        RelativePanel.Below="PlayIconPanel"
+                        RelativePanel.AlignLeftWithPanel="True"
+                        RelativePanel.AlignRightWithPanel="True">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <HyperlinkButton Grid.Column="0">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="20"/>
+                                        <RowDefinition Height="50"/>
+                                        <RowDefinition Height="20"/>
+                                    </Grid.RowDefinitions>
+                                    <Border
+                                        HorizontalAlignment="Center"
+                                        Background="White" 
+                                        Grid.Row="0">
+                                    <TextBlock Text="{x:Bind Info.Share}"/>
+                                    </Border>
+                                    <Image 
+                                        HorizontalAlignment="Center"
+                                        Source="ms-appx:///Assets/Icon/daily_video_action_bg.png" 
+                                        Grid.Row="1"/>
+                                    <Image 
+                                        HorizontalAlignment="Center"
+                                        Grid.Row="1"
+                                        Source="ms-appx:///Assets/Icon/ic_share_green.png"/>
+                                    <TextBlock 
+                                        Grid.Row="2"
+                                        HorizontalAlignment="Center"
+                                        Text="分享"
+                                        FontSize="13"/>
+                                </Grid>
+                            </HyperlinkButton>
+                            <HyperlinkButton Grid.Column="1">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="20"/>
+                                        <RowDefinition Height="50"/>
+                                        <RowDefinition Height="20"/>
+                                    </Grid.RowDefinitions>
+                                    <Border
+                                        HorizontalAlignment="Center"
+                                        Background="White" 
+                                        Grid.Row="0">
+                                        <TextBlock Text="{x:Bind Info.Coin}"/>
+                                    </Border>
+                                    <Image 
+                                        HorizontalAlignment="Center"
+                                        Source="ms-appx:///Assets/Icon/daily_video_action_bg.png" 
+                                        Grid.Row="1"/>
+                                    <Image 
+                                        HorizontalAlignment="Center"
+                                        Grid.Row="1"
+                                        Source="ms-appx:///Assets/Icon/ic_coin.png"/>
+                                    <TextBlock 
+                                        Grid.Row="2"
+                                        HorizontalAlignment="Center"
+                                        Text="投硬币"
+                                        FontSize="13"/>
+                                </Grid>
+                            </HyperlinkButton>
+                            <HyperlinkButton Grid.Column="2">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="20"/>
+                                        <RowDefinition Height="50"/>
+                                        <RowDefinition Height="20"/>
+                                    </Grid.RowDefinitions>
+                                    <Border
+                                        HorizontalAlignment="Center"
+                                        Background="White" 
+                                        Grid.Row="0">
+                                        <TextBlock Text="{x:Bind Info.Favorite}"/>
+                                    </Border>
+                                    <Image 
+                                        HorizontalAlignment="Center"
+                                        Source="ms-appx:///Assets/Icon/daily_video_action_bg.png" 
+                                        Grid.Row="1"/>
+                                    <Image 
+                                        HorizontalAlignment="Center"
+                                        Grid.Row="1"
+                                        Source="ms-appx:///Assets/Icon/ic_collect.png"/>
+                                    <TextBlock 
+                                        Grid.Row="2"
+                                        HorizontalAlignment="Center"
+                                        Text="收藏"
+                                        FontSize="13"/>
+                                </Grid>
+                            </HyperlinkButton>
+                            <HyperlinkButton Grid.Column="3">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="20"/>
+                                        <RowDefinition Height="50"/>
+                                        <RowDefinition Height="20"/>
+                                    </Grid.RowDefinitions>
+                                    <Image 
+                                        HorizontalAlignment="Center"
+                                        Source="ms-appx:///Assets/Icon/daily_video_action_bg.png" 
+                                        Grid.Row="1"/>
+                                    <Image 
+                                        HorizontalAlignment="Center"
+                                        Grid.Row="1"
+                                        Source="ms-appx:///Assets/Icon/ic_download.png"/>
+                                    <TextBlock 
+                                        Grid.Row="2"
+                                        HorizontalAlignment="Center"
+                                        Text="缓存"
+                                        FontSize="13"/>
+                                </Grid>
+                            </HyperlinkButton>
+                        </Grid>
+                    <Border 
+                        Name="SLA"
+                        BorderBrush="Gray" 
+                        BorderThickness="0.5"
+                        RelativePanel.AlignLeftWithPanel="True"
+                        RelativePanel.AlignRightWithPanel="True"
+                        RelativePanel.Below="ButtonPanel"/>
+                        <Ellipse
+                            Name="FacePanel"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.Below="SLA"
+                            Height="40"
+                            Width="40">
+                            <Ellipse.Fill>
+                                <ImageBrush ImageSource="{x:Bind Info.Face}"/>
+                            </Ellipse.Fill>
+                        </Ellipse>
+                    <TextBlock
+                        Name="NamePanel"
+                        RelativePanel.Below="SLA"
+                        RelativePanel.RightOf="FacePanel"
+                        Text="{x:Bind Info.Name}"/>
+                    <TextBlock
+                        FontSize="13"
+                        Text="{x:Bind Info.PubDate}"
+                        RelativePanel.Below="NamePanel"
+                        RelativePanel.RightOf="FacePanel"/>
+                    <HyperlinkButton
+                        RelativePanel.AlignRightWithPanel="True"
+                        RelativePanel.Below="SLA">
+                        <TextBlock Text="+关注"/>
                     </HyperlinkButton>
-                    <HyperlinkButton>
-                        <StackPanel>
-                            <Image/>
-                            <TextBlock/>
+                    <HyperlinkButton
+                        Name="LiveCyclePanel"
+                        RelativePanel.Below="FacePanel"
+                        Background="White"
+                        RelativePanel.AlignLeftWithPanel="True"
+                        RelativePanel.AlignRightWithPanel="True">
+                        <StackPanel Orientation="Horizontal">
+                                <Image Source="ms-appx:///Assets/Icon/ic_live_fill.png"/>
+                                <TextBlock>
+                                    <Run Text="{x:Bind Info.Name}"/>
+                                    <Run Text="的直播间"/>
+                                </TextBlock>
                         </StackPanel>
                     </HyperlinkButton>
-                    <Border/>
-                    <TextBlock/>
-                    <GridView/>
-                    <Border/>
-                    <TextBlock/>
-                    <ListView/>
-                </RelativePanel>
-            </PivotItem>
+                    <Border
+                        Name="SLB"
+                        BorderBrush="Gray"
+                        BorderThickness="0.5"
+                        RelativePanel.Below="LiveCyclePanel"
+                        RelativePanel.AlignLeftWithPanel="True"
+                        RelativePanel.AlignRightWithPanel="True"/>
+                    <TextBlock
+                        Name="TagHeaderPanel"
+                        Text="标签相关"
+                        RelativePanel.Below="SLB"
+                        RelativePanel.AlignLeftWithPanel="True"
+                        RelativePanel.AlignRightWithPanel="True"/>
+                        <GridView
+                            ItemsSource="{x:Bind Info.Tags}"
+                            Name="TagPanel"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"
+                            RelativePanel.Below="TagHeaderPanel">
+                            <GridView.ItemsPanelTemplate>
+                                <wrap:WrapPanel/>
+                            </GridView.ItemsPanelTemplate>
+                            <GridView.ItemTemplate>
+                                <DataTemplate x:DataType="model:VideoTagViewModel">
+                                    <Border
+                                        Height="20"
+                                        BorderBrush="Gray"
+                                        BorderThickness="0.5"
+                                        CornerRadius="10">
+                                        <TextBlock Text="{x:Bind TagName}"/>
+                                    </Border>
+                                </DataTemplate>
+                            </GridView.ItemTemplate>
+                        </GridView>
+                        <Border
+                        Name="SLC"
+                        BorderBrush="Gray"
+                        BorderThickness="0.5"
+                        RelativePanel.Below="TagPanel"
+                        RelativePanel.AlignLeftWithPanel="True"
+                        RelativePanel.AlignRightWithPanel="True"/>
+                        <TextBlock
+                        Name="RelatesHeaderPanel"
+                        Text="视频相关"
+                        RelativePanel.Below="SLC"
+                        RelativePanel.AlignLeftWithPanel="True"
+                        RelativePanel.AlignRightWithPanel="True"/>
+                        <ListView
+                            ItemsSource="{x:Bind Info.Relates}"
+                            RelativePanel.Below="RelatesHeaderPanel"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True">
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:DataType="model:RegionItemViewModel">
+                                    <RelativePanel MaxWidth="400">
+                                        <controls:ImageEx
+                                    Margin="5"
+                                    Name="CoverPanel"
+                                    RelativePanel.AlignTopWithPanel="True"
+                                    RelativePanel.AlignLeftWithPanel="True"
+                                    RelativePanel.AlignBottomWithPanel="True"
+                                    Height="100"
+                                    Width="160"
+                                    Source="{x:Bind Cover}"/>
+                                        <TextBlock
+                                    Margin="5"
+                                    RelativePanel.RightOf="CoverPanel"
+                                    RelativePanel.AlignTopWithPanel="True"
+                                    TextWrapping="Wrap"
+                                    MaxLines="2"
+                                    TextTrimming="CharacterEllipsis"
+                                    Name="TitlePanel"
+                                    Text="{x:Bind Title}"/>
+                                        <Image 
+                                    Width="16"
+                                    Height="16"
+                                    Name="UpIconPanel"
+                                    RelativePanel.Below="TitlePanel"
+                                    RelativePanel.RightOf="CoverPanel"
+                                    Margin="5"
+                                    Source="ms-appx:///Assets/Icon/ic_category_up.png"/>
+                                        <TextBlock
+                                    Margin="3"
+                                    RelativePanel.Below="TitlePanel"
+                                    RelativePanel.RightOf="UpIconPanel"
+                                    Text="{x:Bind Name}"
+                                    Foreground="Gray"
+                                    FontSize="14"/>
+                                        <Image
+                                    Width="16"
+                                    Height="16"
+                                    Name="PlayIconPanel"
+                                    Margin="5"
+                                    RelativePanel.Below="UpIconPanel"
+                                    RelativePanel.RightOf="CoverPanel"
+                                    Source="ms-appx:///Assets/Icon/ic_info_views2.png"/>
+                                        <TextBlock
+                                    Margin="3"
+                                    Name="PlayPanel"
+                                    RelativePanel.Below="UpIconPanel"
+                                    RelativePanel.RightOf="PlayIconPanel"
+                                    Text="{x:Bind Play}"
+                                    Foreground="Gray"
+                                    FontSize="13"/>
+                                        <Image
+                                    Height="16"
+                                    Width="16"
+                                    Name="DanmukuIconPanel"
+                                    Margin="25,5,5,5"
+                                    RelativePanel.Below="UpIconPanel"
+                                    RelativePanel.RightOf="PlayPanel"
+                                    Source="ms-appx:///Assets/Icon/ic_info_danmakus2.png"/>
+                                        <TextBlock
+                                    Margin="3"
+                                    RelativePanel.RightOf="DanmukuIconPanel"
+                                    RelativePanel.Below="UpIconPanel"
+                                    Text="{x:Bind Danmaku}"
+                                    Foreground="Gray"
+                                    FontSize="13"/>
+                                    </RelativePanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+    </RelativePanel>
+                    <ListView>
+                        <ListView.Header>
+                            <Image/>
+                            
+                        </ListView.Header>
+                    </ListView>
+    </Grid>
+    </PivotItem>
         </Pivot>
         <local:MessageShow 
             x:Name="messShow" 

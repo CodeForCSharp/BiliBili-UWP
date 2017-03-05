@@ -138,14 +138,12 @@
     <Compile Include="Controls\LiveHomeFragment.xaml.cs">
       <DependentUpon>LiveHomeFragment.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\OrientedSize.cs" />
     <Compile Include="Controls\RegionPageFragment.xaml.cs">
       <DependentUpon>RegionPageFragment.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\SubPartionFragment.xaml.cs">
       <DependentUpon>SubPartionFragment.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\WrapPanel.cs" />
     <Compile Include="Controls\MessageShow.xaml.cs">
       <DependentUpon>MessageShow.xaml</DependentUpon>
     </Compile>
@@ -265,8 +263,7 @@
     <Content Include="Assets\Icon\bangumi_timeline_weekday_6.png" />
     <Content Include="Assets\Icon\bangumi_timeline_weekday_0.png" />
     <Content Include="Assets\Icon\bili_default_image_tv.9.png" />
-    <Content Include="Assets\Icon\DM.png" />
-    <Content Include="Assets\Icon\DY.png" />
+    <Content Include="Assets\Icon\daily_video_action_bg.png" />
     <Content Include="Assets\Icon\ic_btn_rank_all.png" />
     <Content Include="Assets\Icon\ic_category_t1.png" />
     <Content Include="Assets\Icon\ic_category_t11.png" />
@@ -362,6 +359,7 @@
     <Content Include="Assets\Icon\ic_hint_search.png" />
     <Content Include="Assets\Icon\ic_info_danmakus2.png" />
     <Content Include="Assets\Icon\ic_info_views2.png" />
+    <Content Include="Assets\Icon\ic_live_fill.png" />
     <Content Include="Assets\Icon\ic_photo_random.png" />
     <Content Include="Assets\Icon\ic_search_history.png" />
     <Content Include="Assets\Icon\ic_share_green.png" />
@@ -371,10 +369,6 @@
     <Content Include="Assets\Icon\live_home_follow_anchor.png" />
     <Content Include="Assets\Icon\live_home_live_center.png" />
     <Content Include="Assets\Icon\live_home_search_room.png" />
-    <Content Include="Assets\Icon\Play.png" />
-    <Content Include="Assets\Icon\Time.png" />
-    <Content Include="Assets\Icon\Type.png" />
-    <Content Include="Assets\Icon\up.png" />
     <Content Include="Assets\Icon\礼物.png" />
     <Content Include="Assets\ic_22.png" />
     <Content Include="Assets\ic_22_hide.png" />
