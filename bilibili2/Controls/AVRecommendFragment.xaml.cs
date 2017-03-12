@@ -58,8 +58,8 @@ namespace bilibili2
                         {
                             Cover = token["cover"].Value<string>(),
                             Title = token["title"].Value<string>(),
-                            Danmaku = token["danmaku"].Value<int>().ToString(),
-                            Play = token["play"].Value<int>().ToString(),
+                            Danmaku = token["danmaku"]?.Value<int>().ToString()??"-",
+                            Play = token["play"]?.Value<int>().ToString()??"-",
                             Param = token["param"].Value<string>()
                         }).Take(4);
                     var bangumis = model["data"]
@@ -94,8 +94,8 @@ namespace bilibili2
                             {
                                 Cover = item["cover"].Value<string>(),
                                 Title = item["title"].Value<string>(),
-                                Danmaku = item["danmaku"].Value<int>().ToString(),
-                                Play = item["play"].Value<int>().ToString(),
+                                Danmaku = item["danmaku"]?.Value<int>().ToString()??"-",
+                                Play = item["play"]?.Value<int>().ToString()??"-",
                                 Param = item["param"].Value<string>()
                             })
                         });

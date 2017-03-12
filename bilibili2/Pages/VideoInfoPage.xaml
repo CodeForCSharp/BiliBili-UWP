@@ -6,11 +6,12 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Class="bilibili2.VideoInfoPage"
     mc:Ignorable="d"
+    xmlns:localControl="using:bilibili2.Controls"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:wrap="using:Microsoft.Toolkit.Uwp.UI.Controls.WrapPanel"
     xmlns:model="using:bilibili2">
     <Page.Resources>
-        <SolidColorBrush x:Key="BG" x:Name="bg" Color="#FFDF85A0"></SolidColorBrush>
+        <SolidColorBrush x:Key="BG" x:Name="bg" Color="#FFDF85A0"/>
     </Page.Resources>
     <RelativePanel  Background="{ThemeResource Bili-Background}">
         <VisualStateManager.VisualStateGroups>
@@ -20,12 +21,6 @@
                         <AdaptiveTrigger MinWindowWidth="801"/>
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="com_bar.(Grid.Row)" Value="0"/>
-                        <Setter Target="com_bar.HorizontalAlignment" Value="Right"/>
-                        <Setter Target="Down_ComBar.(Grid.Row)" Value="0"/>
-                        <Setter Target="Down_ComBar.HorizontalAlignment" Value="Right"/>
-                        <Setter Target="grid_HotComment.Visibility" Value="Visible"></Setter>
-                        <Setter Target="width.Width" Value="*"></Setter>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="narrow">
@@ -33,34 +28,72 @@
                         <AdaptiveTrigger MinWindowWidth="0"/>
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="com_bar.(Grid.Row)" Value="3"/>
-                        <Setter Target="com_bar.HorizontalAlignment" Value="Stretch"/>
-                        <Setter Target="Down_ComBar.(Grid.Row)" Value="3"/>
-                        <Setter Target="Down_ComBar.HorizontalAlignment" Value="Stretch"/>
-                        <Setter Target="grid_HotComment.Visibility" Value="Collapsed"></Setter>
-                        <Setter Target="width.Width" Value="auto"></Setter>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-        <Pivot>
+        <AppBarButton
+            Name="BtnBack"
+            RelativePanel.AlignTopWithPanel="True"
+            RelativePanel.AlignLeftWithPanel="True"
+            Icon="Back"
+            Height="48"
+            Width="48"
+            Background="{StaticResource BG}"
+            Foreground="White"
+            Click="BtnBack_Click"/>
+        <Border
+            RelativePanel.RightOf="BtnBack"
+            RelativePanel.AlignTopWithPanel="True"
+            RelativePanel.AlignRightWithPanel="True"
+            Background="{StaticResource BG}"
+            Height="48">
+            <TextBlock
+                VerticalAlignment="Center"
+                Name="HeaderTxt"
+                Foreground="White"/>
+        </Border>
+        <Pivot
+            RelativePanel.Below="BtnBack"
+            RelativePanel.AlignLeftWithPanel="True"
+            RelativePanel.AlignRightWithPanel="True"
+            RelativePanel.AlignBottomWithPanel="True"
+            Style="{StaticResource PivotHeaderWithBackground}">
+            <Pivot.ItemContainerStyle>
+                <Style TargetType="PivotItem">
+                    <Setter Property="Margin" Value="0"/>
+                </Style>
+            </Pivot.ItemContainerStyle>
+            <Pivot.Resources>
+                <Style BasedOn="{StaticResource WhiteHeaderStyle}" TargetType="PivotHeaderItem"/>
+            </Pivot.Resources>
             <PivotItem Header="简介">
-                <Grid>
-                    <RelativePanel>
+                <ScrollViewer>
+                    <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <RelativePanel 
+                        Name="LeftPanel"
+                        Grid.Column="0">
                     <controls:ImageEx
+                        Margin="5"
                         Name="PicPanel"
                         RelativePanel.AlignLeftWithPanel="True"
                         RelativePanel.AlignRightWithPanel="True"
                         RelativePanel.AlignTopWithPanel="True"
-                        Source="{x:Bind Info.Pic}"
+                        Source="{x:Bind Info.Pic,Mode=OneWay}"
                         />
                     <TextBlock
+                        Margin="5"
                         Name="TitlePanel"
-                        Text="{x:Bind Info.Title}"
+                        Text="{x:Bind Info.Title,Mode=OneWay}"
                         RelativePanel.AlignLeftWithPanel="True"
                         RelativePanel.AlignRightWithPanel="True"
                         RelativePanel.Below="PicPanel"/>
                     <Image
+                        Margin="5"
                         Name="PlayIconPanel"
                         Height="20"
                         Width="20"
@@ -68,29 +101,43 @@
                         RelativePanel.AlignLeftWithPanel="True"
                         Source="ms-appx:///Assets/Icon/ic_info_views2.png"/>
                     <TextBlock
+                        Margin="5"
                         Foreground="Gray"
                         FontSize="14"
                         Name="PlayPanel"
                         RelativePanel.Below="TitlePanel"
                         RelativePanel.RightOf="PlayIconPanel"
-                        Text="{x:Bind Info.View}"
+                        Text="{x:Bind Info.View,Mode=OneWay}"
                         />
                     <Image
+                        Margin="10,5,5,5"
+                        Source="ms-appx:///Assets/Icon/ic_info_danmakus2.png"
                         Name="DanmakuIconPanel"
                         RelativePanel.RightOf="PlayPanel"
                         RelativePanel.Below="TitlePanel"
                         Height="20"
                         Width="20"/>
                     <TextBlock
+                        Margin="5"
                         FontSize="14"
-                        Text="{x:Bind Info.Danmaku}"
+                        Text="{x:Bind Info.Danmaku,Mode=OneWay}"
                         RelativePanel.RightOf="DanmakuIconPanel"
                         RelativePanel.Below="TitlePanel"
                         Foreground="Gray"/>
                     <TextBlock/>
-                    <Grid
+                            <TextBlock
+                                Margin="5"
+                                Name="DescPanel"
+                                RelativePanel.Below="PlayIconPanel"
+                                RelativePanel.AlignLeftWithPanel="True"
+                                RelativePanel.AlignRightWithPanel="True"
+                                TextWrapping="Wrap"
+                                Foreground="Gray"
+                                FontSize="13"
+                                Text="{x:Bind Info.Desc,Mode=OneWay}"/>
+                            <Grid
                         Name="ButtonPanel"
-                        RelativePanel.Below="PlayIconPanel"
+                        RelativePanel.Below="DescPanel"
                         RelativePanel.AlignLeftWithPanel="True"
                         RelativePanel.AlignRightWithPanel="True">
                             <Grid.ColumnDefinitions>
@@ -99,7 +146,9 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <HyperlinkButton Grid.Column="0">
+                            <HyperlinkButton
+                                HorizontalAlignment="Center"
+                                Grid.Column="0">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="20"/>
@@ -109,25 +158,34 @@
                                     <Border
                                         HorizontalAlignment="Center"
                                         Background="White" 
-                                        Grid.Row="0">
-                                    <TextBlock Text="{x:Bind Info.Share}"/>
+                                        Grid.Row="0"
+                                        CornerRadius="2">
+                                        <TextBlock 
+                                            Text="{x:Bind Info.Share,Mode=OneWay}"
+                                            Foreground="#FF36C27E"/>
                                     </Border>
                                     <Image 
                                         HorizontalAlignment="Center"
                                         Source="ms-appx:///Assets/Icon/daily_video_action_bg.png" 
                                         Grid.Row="1"/>
                                     <Image 
+                                        Width="30"
+                                        Height="30"
+                                        VerticalAlignment="Center"
                                         HorizontalAlignment="Center"
                                         Grid.Row="1"
                                         Source="ms-appx:///Assets/Icon/ic_share_green.png"/>
                                     <TextBlock 
+                                        Foreground="Black"
                                         Grid.Row="2"
                                         HorizontalAlignment="Center"
                                         Text="分享"
                                         FontSize="13"/>
                                 </Grid>
                             </HyperlinkButton>
-                            <HyperlinkButton Grid.Column="1">
+                            <HyperlinkButton
+                                HorizontalAlignment="Center"
+                                Grid.Column="1">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="20"/>
@@ -137,25 +195,34 @@
                                     <Border
                                         HorizontalAlignment="Center"
                                         Background="White" 
-                                        Grid.Row="0">
-                                        <TextBlock Text="{x:Bind Info.Coin}"/>
+                                        Grid.Row="0"
+                                        CornerRadius="2">
+                                        <TextBlock
+                                            Text="{x:Bind Info.Coin,Mode=OneWay}"
+                                            Foreground="#FFFBC02D"/>
                                     </Border>
                                     <Image 
                                         HorizontalAlignment="Center"
                                         Source="ms-appx:///Assets/Icon/daily_video_action_bg.png" 
                                         Grid.Row="1"/>
                                     <Image 
+                                        Width="30"
+                                        Height="30"
+                                        VerticalAlignment="Center"
                                         HorizontalAlignment="Center"
                                         Grid.Row="1"
                                         Source="ms-appx:///Assets/Icon/ic_coin.png"/>
                                     <TextBlock 
+                                        Foreground="Black"
                                         Grid.Row="2"
                                         HorizontalAlignment="Center"
                                         Text="投硬币"
                                         FontSize="13"/>
                                 </Grid>
                             </HyperlinkButton>
-                            <HyperlinkButton Grid.Column="2">
+                            <HyperlinkButton
+                                HorizontalAlignment="Center"
+                                Grid.Column="2">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="20"/>
@@ -165,25 +232,34 @@
                                     <Border
                                         HorizontalAlignment="Center"
                                         Background="White" 
-                                        Grid.Row="0">
-                                        <TextBlock Text="{x:Bind Info.Favorite}"/>
+                                        Grid.Row="0"
+                                        CornerRadius="2">
+                                        <TextBlock 
+                                            Text="{x:Bind Info.Favorite,Mode=OneWay}"
+                                            Foreground="#FFF59DB6"/>
                                     </Border>
                                     <Image 
                                         HorizontalAlignment="Center"
                                         Source="ms-appx:///Assets/Icon/daily_video_action_bg.png" 
                                         Grid.Row="1"/>
                                     <Image 
+                                        Width="30"
+                                        Height="30"
+                                        VerticalAlignment="Center"
                                         HorizontalAlignment="Center"
                                         Grid.Row="1"
                                         Source="ms-appx:///Assets/Icon/ic_collect.png"/>
                                     <TextBlock 
+                                        Foreground="Black"
                                         Grid.Row="2"
                                         HorizontalAlignment="Center"
                                         Text="收藏"
                                         FontSize="13"/>
                                 </Grid>
                             </HyperlinkButton>
-                            <HyperlinkButton Grid.Column="3">
+                            <HyperlinkButton
+                                HorizontalAlignment="Center"
+                                Grid.Column="3">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="20"/>
@@ -195,10 +271,14 @@
                                         Source="ms-appx:///Assets/Icon/daily_video_action_bg.png" 
                                         Grid.Row="1"/>
                                     <Image 
+                                        Width="30"
+                                        Height="30"
+                                        VerticalAlignment="Center"
                                         HorizontalAlignment="Center"
                                         Grid.Row="1"
                                         Source="ms-appx:///Assets/Icon/ic_download.png"/>
                                     <TextBlock 
+                                        Foreground="Black"
                                         Grid.Row="2"
                                         HorizontalAlignment="Center"
                                         Text="缓存"
@@ -206,48 +286,112 @@
                                 </Grid>
                             </HyperlinkButton>
                         </Grid>
-                    <Border 
-                        Name="SLA"
+                            <Border 
+                        Name="SL0"
                         BorderBrush="Gray" 
                         BorderThickness="0.5"
                         RelativePanel.AlignLeftWithPanel="True"
                         RelativePanel.AlignRightWithPanel="True"
                         RelativePanel.Below="ButtonPanel"/>
+                            <TextBlock
+                                Margin="5"
+                                Name="PartHeaderPanel"
+                                RelativePanel.Below="SL0"
+                                RelativePanel.AlignLeftWithPanel="True"
+                                RelativePanel.AlignRightWithPanel="True">
+                                <Run Text="分集（"/>
+                                <Run Text="{x:Bind Info.Pages.Count,Mode=OneWay}"/>
+                                <Run Text="）"/>
+                            </TextBlock>
+                            <localControl:AdaptiveGridView
+                                IsItemClickEnabled="True"
+                                ItemClick="PartPanel_ItemClick"
+                                ItemsSource="{x:Bind Info.Pages,Mode=OneWay}"
+                                x:Name="PartPanel"
+                                RelativePanel.Below="PartHeaderPanel"
+                                RelativePanel.AlignLeftWithPanel="True"
+                                RelativePanel.AlignRightWithPanel="True"
+                                ScrollViewer.VerticalScrollMode="Disabled"
+                                DesiredWidth="150"
+                                SelectionMode="None">
+                                <localControl:AdaptiveGridView.ItemTemplate>
+                                    <DataTemplate x:DataType="model:VideoPageViewModel">
+                                        <Border
+                                            Background="White"
+                                            CornerRadius="3"
+                                            BorderBrush="Gray"
+                                            BorderThickness="0.5"
+                                            Height="40">
+                                            <TextBlock
+                                                VerticalAlignment="Center"
+                                                FontSize ="13"
+                                                Text="{x:Bind Part}"
+                                                MaxLines="2"
+                                                TextWrapping="Wrap"
+                                                TextTrimming="CharacterEllipsis"
+                                                />
+                                        </Border>
+                                    </DataTemplate>
+                                </localControl:AdaptiveGridView.ItemTemplate>
+                            </localControl:AdaptiveGridView>
+                            <Border 
+                        Name="SLA"
+                        BorderBrush="Gray" 
+                        BorderThickness="0.5"
+                        RelativePanel.AlignLeftWithPanel="True"
+                        RelativePanel.AlignRightWithPanel="True"
+                        RelativePanel.Below="PartPanel"/>
                         <Ellipse
+                            Margin="5"
                             Name="FacePanel"
                             RelativePanel.AlignLeftWithPanel="True"
                             RelativePanel.Below="SLA"
-                            Height="40"
-                            Width="40">
+                            Height="50"
+                            Width="50">
                             <Ellipse.Fill>
-                                <ImageBrush ImageSource="{x:Bind Info.Face}"/>
+                                <ImageBrush ImageSource="{x:Bind Info.Face,Mode=OneWay}"/>
                             </Ellipse.Fill>
                         </Ellipse>
                     <TextBlock
+                        Margin="5"
                         Name="NamePanel"
                         RelativePanel.Below="SLA"
                         RelativePanel.RightOf="FacePanel"
-                        Text="{x:Bind Info.Name}"/>
+                        Text="{x:Bind Info.Name,Mode=OneWay}"/>
                     <TextBlock
+                        Margin="5"
                         FontSize="13"
-                        Text="{x:Bind Info.PubDate}"
+                        Text="{x:Bind Info.PubDate,Mode=OneWay}"
                         RelativePanel.Below="NamePanel"
                         RelativePanel.RightOf="FacePanel"/>
                     <HyperlinkButton
+                        Margin="5"
+                        BorderBrush="{StaticResource BG}"
+                        BorderThickness="0.5"
+                        Foreground="{StaticResource BG}"
                         RelativePanel.AlignRightWithPanel="True"
                         RelativePanel.Below="SLA">
                         <TextBlock Text="+关注"/>
                     </HyperlinkButton>
                     <HyperlinkButton
+                        Margin="5"
                         Name="LiveCyclePanel"
                         RelativePanel.Below="FacePanel"
                         Background="White"
                         RelativePanel.AlignLeftWithPanel="True"
-                        RelativePanel.AlignRightWithPanel="True">
+                        RelativePanel.AlignRightWithPanel="True"
+                        HorizontalContentAlignment="Stretch"
+                        HorizontalAlignment="Stretch">
                         <StackPanel Orientation="Horizontal">
-                                <Image Source="ms-appx:///Assets/Icon/ic_live_fill.png"/>
-                                <TextBlock>
-                                    <Run Text="{x:Bind Info.Name}"/>
+                                <controls:ImageEx
+                                    Foreground="#FFFBC02D"
+                                    Width="20"
+                                    Height="20"
+                                    Source="ms-appx:///Assets/Icon/ic_live_fill.png"/>
+                                    <TextBlock
+                                        Foreground="#FFFBC02D">
+                                    <Run Text="正在轮播 :"/>
+                                    <Run Text="{x:Bind Info.Name,Mode=OneWay}"/>
                                     <Run Text="的直播间"/>
                                 </TextBlock>
                         </StackPanel>
@@ -260,28 +404,36 @@
                         RelativePanel.AlignLeftWithPanel="True"
                         RelativePanel.AlignRightWithPanel="True"/>
                     <TextBlock
+                        Margin="5"
                         Name="TagHeaderPanel"
                         Text="标签相关"
                         RelativePanel.Below="SLB"
                         RelativePanel.AlignLeftWithPanel="True"
                         RelativePanel.AlignRightWithPanel="True"/>
                         <GridView
-                            ItemsSource="{x:Bind Info.Tags}"
+                            SelectionMode="None"
+                            ItemsSource="{x:Bind Info.Tags,Mode=OneWay}"
                             Name="TagPanel"
                             RelativePanel.AlignLeftWithPanel="True"
                             RelativePanel.AlignRightWithPanel="True"
                             RelativePanel.Below="TagHeaderPanel">
-                            <GridView.ItemsPanelTemplate>
-                                <wrap:WrapPanel/>
-                            </GridView.ItemsPanelTemplate>
+                            <GridView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <wrap:WrapPanel/>
+                                </ItemsPanelTemplate>
+                            </GridView.ItemsPanel>
                             <GridView.ItemTemplate>
                                 <DataTemplate x:DataType="model:VideoTagViewModel">
                                     <Border
-                                        Height="20"
+                                        Background="White"
+                                        Height="30"
                                         BorderBrush="Gray"
                                         BorderThickness="0.5"
-                                        CornerRadius="10">
-                                        <TextBlock Text="{x:Bind TagName}"/>
+                                        CornerRadius="15">
+                                        <TextBlock 
+                                            Margin="5"
+                                            Text="{x:Bind TagName,Mode=OneWay}"
+                                            FontSize="14"/>
                                     </Border>
                                 </DataTemplate>
                             </GridView.ItemTemplate>
@@ -294,19 +446,21 @@
                         RelativePanel.AlignLeftWithPanel="True"
                         RelativePanel.AlignRightWithPanel="True"/>
                         <TextBlock
+                            Margin="5"
                         Name="RelatesHeaderPanel"
                         Text="视频相关"
                         RelativePanel.Below="SLC"
                         RelativePanel.AlignLeftWithPanel="True"
                         RelativePanel.AlignRightWithPanel="True"/>
                         <ListView
-                            ItemsSource="{x:Bind Info.Relates}"
+                            SelectionMode="None"
+                            ItemsSource="{x:Bind Info.Relates,Mode=OneWay}"
                             RelativePanel.Below="RelatesHeaderPanel"
                             RelativePanel.AlignLeftWithPanel="True"
                             RelativePanel.AlignRightWithPanel="True">
                             <ListView.ItemTemplate>
                                 <DataTemplate x:DataType="model:RegionItemViewModel">
-                                    <RelativePanel MaxWidth="400">
+                                    <RelativePanel>
                                         <controls:ImageEx
                                     Margin="5"
                                     Name="CoverPanel"
@@ -376,14 +530,127 @@
                             </ListView.ItemTemplate>
                         </ListView>
     </RelativePanel>
-                    <ListView>
+                    <ListView
+                        SelectionMode="None"
+                        ItemsSource="{x:Bind Replies}"
+                        Grid.Column="1">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
                         <ListView.Header>
-                            <Image/>
-                            
+                            <StackPanel Orientation="Horizontal">
+                                    <Image
+                                        Margin="5"
+                                        Width="20"
+                                        Height="20"
+                                        Source="ms-appx:///Assets/Icon/ic_header_hot.png"/>
+                                <TextBlock 
+                                    Margin="5"
+                                    Text="热门评论"/>
+                            </StackPanel>
                         </ListView.Header>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="model:VideoReplyViewModel">
+                                    <RelativePanel>
+                                        <Ellipse
+                                            Margin="5"
+                                            Name="FacePanel"
+                                            RelativePanel.AlignLeftWithPanel="True"
+                                            RelativePanel.AlignTopWithPanel="True"
+                                            Height="50"
+                                            Width="50">
+                                            <Ellipse.Fill>
+                                                <ImageBrush ImageSource="{x:Bind Face}"/>
+                                            </Ellipse.Fill>
+                                        </Ellipse>
+                                        <Image
+                                            RelativePanel.AlignHorizontalCenterWith="FacePanel"
+                                            Margin="5"
+                                            RelativePanel.Below="FacePanel"
+                                            Height="15"
+                                            Width="30"
+                                            Source="{x:Bind Level}"/>
+                                        <TextBlock
+                                            Margin="5"
+                                            Name="NamePanel"
+                                            RelativePanel.RightOf="FacePanel"
+                                            RelativePanel.AlignTopWithPanel="True"
+                                            Text="{x:Bind Name}"/>
+                                        <TextBlock
+                                            Margin="5"
+                                            Width="30"
+                                            Name="FloorPanel"
+                                            RelativePanel.RightOf="FacePanel"
+                                            RelativePanel.Below="NamePanel"
+                                            Foreground="Gray"
+                                            FontSize="13"
+                                            Text="{x:Bind Floor}"/>
+                                        <TextBlock
+                                            Margin="5"
+                                            RelativePanel.Below="NamePanel"
+                                            RelativePanel.RightOf="FloorPanel"
+                                            Foreground="Gray"
+                                            FontSize="13"
+                                            Text="{x:Bind Ctime}"/>
+                                        <HyperlinkButton
+                                            Margin="5"
+                                            RelativePanel.AlignTopWithPanel="True"
+                                            RelativePanel.LeftOf="DisagreePanel">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image 
+                                                    Width="15"
+                                                    Height="15"
+                                                    Source="ms-appx:///Assets/Icon/ic_feedback_like_grey.png"/>
+                                                <TextBlock
+                                                    FontSize="13"
+                                                    Foreground="Gray"
+                                                    Text="{x:Bind Like}"/>
+                                            </StackPanel>
+                                        </HyperlinkButton>
+                                        <HyperlinkButton
+                                            Margin="5"
+                                            Name="DisagreePanel"
+                                            RelativePanel.AlignTopWithPanel="True"
+                                            RelativePanel.AlignRightWithPanel="True">
+                                            <Image 
+                                                Height="15"
+                                                Width="15"
+                                                Source="ms-appx:///Assets/Icon/ic_feedback_disagree_grey.png"/>
+                                        </HyperlinkButton>
+                                        <TextBlock
+                                            Margin="5"
+                                            Name="ContentPanel"
+                                            RelativePanel.Below="FloorPanel"
+                                            RelativePanel.RightOf="FacePanel"
+                                            RelativePanel.AlignRightWithPanel="True"
+                                            Text="{x:Bind Content}"
+                                            TextWrapping="Wrap"/>
+                                        <TextBlock
+                                            Margin="5"
+                                            RelativePanel.RightOf="FacePanel"
+                                            RelativePanel.Below="ContentPanel"
+                                            Foreground="Gray"
+                                            FontSize="13"
+                                            Text="{x:Bind Rcount}"/>
+                                    </RelativePanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
                     </ListView>
     </Grid>
-    </PivotItem>
+                </ScrollViewer>
+            </PivotItem>
+            <PivotItem>
+                <PivotItem.Header>
+                    <TextBlock>
+                        <Run Text="评论（"/>
+                        <Run Text="{x:Bind Info.Reply,Mode=OneWay}"/>
+                        <Run Text="）"/>
+                    </TextBlock>
+                </PivotItem.Header>
+                
+            </PivotItem>
         </Pivot>
         <local:MessageShow 
             x:Name="messShow" 

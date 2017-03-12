@@ -55,14 +55,7 @@ namespace bilibili2.Pages
         string root = "";
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            object[] o = e.Parameter as object[];
-            bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
-            grid_Commnet.DataContext = o[0] as CommentModel;
-            ListView_Flyout.Items.Clear();
-            ps = 1;
-            aid = o[1].ToString();
-            rootsid = ((CommentModel)o[0]).rpid;
-            await GetComments(o[1].ToString(), ((CommentModel)o[0]).rpid);
+
         }
         private async Task GetComments(string aid, string rootid)
         {
@@ -74,43 +67,6 @@ namespace bilibili2.Pages
                 WebClientClass wc = new WebClientClass();
                 Random r = new Random();
                 string results = await wc.GetResults(new Uri("http://api.bilibili.com/x/reply/reply?oid=" + aid + "&pn=1&ps=20&root=" + rootid + "&type=1&r=" + r.Next(1000, 99999)));
-                CommentModel model = JsonConvert.DeserializeObject<CommentModel>(results);
-                CommentModel model3 = JsonConvert.DeserializeObject<CommentModel>(model.data.ToString());
-                List<CommentModel> ban = JsonConvert.DeserializeObject<List<CommentModel>>(model3.replies.ToString());
-                ListView_Flyout.Items.Clear();
-                foreach (CommentModel item in ban)
-                {
-                    CommentModel model1 = new CommentModel();
-                    model1 = JsonConvert.DeserializeObject<CommentModel>(item.member.ToString());
-                    CommentModel model2 = new CommentModel();
-                    model2 = JsonConvert.DeserializeObject<CommentModel>(item.content.ToString());
-                    CommentModel modelLV = JsonConvert.DeserializeObject<CommentModel>(model1.level_info.ToString());
-                    CommentModel resultsModel = new CommentModel()
-                    {
-                        avatar = model1.avatar,
-                        message = model2.message,
-                        plat = model2.plat,
-                        floor = item.floor,
-                        uname = model1.uname,
-                        mid = model1.mid,
-                        ctime = item.ctime,
-                        like = item.like,
-                        rcount = item.rcount,
-                        rpid = item.rpid,
-                        current_level=modelLV.current_level
-                    };
-                    ListView_Flyout.Items.Add(resultsModel);
-                    if (ban.Count == 0)
-                    {
-                        btn_Load_More.Content = "加载完了...";
-                        btn_Load_More.IsEnabled = false;
-                    }
-                    else
-                    {
-                        btn_Load_More.Content = "加载更多";
-                        btn_Load_More.IsEnabled = true;
-                    }
-                }
             }
             catch (Exception ex)
             {
@@ -132,45 +88,6 @@ namespace bilibili2.Pages
                 WebClientClass wc = new WebClientClass();
                 Random r = new Random();
                 string results = await wc.GetResults(new Uri("http://api.bilibili.com/x/reply/reply?oid=" + aid + "&pn=" + num + "&ps=20&root=" + rootid + "&type=1&r=" + r.Next(1000, 99999)));
-                CommentModel model = JsonConvert.DeserializeObject<CommentModel>(results);
-                CommentModel model3 = JsonConvert.DeserializeObject<CommentModel>(model.data.ToString());
-                //Video_Grid_Info.DataContext = model;
-                List<CommentModel> ban = JsonConvert.DeserializeObject<List<CommentModel>>(model3.replies.ToString());
-
-                foreach (CommentModel item in ban)
-                {
-                    CommentModel model1 = new CommentModel();
-                    model1 = JsonConvert.DeserializeObject<CommentModel>(item.member.ToString());
-                    CommentModel model2 = new CommentModel();
-                    model2 = JsonConvert.DeserializeObject<CommentModel>(item.content.ToString());
-                    CommentModel modelLV = JsonConvert.DeserializeObject<CommentModel>(model1.level_info.ToString());
-                    CommentModel resultsModel = new CommentModel()
-                    {
-                        avatar = model1.avatar,
-                        message = model2.message,
-                        plat = model2.plat,
-                        floor = item.floor,
-                        uname = model1.uname,
-                        mid = model1.mid,
-                        ctime = item.ctime,
-                        like = item.like,
-                        rcount = item.rcount,
-                        rpid = item.rpid,
-                        current_level=modelLV.current_level
-                    };
-                    ListView_Flyout.Items.Add(resultsModel);
-                }
-                if (ban.Count == 0)
-                {
-                    btn_Load_More.Content = "加载完了...";
-                    btn_Load_More.IsEnabled = false;
-                }
-                else
-                {
-                    btn_Load_More.Content = "加载更多";
-                    btn_Load_More.IsEnabled = true;
-                }
-
             }
             catch (Exception ex)
             {
@@ -184,54 +101,54 @@ namespace bilibili2.Pages
 
         private async void btn_Zan_Click(object sender, RoutedEventArgs e)
         {
-            string rpid = ((sender as HyperlinkButton).DataContext as CommentModel).rpid;
-            UserClass getUser = new UserClass();
-            if (getUser.IsLogin())
-            {
-                try
-                {
-                    Uri ReUri = new Uri("http://api.bilibili.com/x/reply/action");
+            //string rpid = ((sender as HyperlinkButton).DataContext as CommentModel).rpid;
+            //UserClass getUser = new UserClass();
+            //if (getUser.IsLogin())
+            //{
+            //    try
+            //    {
+            //        Uri ReUri = new Uri("http://api.bilibili.com/x/reply/action");
 
-                    HttpClient hc = new HttpClient();
-                    hc.DefaultRequestHeaders.Referer = new Uri("http://www.bilibili.com/");
-                    string sendString = "";
-                    if (((sender as HyperlinkButton).Content as TextBlock).Text == "赞同")
-                    {
-                        sendString = "jsonp=jsonp&oid=" + aid + "&type=1&rpid=" + rpid + "&action=1";
-                    }
-                    else
-                    {
-                        sendString = "jsonp=jsonp&oid=" + aid + "&type=1&rpid=" + rpid + "&action=0";
-                    }
-                    var response = await hc.PostAsync(ReUri, new HttpStringContent(sendString, Windows.Storage.Streams.UnicodeEncoding.Utf8, "application/x-www-form-urlencoded"));
-                    response.EnsureSuccessStatusCode();
-                    string result = await response.Content.ReadAsStringAsync();
-                    JObject json = JObject.Parse(result);
-                    if ((int)json["code"] == 0)
-                    {
-                        if (((sender as HyperlinkButton).Content as TextBlock).Text == "赞同")
-                        {
-                            ((sender as HyperlinkButton).Content as TextBlock).Text = "取消赞";
-                        }
-                        else
-                        {
-                            ((sender as HyperlinkButton).Content as TextBlock).Text = "赞同";
-                        }
-                    }
-                    else
-                    {
-                        messShow.Show("点赞失败\r\n"+ result, 3000);
-                    }
+            //        HttpClient hc = new HttpClient();
+            //        hc.DefaultRequestHeaders.Referer = new Uri("http://www.bilibili.com/");
+            //        string sendString = "";
+            //        if (((sender as HyperlinkButton).Content as TextBlock).Text == "赞同")
+            //        {
+            //            sendString = "jsonp=jsonp&oid=" + aid + "&type=1&rpid=" + rpid + "&action=1";
+            //        }
+            //        else
+            //        {
+            //            sendString = "jsonp=jsonp&oid=" + aid + "&type=1&rpid=" + rpid + "&action=0";
+            //        }
+            //        var response = await hc.PostAsync(ReUri, new HttpStringContent(sendString, Windows.Storage.Streams.UnicodeEncoding.Utf8, "application/x-www-form-urlencoded"));
+            //        response.EnsureSuccessStatusCode();
+            //        string result = await response.Content.ReadAsStringAsync();
+            //        JObject json = JObject.Parse(result);
+            //        if ((int)json["code"] == 0)
+            //        {
+            //            if (((sender as HyperlinkButton).Content as TextBlock).Text == "赞同")
+            //            {
+            //                ((sender as HyperlinkButton).Content as TextBlock).Text = "取消赞";
+            //            }
+            //            else
+            //            {
+            //                ((sender as HyperlinkButton).Content as TextBlock).Text = "赞同";
+            //            }
+            //        }
+            //        else
+            //        {
+            //            messShow.Show("点赞失败\r\n"+ result, 3000);
+            //        }
 
-                }
-                catch (Exception)
-                {
-                }
-            }
-            else
-            {
-                messShow.Show("请先登录!", 3000);
-            }
+                //}
+                //catch (Exception)
+                //{
+                //}
+            //}
+            //else
+            //{
+            //    messShow.Show("请先登录!", 3000);
+            //}
         }
         bool canLoad = true;
         private async void sv1_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
@@ -250,8 +167,8 @@ namespace bilibili2.Pages
 
         private void ListView_Flyout_ItemClick(object sender, ItemClickEventArgs e)
         {
-            root = (e.ClickedItem as CommentModel).rpid;
-            txt_Com_1.Text = "回复 @" + (e.ClickedItem as CommentModel).uname + ":";
+            //root = (e.ClickedItem as CommentModel).rpid;
+            //txt_Com_1.Text = "回复 @" + (e.ClickedItem as CommentModel).uname + ":";
         }
 
         private async void btn_Load_More_Click(object sender, RoutedEventArgs e)
@@ -323,8 +240,8 @@ namespace bilibili2.Pages
 
         private void HyperlinkButton_Click(object sender, RoutedEventArgs e)
         {
-            CommentModel model = (sender as HyperlinkButton).DataContext as CommentModel;
-            this.Frame.Navigate(typeof(UserInfoPage), model.mid);
+            //CommentModel model = (sender as HyperlinkButton).DataContext as CommentModel;
+            //this.Frame.Navigate(typeof(UserInfoPage), model.mid);
         }
     }
 }

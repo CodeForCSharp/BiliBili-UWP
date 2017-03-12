@@ -311,13 +311,6 @@
                                 <TextBlock Foreground="Gray" Margin="0 5">
 									<Run Text="诚挚感谢以下小伙伴的帮助(排名不分先后)"/>
                                 </TextBlock>
-                                <WrapPanel:WrapPanel  Visibility="Visible">
-                                    <HyperlinkButton NavigateUri="http://toosame.com/m/" Margin="5 0">旋风小伙(微页开发者)</HyperlinkButton>
-                                    <HyperlinkButton Margin="5 0">Dearest匿爱</HyperlinkButton>
-                                    <HyperlinkButton  Margin="5 0">狮子座</HyperlinkButton>
-                                    <HyperlinkButton  Margin="5 0">夜仲泪雪</HyperlinkButton>
-                                    <HyperlinkButton NavigateUri="https://github.com/CodeForCSharp" Margin="5 0">CodeForCSharp</HyperlinkButton>
-                                </WrapPanel:WrapPanel>
                                 <TextBlock FontSize="18" >
 									<Run Text="引用及参考"/>
                                 </TextBlock>

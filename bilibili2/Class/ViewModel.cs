@@ -20,110 +20,6 @@ namespace bilibili2
         public string Image { get; set; }
         public string Uri { get; set; }
     }
-    //视频详细信息
-    public class VideoInfoModel
-    {
-        public int code { get; set; }
-        public string error { get; set; }
-
-        public object list { get; set; }
-        public string pic { get; set; }
-        public string title { get; set; }
-        public string play { get; set; }
-        public string typename { get; set; }
-        public string author { get; set; }
-        public string video_review { get; set; }
-        public string description { get; set; }
-        public string mid { get; set; }
-        public string aid { get; set; }
-        public string created_at { get; set; }
-        public string favorites { get; set; }
-        public string face { get; set; }
-
-        public string coins { get; set; }
-        public string page { get; set; }
-        public string part { get; set; }
-        public string cid { get; set; }
-        public string tag { get; set; }
-
-        public string Play
-        {
-            get
-            {
-                if (Convert.ToInt32(play) > 10000)
-                {
-                    double d = (double)Convert.ToDouble(play) / 10000;
-                    return d.ToString("0.0") + "万";
-                }
-                else
-                {
-                    return play;
-                }
-            }
-        }
-        public string Video_review
-        {
-            get
-            {
-                if (Convert.ToInt32(video_review) > 10000)
-                {
-                    double d = (double)Convert.ToDouble(video_review) / 10000;
-                    return d.ToString("0.0") + "万";
-                }
-                else
-                {
-                    return video_review;
-                }
-            }
-        }
-        public string Favorites
-        {
-            get
-            {
-                if (Convert.ToInt32(favorites) > 10000)
-                {
-                    double d = (double)Convert.ToDouble(favorites) / 10000;
-                    return d.ToString("0.0") + "万";
-                }
-                else
-                {
-                    return favorites;
-                }
-            }
-        }
-        public string Coins
-        {
-            get
-            {
-                if (Convert.ToInt32(coins) > 10000)
-                {
-                    double d = (double)Convert.ToDouble(coins) / 10000;
-                    return d.ToString("0.0") + "万";
-                }
-                else
-                {
-                    return coins;
-                }
-            }
-        }
-
-        public string Created_at {
-            get
-            {
-                DateTime dt = Convert.ToDateTime(created_at);
-                if (dt.Date == DateTime.Now.Date)
-                {
-                    TimeSpan ts = DateTime.Now - dt;
-                    return ts.Hours + "小时前";
-                }
-                else
-                {
-                    return created_at;
-                }
-            }
-        }
-
-    }
     //视频信息
     public class VideoModel
     {
@@ -250,92 +146,6 @@ namespace bilibili2
             }
         }
 
-    }
-    //评论
-    public class CommentModel
-    {
-
-        public object data { get; set; }
-        public object replies { get; set; }
-        public object member { get; set; }
-        public object content { get; set; }
-        public object level_info { get; set; }
-        public string avatar { get; set; }
-        public string uname { get; set; }
-        public string floor { get; set; }
-        public string rpid { get; set; }
-        public long ctime { set; get; }
-        public int plat { get; set; }
-        public string Plat
-        {
-            get
-            {
-                switch (plat)
-                {
-                    case 2:
-                        return "来自 Android";
-                    case 3:
-                        return "来自 IOS";
-                    case 4:
-                        return "来自 WindowsPhone";
-                    case 6:
-                        return "来自 Windows";
-                    default:
-                        return "";
-                }
-            }
-        }
-        public string mid { get; set; }
-        public string time
-        {
-            get
-            {
-                DateTime dtStart = new DateTime(1970, 1, 1);
-                long lTime = long.Parse(ctime + "0000000");
-                //long lTime = long.Parse(textBox1.Text);
-                TimeSpan toNow = new TimeSpan(lTime);
-                return dtStart.Add(toNow).ToLocalTime().ToString();
-            }
-        }
-        public string rcount { get; set; }
-        public string like { get; set; }
-        public string message { get; set; }
-        public int current_level { get; set; }
-        public string LV
-        {
-            get
-            {
-                switch (current_level)
-                {
-                    case 0:
-                        return "ms-appx:///Assets/MiniIcon/ic_lv0_large.png";
-                    case 1:
-                        return "ms-appx:///Assets/MiniIcon/ic_lv1_large.png";
-                    case 2:
-                        return "ms-appx:///Assets/MiniIcon/ic_lv2_large.png";
-                    case 3:
-                        return "ms-appx:///Assets/MiniIcon/ic_lv3_large.png";
-                    case 4:
-                        return "ms-appx:///Assets/MiniIcon/ic_lv4_large.png";
-                    case 5:
-                        return "ms-appx:///Assets/MiniIcon/ic_lv5_large.png";
-                    case 6:
-                        return "ms-appx:///Assets/MiniIcon/ic_lv6_large.png";
-                    default:
-                        return "";
-                }
-            }
-        }
-    }
-    //视频相关
-    public class RecommendModel
-    {
-        public string dm_count { get; set; }
-        public string title { get; set; }
-        public string id { get; set; }
-        public string click { get; set; }
-        public string pic { get; set; }
-        public string author_name { get; set; }
     }
     //这个Model用来保存登录请求的access_key
     public class LoginModel
@@ -535,13 +345,6 @@ namespace bilibili2
             }
         }
     }
-    //热门搜索
-    public class HotModel
-    {
-        public object list { get; set; }
-        public string keyword { get; set; }
-        public string status { get; set; }
-    }
     //用户追番
     public class GetUserBangumi
     {
@@ -620,37 +423,6 @@ namespace bilibili2
             }
         }
 
-    }
-    //话题
-    public class TopicModel
-    {
-        public int results { get; set; }
-        public object list { get; set; }
-        public string title { get; set; }
-        public string img { get; set; }
-        public string link { get; set; }
-    }
-    //番剧更新表
-    public class BangumiTimeLineModel
-    {
-        public object list { get; set; }
-        public string bgmcount { get; set; }
-        public string cover { get; set; }
-        public string lastupdate_at { get; set; }
-        public string title { get; set; }
-        public string square_cover { get; set; }
-        public int weekday { get; set; }
-        public string spid { get; set; }
-        public string season_id { get; set; }
-    }
-    //番剧索引
-    public class TagModel
-    {
-        public object result { get; set; }
-        public string cover { get; set; }
-        public int index { get; set; }
-        public int tag_id { get; set; }
-        public string tag_name { get; set; }
     }
     //番剧信息
     public class BangumiInfoModel
@@ -811,57 +583,6 @@ namespace bilibili2
                 return String.Format("{0}万人订阅", (double)favorites / 10000);
             }
         }
-    }
-
-    public class BannumiIndexModel
-    {
-        public object result { get; set; }
-        //最近更新
-        public object latestUpdate { get; set; }
-        public object list { get; set; }
-        public string title { get; set; }
-        public int watchingCount { get; set; }
-        public string newest_ep_index { get; set; }
-        public string cover { get; set; }
-        public string newest_ep_id { get; set; }
-        public string season_id { get; set; }
-        //分类
-        public object categories { get; set; }
-        public object category { get; set; }
-        public string bangumi_title { get; set; }
-        public int spid { get; set; }
-        public string bangumi_id { get; set; }
-        public string total_count { get; set; }
-
-        //分类推荐信息
-        public object recommendCategory { get; set; }
-        public string tag_name { get; set; }
-        public string tag_id { get; set; }
-    }
-
-    //番剧Banner
-    public class BanBannerModel
-    {
-        public int code { get; set; }
-        public string message { get; set; }
-        public object result { get; set; }
-        public object banners { get; set; }
-        public string img { get; set; }
-        public string title { get; set; }
-        public string link { get; set; }
-    }
-
-    public class BanTJModel
-    {
-        public int code { get; set; }
-        public string message { get; set; }
-        public object result { get; set; }
-        public int id { get; set; }
-        public string title { get; set; }
-        public string cover { get; set; }
-        public string desc { get; set; }
-        public string link { get; set; }
-        public string cursor { get; set; }//以防万一数字太大，用string
     }
 
     public class FavboxModel
@@ -1239,6 +960,7 @@ namespace bilibili2
         public string Share { get; set; }
         public string PubDate { get; set; }
         public List<RegionItemViewModel> Relates { get; set; }
+        public List<VideoPageViewModel> Pages { get; set; }
     }
 
     public class VideoTagViewModel
@@ -1248,6 +970,30 @@ namespace bilibili2
         public int Likes { get; set; }
         public int Hates { get; set; }
     }
+
+    public class VideoPageViewModel
+    {
+        public int Cid { get; set; }
+        public int Page { get; set; }
+        public string Part { get; set; }
+    }
+
+    public class VideoReplyViewModel
+    {
+        public int Rpid { get; set; }
+        public int Oid { get; set; }
+        public int Like { get; set; }
+        public string Floor { get; set; }
+        public string Level { get; set; }
+        public string Mid { get; set; }
+        public string Rcount { get; set; }
+        public string Face { get; set; }
+        public string Name { get; set; }
+        public string Ctime { get; set; }
+        public string Content { get; set; }
+        public List<VideoReplyViewModel> Replies { get; set; }
+    }
+
     public class MessageModel
     {
         public int code { get; set; }

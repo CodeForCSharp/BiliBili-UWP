@@ -132,5 +132,17 @@ namespace bilibili2.Class
             }
             return $"{timeCalled}{date.Hour}:{date.Minute:D2}";
         }
+
+        public static string SimplifyTimes(double times)
+        {
+            return times >= 10000 ? $"{times / 10000:.00}万" : $"{times}";
+        }
+
+        public static string TickToDate(long tick)
+        {
+            var pivot = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            var pubdate = pivot + TimeSpan.FromSeconds(tick);
+            return pubdate.ToString("yyyy-MM-dd hh:mm:ss");
+        }
     }
 }

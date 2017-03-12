@@ -123,7 +123,7 @@ namespace bilibili2.Pages
         DispatcherTimer datetimer = new DispatcherTimer();//用于更新时间
         SettingHelper setting = new SettingHelper();
         List<DanmakuViewModel> DanMuPool = null;
-        List<VideoModel> VideoList = new List<VideoModel>();//视频列表
+        List<VideoPageViewModel> VideoList = new List<VideoPageViewModel>();//视频列表
         string device = Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily;
         int PlayP = 0;//播放第几P
         bool LoadDanmu = true;
@@ -141,8 +141,11 @@ namespace bilibili2.Pages
             datetimer.Interval = new TimeSpan(0, 0, 1);
             datetimer.Tick += Datetimer_Tick;
             datetimer.Start();
-            VideoList = ((KeyValuePair<List<VideoModel>, int>)e.Parameter).Key;
-            PlayP= ((KeyValuePair<List<VideoModel>, int>)e.Parameter).Value;
+            if(e.Parameter is KeyValuePair<List<VideoPageViewModel>, int> model)
+            {
+                VideoList = model.Key;
+                PlayP = model.Value;
+            }
             if (VideoList.Count<=1)
             {
                 btn_Menu.Visibility = Visibility.Collapsed;
@@ -155,7 +158,7 @@ namespace bilibili2.Pages
             }
             GetSetting();
            
-            await PlayVideo(VideoList[PlayP]);
+            await PlayVideo(VideoList[PlayP-1]);
             Is = true;
             timer.Interval = new TimeSpan(0, 0, 0, 1);
             timer.Tick += Timer_Tick;
@@ -163,19 +166,19 @@ namespace bilibili2.Pages
             player.Play();
         }
 
-        private async Task PlayVideo(VideoModel model)
+        private async Task PlayVideo(VideoPageViewModel model)
         {
-            model.cid = Convert.ToInt64(double.Parse(model.cid)).ToString();
-            if (model.path!=null)
-            {
-               PlayLocalOld(model);
-                return;
-            }
+            //model.cid = Convert.ToInt64(double.Parse(model.cid)).ToString();
+            //if (model.path!=null)
+            //{
+            //   PlayLocalOld(model);
+            //    return;
+            //}
             progress.Visibility = Visibility.Visible;
-            top_Title.Text = model.title + " " + model.page;
+            top_Title.Text = model.Part + " " + model.Page;
             pro_Num.Text = "填充弹幕中...";
-            Cid = model.cid;
-            Aid = model.aid;
+            Cid = model.Cid.ToString();
+            //Aid = model.aid;
             //if (sql.ValuesExists(Cid))
             //{
             //    menu_LastPost.IsEnabled = true;
@@ -187,9 +190,9 @@ namespace bilibili2.Pages
             //    sql.InsertValue(Cid);
             //}
             lastPostVIs = false;
-            DanMuPool = await GetDM(model.cid,false,false,string.Empty);
+            DanMuPool = await GetDM(Cid,false,false,string.Empty);
             pro_Num.Text = "读取视频信息...";
-            await GetPlayInfo(model.cid, top_cb_Quality.SelectedIndex+1);
+            await GetPlayInfo(Cid,top_cb_Quality.SelectedIndex+1);
         }
 
         private async void PlayLocalOld(VideoModel model)
@@ -1033,7 +1036,7 @@ namespace bilibili2.Pages
             {
                 count = DanMuPool.Count;
             }
-            string message = "视频标题：" + VideoList[PlayP].title + "\r\n分P数量：" + VideoList.Count + "\r\n弹幕池数量：" + count + "\r\n视频宽度：" +player.PlaybackSession.NaturalVideoWidth + "\r\n视频高度：" + player.PlaybackSession.NaturalVideoHeight + "\r\n视频长度：" + player.PlaybackSession.NaturalDuration.Hours.ToString("00") + ":" + player.PlaybackSession.NaturalDuration.Minutes.ToString("00") + ":" + player.PlaybackSession.NaturalDuration.Seconds.ToString("00") + "\r\n缓冲进度：" + player.PlaybackSession.DownloadProgress.ToString("P");
+            string message = "视频标题：" + VideoList[PlayP-1].Part + "\r\n分P数量：" + VideoList.Count + "\r\n弹幕池数量：" + count + "\r\n视频宽度：" +player.PlaybackSession.NaturalVideoWidth + "\r\n视频高度：" + player.PlaybackSession.NaturalVideoHeight + "\r\n视频长度：" + player.PlaybackSession.NaturalDuration.Hours.ToString("00") + ":" + player.PlaybackSession.NaturalDuration.Minutes.ToString("00") + ":" + player.PlaybackSession.NaturalDuration.Seconds.ToString("00") + "\r\n缓冲进度：" + player.PlaybackSession.DownloadProgress.ToString("P");
             await new MessageDialog(message, "视频信息").ShowAsync();
         }
 

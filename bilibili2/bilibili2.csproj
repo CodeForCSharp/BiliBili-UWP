@@ -12,7 +12,7 @@
     <DefaultLanguage>zh-CN</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
+    <TargetPlatformMinVersion>10.0.14393.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -346,6 +346,10 @@
     <Content Include="Assets\Icon\ic_collect.png" />
     <Content Include="Assets\Icon\ic_collected.png" />
     <Content Include="Assets\Icon\ic_download.png" />
+    <Content Include="Assets\Icon\ic_feedback_disagree_grey.png" />
+    <Content Include="Assets\Icon\ic_feedback_disagree_pink.png" />
+    <Content Include="Assets\Icon\ic_feedback_like_grey.png" />
+    <Content Include="Assets\Icon\ic_feedback_like_pink.png" />
     <Content Include="Assets\Icon\ic_header_activity_center.png" />
     <Content Include="Assets\Icon\ic_header_black_list_center.png" />
     <Content Include="Assets\Icon\ic_header_ding.png" />
@@ -378,13 +382,13 @@
     <Content Include="Assets\LOGO88.png" />
     <Content Include="Assets\MiniIcon\DM.png" />
     <Content Include="Assets\MiniIcon\DY.png" />
-    <Content Include="Assets\MiniIcon\ic_lv0_large.png" />
-    <Content Include="Assets\MiniIcon\ic_lv1_large.png" />
-    <Content Include="Assets\MiniIcon\ic_lv2_large.png" />
-    <Content Include="Assets\MiniIcon\ic_lv3_large.png" />
-    <Content Include="Assets\MiniIcon\ic_lv4_large.png" />
-    <Content Include="Assets\MiniIcon\ic_lv5_large.png" />
-    <Content Include="Assets\MiniIcon\ic_lv6_large.png" />
+    <Content Include="Assets\Icon\ic_lv0_large.png" />
+    <Content Include="Assets\Icon\ic_lv1_large.png" />
+    <Content Include="Assets\Icon\ic_lv2_large.png" />
+    <Content Include="Assets\Icon\ic_lv3_large.png" />
+    <Content Include="Assets\Icon\ic_lv4_large.png" />
+    <Content Include="Assets\Icon\ic_lv5_large.png" />
+    <Content Include="Assets\Icon\ic_lv6_large.png" />
     <Content Include="Assets\MiniIcon\scj.png" />
     <Content Include="Assets\MiniIcon\Sex.png" />
     <Content Include="Assets\MiniIcon\Time.png" />
