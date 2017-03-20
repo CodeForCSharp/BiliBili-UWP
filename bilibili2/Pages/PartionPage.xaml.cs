@@ -79,7 +79,7 @@ namespace bilibili2.Pages
             {
                 var header = new RegionHeaderViewModel
                 {
-                    Banners = model["data"]["banner"]["top"].Select(token => new RegionBannerViewModel
+                    Banners = model["data"]["banner"]?["top"].Select(token => new RegionBannerViewModel
                     {
                         Id = token["id"].Value<int>(),
                         Image = token["image"].Value<string>(),

@@ -154,7 +154,7 @@ namespace bilibili2.Pages
             {
                 btn_Menu.Visibility = Visibility.Visible;
                 gridview_List.ItemsSource = VideoList;
-                gridview_List.SelectedIndex = PlayP;
+                gridview_List.SelectedIndex = PlayP-1;
             }
             GetSetting();
            
@@ -532,7 +532,7 @@ namespace bilibili2.Pages
                     string files = await FileIO.ReadTextAsync(file);
                     a = files;
                 }
-                XmlDocument xdoc = new XmlDocument();
+                Windows.Data.Xml.Dom.XmlDocument xdoc = new Windows.Data.Xml.Dom.XmlDocument();
                 xdoc.LoadXml(a);
                 var ps = xdoc.DocumentElement.ChildNodes.Where(node => node.NodeName == "d");
                 foreach(var p in ps)

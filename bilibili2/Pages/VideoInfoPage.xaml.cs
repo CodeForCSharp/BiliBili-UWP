@@ -42,9 +42,10 @@ namespace bilibili2
     public sealed partial class VideoInfoPage : Page,INotifyPropertyChanged
     {
         private WebClientClass wc = new WebClientClass();
-        public ObservableCollection<VideoReplyViewModel> Replies { get; } = new ObservableCollection<VideoReplyViewModel>();
+        public ObservableCollection<VideoReplyViewModel> HotReplies { get; } = new ObservableCollection<VideoReplyViewModel>();
         private Frame frame = Window.Current.Content as Frame;
-
+        public IncrementalLoadingCollection<VideoReplyViewModel> Replies { get; } = new IncrementalLoadingCollection<VideoReplyViewModel>();
+        private string aid;
         public void OnPropertyChanged([CallerMemberName]string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -69,6 +70,42 @@ namespace bilibili2
 
         public VideoInfoPage()
         {
+            Replies.LoadDataTask = async () =>
+            {
+                var url = $"http://api.bilibili.com/x/v2/reply?_device=android&_ulv=10000&oid={aid}&appkey={ApiHelper._appKey}&build=411005&plat=2&platform=android&type=1&pn={Replies.CurrentPage}&ps=20&nohot=1&sort=0";
+                url += $"&sign={ApiHelper.GetSign(url)}";
+                var results = await wc.GetResults(new Uri(url));
+                var model = JObject.Parse(results);
+                if (model["code"].Value<int>() == 0)
+                {
+                    Replies.MaxPage = model["data"]["page"]["count"].Value<int>();
+                    var vms = model["data"]["replies"].Select(token => new VideoReplyViewModel
+                    {
+                        Content = token["content"]["message"].Value<string>(),
+                        Ctime = Converter.TickToDate(token["ctime"].Value<long>()),
+                        Face = token["member"]["avatar"].Value<string>(),
+                        Floor = $"#{token["floor"].Value<int>()}",
+                        Level = $"ms-appx:///Assets/Icon/ic_lv{token["member"]["level_info"]["current_level"].Value<int>()}_large.png",
+                        Like = token["like"].Value<int>(),
+                        Mid = token["member"]["mid"].Value<string>(),
+                        Name = token["member"]["uname"].Value<string>(),
+                        Oid = token["oid"].Value<int>(),
+                        Rcount = $"总共有{token["rcount"].Value<int>()}条回复",
+                        Rpid = token["rpid"].Value<int>(),
+                        Replies = token["replies"].Select(item=> new VideoReplyViewModel
+                        {
+                            Content = item["content"]["message"].Value<string>(),
+                            Ctime = Converter.TickToDate(item["ctime"].Value<long>()),
+                            Name = item["member"]["uname"].Value<string>(),
+                        }).ToList()
+                    });
+                    return Tuple.Create(vms,Replies.CurrentPage<=Replies.MaxPage);
+                }
+                else
+                {
+                    throw new Exception("Invaild Parameter");
+                }
+            };
             this.InitializeComponent();
             NavigationCacheMode = NavigationCacheMode.Enabled;
             DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
@@ -80,18 +117,21 @@ namespace bilibili2
             DataRequest request = args.Request;
             request.Data.Properties.Title = info.Title;
             request.Data.Properties.Description = info.Desc + "\r\n——分享自BiliBili UWP";
-            request.Data.SetWebLink(new Uri($"http://www.bilibili.com/video/av{info}"));
+            request.Data.SetWebLink(new Uri($"http://www.bilibili.com/video/av{aid}"));
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (e.NavigationMode == NavigationMode.New)
             {
-                if(e.Parameter is string aid)
+                if(e.Parameter is string aidString)
                 {
-                    HeaderTxt.Text = $"AV{aid}";
-                    GetVideoInfo(aid);
-                    GetReplyHotAsync(aid);
+                    aid = aidString;
+                    HeaderTxt.Text = $"AV{aidString}";
+                    GetVideoInfo(aidString);
+                    GetReplyHotAsync(aidString);
+                    Replies.Reset();
+                    VideoInfoPanel.SelectedIndex = 0;
                 }
             }
         }
@@ -126,10 +166,10 @@ namespace bilibili2
                     Rcount = $"总共有{token["rcount"].Value<int>()}条回复",
                     Rpid = token["rpid"].Value<int>()
                 });
-                Replies.Clear();
+                HotReplies.Clear();
                 foreach(var vm in vms)
                 {
-                    Replies.Add(vm);
+                    HotReplies.Add(vm);
                 }
             }
         }
@@ -190,7 +230,7 @@ namespace bilibili2
             }
             catch (Exception ex)
             {
-                messShow.Show("读取视频信息\r\n"+ex.Message,3000);
+                MessageShow.Show("读取视频信息\r\n"+ex.Message,3000);
             }
             finally
             {
@@ -205,6 +245,31 @@ namespace bilibili2
             {
                 frame.Navigate(typeof(PlayerPage), new KeyValuePair<List<VideoPageViewModel>,int>(Info.Pages, model.Page));
             }
+        }
+
+        private void PayCoinButton_Click(object sender, RoutedEventArgs e)
+        {
+            PayCoinPanel.IsOpen = true;
+        }
+
+        private void ShareButton_Click(object sender, RoutedEventArgs e)
+        {
+            SharePanel.IsOpen = true;
+        }
+
+        private void ShareApps_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            DataTransferManager.ShowShareUI();
+        }
+
+        private void ShareLink_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+
+        }
+
+        private void BrowserOpen_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+
         }
     } 
 }

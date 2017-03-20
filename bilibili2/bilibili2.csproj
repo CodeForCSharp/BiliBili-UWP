@@ -596,6 +596,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Downloads\XPShadow\XPShadow\XPShadow.csproj">
+      <Project>{ed346d43-316a-43f2-9c1a-7caf467f9ed8}</Project>
+      <Name>XPShadow</Name>
+    </ProjectReference>
     <ProjectReference Include="..\bilibili2.BackTask\bilibili2.BackTask.csproj">
       <Project>{a138e7d5-614a-4d37-a282-7fc3eee9f910}</Project>
       <Name>bilibili2.BackTask</Name>

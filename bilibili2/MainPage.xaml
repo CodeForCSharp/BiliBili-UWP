@@ -22,7 +22,7 @@
                     <VisualState.Setters>
                         <Setter Target="SpView.DisplayMode" Value="Inline"/>
                         <Setter Target="SpView.IsPaneOpen" Value="True"/>
-                        <Setter Target="BtnOpenMenu.IsEnable" Value="False"/>
+                        <Setter Target="BtnOpenMenu.IsEnabled" Value="False"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="narrow">
@@ -32,7 +32,7 @@
                     <VisualState.Setters>
                         <Setter Target="SpView.DisplayMode" Value="Overlay"/>
                         <Setter Target="SpView.IsPaneOpen" Value="False"/>
-                        <Setter Target="BtnOpenMenu.IsEnable" Value="True"/>
+                        <Setter Target="BtnOpenMenu.IsEnabled" Value="True"/>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
