@@ -49,7 +49,8 @@ namespace bilibili2.Controls
                         Play = item["play"]?.Value<string>() ?? "-",
                         Param = item["param"].Value<string>(),
                         Title = item["title"].Value<string>(),
-                        Name = item["name"].Value<string>()
+                        Name = item["name"].Value<string>(),
+                        Goto = item["goto"].Value<string>()
                     });
                     return Tuple.Create(items,items.Any());
                 }

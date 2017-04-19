@@ -822,6 +822,7 @@ namespace bilibili2
         public string Title { get; set; }
         public string Name { get; set; }
         public string Cover { get; set; }
+        public string Goto { get; set; }
         public string Param { get; set; }
         public string Play { get; set; }
         public string Danmaku { get; set; }
@@ -994,6 +995,11 @@ namespace bilibili2
         public List<VideoReplyViewModel> Replies { get; set; }
     }
 
+    public class VideoContextViewModel
+    {
+        public string Id { get; set; }
+        public string Goto { get; set; }
+    }
     public class MessageModel
     {
         public int code { get; set; }

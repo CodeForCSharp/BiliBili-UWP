@@ -47,7 +47,7 @@ namespace bilibili2.Controls
                           More = "更多番剧",
                           BannerCover =model["result"]["recommend_jp"]["foot"].First["cover"].Value<string>(),
                           BannerTitle =model["result"]["recommend_jp"]["foot"].First["title"].Value<string>(),
-                          BannerDesc = model["result"]["recommend_jp"]["foot"].First["desc"].Value<string>(),
+                          BannerDesc = model["result"]["recommend_jp"]["foot"].First["desc"]?.Value<string>()??"",
                           IsNew = model["result"]["recommend_jp"]["foot"].First["is_new"].Value<int>()==1?true:false,
                           Link =model["result"]["recommend_jp"]["foot"].First["link"].Value<string>(),
                            Items = model["result"]["recommend_jp"]["recommend"].Select(item=>new BangumiItemViewModel
@@ -66,7 +66,7 @@ namespace bilibili2.Controls
                           More = "更多国漫",
                           BannerCover =model["result"]["recommend_cn"]["foot"].First["cover"].Value<string>(),
                           BannerTitle =model["result"]["recommend_cn"]["foot"].First["title"].Value<string>(),
-                          BannerDesc = model["result"]["recommend_cn"]["foot"].First["desc"].Value<string>(),
+                          BannerDesc = model["result"]["recommend_cn"]["foot"].First["desc"]?.Value<string>(),
                           IsNew = model["result"]["recommend_cn"]["foot"].First["is_new"]==null?true:false,
                           Link =model["result"]["recommend_cn"]["foot"].First["link"].Value<string>(),
                            Items = model["result"]["recommend_cn"]["recommend"].Select(item=>new BangumiItemViewModel

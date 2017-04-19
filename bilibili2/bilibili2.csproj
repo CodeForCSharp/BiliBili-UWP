@@ -11,7 +11,7 @@
     <AssemblyName>bilibili2</AssemblyName>
     <DefaultLanguage>zh-CN</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
+    <TargetPlatformVersion>10.0.15063.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.14393.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
@@ -96,7 +96,9 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Data\region.json" />
+    <Content Include="Assets\Data\region.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="bilibili2_TemporaryKey.pfx" />
     <None Include="BilibiliEx.pfx" />
     <None Include="project.json" />
@@ -265,6 +267,12 @@
     <Content Include="Assets\Icon\bili_default_image_tv.9.png" />
     <Content Include="Assets\Icon\daily_video_action_bg.png" />
     <Content Include="Assets\Icon\ic_btn_rank_all.png" />
+    <Content Include="Assets\Icon\ic_category_game_center.png" />
+    <Content Include="Assets\Icon\ic_category_game_center2.png" />
+    <Content Include="Assets\Icon\ic_category_live.png" />
+    <Content Include="Assets\Icon\ic_category_live_all.png" />
+    <Content Include="Assets\Icon\ic_category_live_all_area.png" />
+    <Content Include="Assets\Icon\ic_category_promo.png" />
     <Content Include="Assets\Icon\ic_category_t1.png" />
     <Content Include="Assets\Icon\ic_category_t11.png" />
     <Content Include="Assets\Icon\ic_category_t119.png" />
@@ -299,6 +307,7 @@
     <Content Include="Assets\Icon\ic_category_t163.png" />
     <Content Include="Assets\Icon\ic_category_t164.png" />
     <Content Include="Assets\Icon\ic_category_t165.png" />
+    <Content Include="Assets\Icon\ic_category_t167.png" />
     <Content Include="Assets\Icon\ic_category_t17.png" />
     <Content Include="Assets\Icon\ic_category_t19.png" />
     <Content Include="Assets\Icon\ic_category_t20.png" />
@@ -338,6 +347,7 @@
     <Content Include="Assets\Icon\ic_category_t95.png" />
     <Content Include="Assets\Icon\ic_category_t96.png" />
     <Content Include="Assets\Icon\ic_category_t98.png" />
+    <Content Include="Assets\Icon\ic_category_unknown.png" />
     <Content Include="Assets\Icon\ic_category_up.png" />
     <Content Include="Assets\Icon\ic_chevron_right_gray.png" />
     <Content Include="Assets\Icon\ic_coin.png" />
@@ -606,7 +616,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="WindowsMobile, Version=10.0.14393.0">
+    <SDKReference Include="WindowsMobile, Version=10.0.15063.0">
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>

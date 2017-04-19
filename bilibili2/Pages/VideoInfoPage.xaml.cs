@@ -271,5 +271,29 @@ namespace bilibili2
         {
 
         }
+
+        private void DownloadButton_Click(object sender, RoutedEventArgs e)
+        {
+            DownloadPanel.IsOpen = true;
+        }
+
+        private void SelectAllButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(PagesSelectionPanel.SelectedItems.Count == Info.Pages.Count)
+            {
+                PagesSelectionPanel.SelectedIndex = -1;
+                SelectAllButton.Content = "选择全部";
+            }
+            else
+            {
+                PagesSelectionPanel.SelectAll();
+                SelectAllButton.Content = "取消全选";
+            }
+        }
+
+        private void BeginDownloadButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     } 
 }

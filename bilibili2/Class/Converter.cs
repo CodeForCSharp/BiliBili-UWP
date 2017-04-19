@@ -93,7 +93,7 @@ namespace bilibili2.Class
                 if (colorName.StartsWith("#"))
                     colorName = colorName.Replace("#", string.Empty);
                 ulong v = ulong.Parse(colorName);
-                var a = colorName.Length == 8 ? Convert.ToByte(255) : Convert.ToByte(v >> 24 & 0XFF);
+                var a = colorName.Length <= 8 ? Convert.ToByte(255) : Convert.ToByte(v >> 24 & 0XFF);
                 var r = Convert.ToByte(v >> 16 & 0XFF);
                 var g = Convert.ToByte(v >> 8 & 0XFF);
                 var b = Convert.ToByte(v >> 0 & 0XFF);
