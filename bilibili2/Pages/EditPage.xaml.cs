@@ -87,7 +87,8 @@ namespace bilibili2.Pages
                 Uri ReUri = new Uri("https://account.bilibili.com/site/UpdateSetting");
                 HttpClient hc = new HttpClient();
                 hc.DefaultRequestHeaders.Referer = new Uri("https://account.bilibili.com/site/setting");
-                string QuStr = string.Format("uname={0}&sign={1}&sex={2}&birthday={3}", txt_UserName.Text, txt_Sign.Text, sex, dt_Date.Date.Year + "-" + dt_Date.Date.Month + "-" + dt_Date.Date.Day);
+                string QuStr =
+                    $"uname={txt_UserName.Text}&sign={txt_Sign.Text}&sex={sex}&birthday={dt_Date.Date.Year + "-" + dt_Date.Date.Month + "-" + dt_Date.Date.Day}";
                 var response = await hc.PostAsync(ReUri, new HttpStringContent(QuStr, Windows.Storage.Streams.UnicodeEncoding.Utf8, "application/x-www-form-urlencoded"));
                 response.EnsureSuccessStatusCode();
                 string result = await response.Content.ReadAsStringAsync();

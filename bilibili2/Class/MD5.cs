@@ -340,11 +340,11 @@ namespace BILIBILI_UWP.Class
             {
                 if (inputBuffer == null)
                 {
-                    throw new ArgumentNullException("inputBuffer");
+                    throw new ArgumentNullException(nameof(inputBuffer));
                 }
                 if (inputOffset < 0)
                 {
-                    throw new ArgumentOutOfRangeException("inputOffset");
+                    throw new ArgumentOutOfRangeException(nameof(inputOffset));
                 }
                 if ((inputCount < 0) || (inputCount > inputBuffer.Length))
                 {
@@ -352,7 +352,7 @@ namespace BILIBILI_UWP.Class
                 }
                 if ((inputBuffer.Length - inputCount) < inputOffset)
                 {
-                    throw new ArgumentOutOfRangeException("inputOffset");
+                    throw new ArgumentOutOfRangeException(nameof(inputOffset));
                 }
                 if (this.State == 0)
                 {
@@ -371,11 +371,11 @@ namespace BILIBILI_UWP.Class
             {
                 if (inputBuffer == null)
                 {
-                    throw new ArgumentNullException("inputBuffer");
+                    throw new ArgumentNullException(nameof(inputBuffer));
                 }
                 if (inputOffset < 0)
                 {
-                    throw new ArgumentOutOfRangeException("inputOffset");
+                    throw new ArgumentOutOfRangeException(nameof(inputOffset));
                 }
                 if ((inputCount < 0) || (inputCount > inputBuffer.Length))
                 {
@@ -383,7 +383,7 @@ namespace BILIBILI_UWP.Class
                 }
                 if ((inputBuffer.Length - inputCount) < inputOffset)
                 {
-                    throw new ArgumentOutOfRangeException("inputOffset");
+                    throw new ArgumentOutOfRangeException(nameof(inputOffset));
                 }
                 if (this.State == 0)
                 {
@@ -397,21 +397,9 @@ namespace BILIBILI_UWP.Class
                 return buffer;
             }
 
-            public bool CanReuseTransform
-            {
-                get
-                {
-                    return true;
-                }
-            }
+            public bool CanReuseTransform => true;
 
-            public bool CanTransformMultipleBlocks
-            {
-                get
-                {
-                    return true;
-                }
-            }
+            public bool CanTransformMultipleBlocks => true;
 
             public byte[] Hash
             {
@@ -425,29 +413,11 @@ namespace BILIBILI_UWP.Class
                 }
             }
 
-            public int HashSize
-            {
-                get
-                {
-                    return 0x80;
-                }
-            }
+            public int HashSize => 0x80;
 
-            public int InputBlockSize
-            {
-                get
-                {
-                    return 1;
-                }
-            }
+            public int InputBlockSize => 1;
 
-            public int OutputBlockSize
-            {
-                get
-                {
-                    return 1;
-                }
-            }
+            public int OutputBlockSize => 1;
         }
 
 }

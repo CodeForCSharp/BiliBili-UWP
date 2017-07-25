@@ -43,8 +43,7 @@ namespace bilibili2.Controls
         protected override void PrepareContainerForItemOverride(DependencyObject obj, object item)
         {
             base.PrepareContainerForItemOverride(obj, item);
-            var element = obj as FrameworkElement;
-            if (element != null)
+            if (obj is FrameworkElement element)
             {
                 var heightBinding = new Binding()
                 {

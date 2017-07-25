@@ -198,7 +198,7 @@
                                         HorizontalAlignment="Stretch"
                                         VerticalAlignment="Stretch"
                                         x:Name="Rectangle"
-                                        Grid.Row="2"
+                                        Grid.Row="1"
                                         Fill="Transparent"/>
                                 </Grid>
                             </ControlTemplate>

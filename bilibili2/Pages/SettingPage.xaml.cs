@@ -143,14 +143,7 @@ namespace bilibili2
             }
 
 
-            if (settings.SettingContains("Quality"))
-            {
-                cb_Quality.SelectedIndex =int.Parse( settings.GetSettingValue("Quality").ToString());
-            }
-            else
-            {
-                cb_Quality.SelectedIndex = 1;
-            }
+            cb_Quality.SelectedIndex = settings.SettingContains("Quality") ? int.Parse( settings.GetSettingValue("Quality").ToString()) : 1;
 
             if (settings.SettingContains("AutoPlay"))
             {
@@ -201,58 +194,22 @@ namespace bilibili2
             }
             else
             {
-                if (device == "Windows.Mobile")
-                {
-                    //settings.SetSettingValue("Full", true);
-                    tw_AutoFull.IsOn = true;
-                }
-                else
-                {
-                    //settings.SetSettingValue("Full", false);
-                    tw_AutoFull.IsOn = false;
-                }
+                tw_AutoFull.IsOn = device == "Windows.Mobile";
             }
 
-            if (settings.SettingContains("DanmuJianju"))
-            {
-                slider_DanmuJianju.Value =double.Parse( settings.GetSettingValue("DanmuJianju").ToString());
-            }
-            else
-            {
-                slider_DanmuJianju.Value = 0;
-            }
+            slider_DanmuJianju.Value = settings.SettingContains("DanmuJianju") ? double.Parse( settings.GetSettingValue("DanmuJianju").ToString()) : 0;
 
-            if (settings.SettingContains("DanmuTran"))
-            {
-                slider_DanmuTran.Value = double.Parse(settings.GetSettingValue("DanmuTran").ToString());
-            }
-            else
-            {
-                slider_DanmuTran.Value = 100;
-            }
+            slider_DanmuTran.Value = settings.SettingContains("DanmuTran") ? double.Parse(settings.GetSettingValue("DanmuTran").ToString()) : 100;
 
-            if (settings.SettingContains("DanmuSpeed"))
-            {
-                slider_DanmuSpeed.Value = double.Parse(settings.GetSettingValue("DanmuSpeed").ToString());
-            }
-            else
-            {
-                slider_DanmuSpeed.Value = 12;
-            }
+            slider_DanmuSpeed.Value = settings.SettingContains("DanmuSpeed") ? double.Parse(settings.GetSettingValue("DanmuSpeed").ToString()) : 12;
+
             if (settings.SettingContains("DanmuSize"))
             {
                 slider_DanmuSize.Value = double.Parse( settings.GetSettingValue("DanmuSize").ToString());
             }
             else
             {
-                if (device == "Windows.Mobile")
-                {
-                    slider_DanmuSize.Value = 16;
-                }
-                else
-                {
-                    slider_DanmuSize.Value = 22;
-                }
+                slider_DanmuSize.Value = device == "Windows.Mobile" ? 16 : 22;
             }
         }
 
@@ -283,7 +240,7 @@ namespace bilibili2
                     default:
                         break;
                 }
-                ChangeTheme();
+                ChangeTheme?.Invoke();
             }
 
         }
@@ -305,14 +262,7 @@ namespace bilibili2
 
         private void tw_HideStatusBar_Toggled(object sender, RoutedEventArgs e)
         {
-            if (tw_HideStatusBar.IsOn)
-            {
-                settings.SetSettingValue("HideTitleBar", true);
-            }
-            else
-            {
-                settings.SetSettingValue("HideTitleBar", false);
-            }
+            settings.SetSettingValue("HideTitleBar", tw_HideStatusBar.IsOn);
         }
 
         private void cb_Quality_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -360,14 +310,7 @@ namespace bilibili2
 
         private void tw_Drak_Toggled(object sender, RoutedEventArgs e)
         {
-            if (tw_Drak.IsOn)
-            {
-                settings.SetSettingValue("Drak", true);
-            }
-            else
-            {
-                settings.SetSettingValue("Drak", false);
-            }
+            settings.SetSettingValue("Drak", tw_Drak.IsOn);
             ChangeDrak();
         }
 
@@ -507,15 +450,7 @@ namespace bilibili2
 
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (this.ActualWidth<=500)
-            {
-                dan_Sp.OpenPaneLength = this.ActualWidth;
-            }
-            else
-            {
-                dan_Sp.OpenPaneLength = 350;
-
-            }
+            dan_Sp.OpenPaneLength = this.ActualWidth<=500 ? this.ActualWidth : 350;
         }
     }
 }

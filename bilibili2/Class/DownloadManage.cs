@@ -83,18 +83,19 @@ namespace bilibili2.Class
                 return null;
             }
         }
-        SettingHelper setting = new SettingHelper();
+
+        private readonly SettingHelper _setting = new SettingHelper();
         public async void StartDownload(DownModel downModel)
         {
             try
             {
-                BackgroundDownloader downloader = new BackgroundDownloader()
+                var downloader = new BackgroundDownloader()
                 {
                     TransferGroup = DownModel.group
                 };
-                if (setting.SettingContains("UseWifi"))
+                if (_setting.SettingContains("UseWifi"))
                 {
-                    if ((bool)setting.GetSettingValue("UseWifi"))
+                    if ((bool)_setting.GetSettingValue("UseWifi"))
                     {
                         downloader.CostPolicy = BackgroundTransferCostPolicy.Always;
                     }
@@ -106,7 +107,7 @@ namespace bilibili2.Class
                 else
                 {
                     downloader.CostPolicy = BackgroundTransferCostPolicy.UnrestrictedOnly;
-                    setting.SetSettingValue("UseWifi",false);
+                    _setting.SetSettingValue("UseWifi",false);
                 }
                 StorageFolder DowFolder = await KnownFolders.VideosLibrary.CreateFolderAsync("Bili-Down", CreationCollisionOption.OpenIfExists);
                 StorageFolder VideoFolder = await DowFolder.CreateFolderAsync(ReplaceSymbol(downModel.title), CreationCollisionOption.OpenIfExists);
@@ -161,12 +162,12 @@ namespace bilibili2.Class
                                 {
                                     StorageFile files = item2;
                                     string json = await FileIO.ReadTextAsync(item2);
-                                    DownloadManage.DownModel model123 = JsonConvert.DeserializeObject<DownloadManage.DownModel>(json);
+                                    DownModel model123 = JsonConvert.DeserializeObject<DownModel>(json);
                                     if (model123.downloaded == true)
                                     {
                                         ///list_file.Add(model123);
                                         //model.downedCount++;
-                                        DownloadManage.Downloaded.Add(model123.mid);
+                                        Downloaded.Add(model123.mid);
                                     }
                                     //model.aid = model123.aid;
                                 }
@@ -215,20 +216,13 @@ namespace bilibili2.Class
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
             }
-            private DownloadOperation _downOp;
-            public DownloadOperation DownOp
-            {
-                get { return _downOp; }
-                set
-                {
-                    _downOp = value;
-                }
-            }
+
+            public DownloadOperation DownOp { get; set; }
 
             private double _progress;
             public double Progress
             {
-                get { return _progress; }
+                get => _progress;
                 set
                 {
                     _progress = value;
@@ -236,57 +230,57 @@ namespace bilibili2.Class
                 }
             }
 
-            private string _Size;
+            private string _size;
             public string Size
             {
-                get { return _Size; }
+                get => _size;
                 set
                 {
-                    _Size = (((double)Convert.ToDouble(value) / 1024 / 1024)).ToString("0.0") + "M/" + ((Double)DownOp.Progress.TotalBytesToReceive / 1024 / 1024).ToString("0.0") + "M";
+                    _size = (Convert.ToDouble(value) / 1024 / 1024).ToString("0.0") + "M/" + ((double)DownOp.Progress.TotalBytesToReceive / 1024 / 1024).ToString("0.0") + "M";
                     ThisPropertyChanged("Size");
                 }
             }
-            public string Guid { get { return DownOp.Guid.ToString(); } }
-            public string _Status;
+            public string Guid => DownOp.Guid.ToString();
+            private string _status;
             public string Status
             {
-                get { ThisPropertyChanged("Status"); return _Status; }
+                get { ThisPropertyChanged("Status"); return _status; }
                 set
                 {
                     switch (DownOp.Progress.Status)
                     {
                         case BackgroundTransferStatus.Idle:
-                            _Status = "空闲中";
+                            _status = "空闲中";
                             break;
                         case BackgroundTransferStatus.Running:
-                            _Status = "下载中";
+                            _status = "下载中";
                             break;
                         case BackgroundTransferStatus.PausedByApplication:
-                            _Status = "暂停中";
+                            _status = "暂停中";
                             break;
                         case BackgroundTransferStatus.PausedCostedNetwork:
-                            _Status = "因网络暂停";
+                            _status = "因网络暂停";
                             break;
                         case BackgroundTransferStatus.PausedNoNetwork:
-                            _Status = "没有连接至网络";
+                            _status = "没有连接至网络";
                             break;
                         case BackgroundTransferStatus.Completed:
-                            _Status = "完成";
+                            _status = "完成";
                             break;
                         case BackgroundTransferStatus.Canceled:
-                            _Status = "取消";
+                            _status = "取消";
                             break;
                         case BackgroundTransferStatus.Error:
-                            _Status = "下载错误";
+                            _status = "下载错误";
                             break;
                         case BackgroundTransferStatus.PausedSystemPolicy:
-                            _Status = "因系统问题暂停";
+                            _status = "因系统问题暂停";
                             break;
                         default:
-                            _Status = "Wait...";
+                            _status = "Wait...";
                             break;
                     }
-                    ThisPropertyChanged("Status");
+                    ThisPropertyChanged("status");
                 }
             }
         }

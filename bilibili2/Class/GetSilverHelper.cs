@@ -132,7 +132,7 @@ namespace bilibili2.Class
             }
             catch (Exception)
             {
-
+                // ignored
             }
         }
 

@@ -101,10 +101,7 @@ namespace bilibili2
                     });
                     return Tuple.Create(vms,Replies.CurrentPage<=Replies.MaxPage);
                 }
-                else
-                {
-                    throw new Exception("Invaild Parameter");
-                }
+                throw new Exception("Invaild Parameter");
             };
             this.InitializeComponent();
             NavigationCacheMode = NavigationCacheMode.Enabled;
@@ -181,7 +178,7 @@ namespace bilibili2
         {
             try
             {
-                var url = $"https://app.bilibili.com/x/v2/view?_device=android&_ulv=10000&aid={aid}&appkey={ApiHelper._appKey}&build=411005&plat=0&platform=android&ts={ApiHelper.GetTimeSpen}";
+                var url = $"https://app.bilibili.com/x/v2/view?_device=android&_ulv=10000&aid={aid}&appkey={ApiHelper._appKey}&build=411005&platform=android&plat=0&ts={ApiHelper.GetTimeSpen}";
                 url += $"&sign={ApiHelper.GetSign(url)}";
                 var results = await wc.GetResults(new Uri(url));
                 var model = JObject.Parse(results);
@@ -222,7 +219,8 @@ namespace bilibili2
                         {
                             Cid = item["cid"].Value<int>(),
                             Page = item["page"].Value<int>(),
-                            Part = item["part"].Value<string>() != "" ? item["part"].Value<string>() : model["data"]["title"].Value<string>()
+                            Part = item["part"].Value<string>() != "" ? item["part"].Value<string>() : model["data"]["title"].Value<string>(),
+                            Aid = model["data"]["aid"].Value<int>()
                         }).ToList()
                     };
                     Info = vm;
@@ -232,11 +230,6 @@ namespace bilibili2
             {
                 MessageShow.Show("读取视频信息\r\n"+ex.Message,3000);
             }
-            finally
-            {
-
-            }
-
         }
 
         private void PartPanel_ItemClick(object sender, ItemClickEventArgs e)

@@ -203,12 +203,6 @@
                     <RelativePanel
                         RelativePanel.Below="ItemsPanel"
                         RelativePanel.AlignHorizontalCenterWithPanel="True">
-                        <Border
-                            BorderBrush="White"
-                            BorderThickness="2">
-                            <TextBlock 
-                                Text="New!"/>
-                        </Border>
                         <controls:ImageEx
                             Name="BannerCoverPanel"
                             RelativePanel.AlignRightWithPanel="True"

@@ -483,15 +483,7 @@ namespace bilibili2.Pages
 
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-          
-           if (this.ActualWidth<=500)
-            {
-                sp_Video.OpenPaneLength = this.ActualWidth;
-            }
-            else
-            {
-                sp_Video.OpenPaneLength = 350;
-            }
+            sp_Video.OpenPaneLength = this.ActualWidth<=500 ? this.ActualWidth : 350;
         }
 
         private void cb_btn_Select_Checked(object sender, RoutedEventArgs e)

@@ -55,10 +55,7 @@ namespace bilibili2.Pages
                         });
                         return Tuple.Create(items,items.Any());
                     }
-                    else
-                    {
-                        throw new Exception("Vaild Parameter");
-                    }
+                    throw new Exception("Vaild Parameter");
                 }
             };
             Bans = new IncrementalLoadingCollection<BanSearchBanViewModel>
@@ -80,10 +77,7 @@ namespace bilibili2.Pages
                         });
                         return Tuple.Create(items,Bans.CurrentPage<=Bans.MaxPage);
                     }
-                    else
-                    {
-                        throw new Exception("Vaild Parameter");
-                    }
+                    throw new Exception("Vaild Parameter");
                 }
             };
             UPs = new IncrementalLoadingCollection<BanSearchUpViewModel>
@@ -105,10 +99,7 @@ namespace bilibili2.Pages
                         });
                         return Tuple.Create(items,UPs.CurrentPage<=UPs.MaxPage);
                     }
-                    else
-                    {
-                        throw new Exception("Vaild Parameter");
-                    }
+                    throw new Exception("Vaild Parameter");
                 }
             };
             Moives = new IncrementalLoadingCollection<BanSearchMoiveViewModel>
@@ -128,10 +119,7 @@ namespace bilibili2.Pages
                         });
                         return Tuple.Create(items,Moives.CurrentPage<=Moives.MaxPage);
                     }
-                    else
-                    {
-                        throw new Exception("Vaild Parameter");
-                    }
+                    throw new Exception("Vaild Parameter");
                 }
             };
             Specials = new IncrementalLoadingCollection<BanSearchSpecialViewModel>
@@ -153,22 +141,20 @@ namespace bilibili2.Pages
                         });
                         return Tuple.Create(items,Specials.CurrentPage<=Specials.MaxPage);
                     }
-                    else
-                    {
-                        throw new Exception("Vaild Parameter");
-                    }
+                    throw new Exception("Vaild Parameter");
                 }
             };
             this.InitializeComponent();
         }
         private string keyword = "";
-        WebClientClass wc = new WebClientClass();
+
+        private readonly WebClientClass _wc = new WebClientClass();
         //搜索视频
         public async Task<JObject> SearchTypeAsync(int type,int pn)
         {
             var url = $"http://app.bilibili.com/x/v2/search/type?_device=android&appkey=84956560bc028eb7&build=434000&keyword={Uri.EscapeDataString(keyword)}&pn={pn}&ps=20&platform=android&type={type}";
             url += $"&sign={ApiHelper.GetSign(url)}";
-            var result = await wc.GetResults(new Uri(url));
+            var result = await _wc.GetResults(new Uri(url));
             return JObject.Parse(result);
         }
 
@@ -176,7 +162,7 @@ namespace bilibili2.Pages
         {
             var url = $"http://app.bilibili.com/x/v2/search?_device=android&appkey=84956560bc028eb7&build=434000&keyword={Uri.EscapeDataString(keyword)}&pn={pn}&ps=20&platform=android&order={"default"}";//rid={}
             url += $"&sign={ApiHelper.GetSign(url)}";
-            var result = await wc.GetResults(new Uri(url));
+            var result = await _wc.GetResults(new Uri(url));
             return JObject.Parse(result);
         }
         //开始搜索
@@ -197,7 +183,7 @@ namespace bilibili2.Pages
             }
             else
             {
-                BackEvent();
+                BackEvent?.Invoke();
             }
         }
 

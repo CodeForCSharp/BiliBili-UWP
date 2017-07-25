@@ -50,7 +50,6 @@ namespace bilibili2
             ChangeTitbarColor();
         }
 
-        string navInfo = string.Empty;
         private SettingHelper settings = new SettingHelper();
         DispatcherTimer timer = new DispatcherTimer();
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -98,19 +97,9 @@ namespace bilibili2
                 if (model.code == 0)
                 {
                     MessageModel list = JsonConvert.DeserializeObject<MessageModel>(model.data.ToString());
-                    if (list.reply_me != 0 || list.chat_me != 0 || list.notify_me != 0)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    return list.reply_me != 0 || list.chat_me != 0 || list.notify_me != 0;
                 }
-                else
-                {
-                    return false;
-                }
+                return false;
             }
             catch (Exception)
             {
@@ -210,20 +199,17 @@ namespace bilibili2
 
         public static T FindVisualChild<T>(DependencyObject obj) where T : DependencyObject
         {
-            int count = Windows.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(obj);
-            for (int i = 0; i < count; i++)
+            var count = VisualTreeHelper.GetChildrenCount(obj);
+            for (var i = 0; i < count; i++)
             {
-                DependencyObject child = Windows.UI.Xaml.Media.VisualTreeHelper.GetChild(obj, i);
-                if (child != null && child is T)
+                var child = VisualTreeHelper.GetChild(obj, i);
+                if (child is T c)
                 {
-                    return (T)child;
+                    return c;
                 }
-                else
-                {
-                    T childOfChild = FindVisualChild<T>(child);
-                    if (childOfChild != null)
-                        return childOfChild;
-                }
+                var childOfChild = FindVisualChild<T>(child);
+                if (childOfChild != null)
+                    return childOfChild;
             }
 
             return null;
@@ -534,14 +520,7 @@ namespace bilibili2
 
         private void BtnUserInfo_Click(object sender, RoutedEventArgs e)
         {
-            if (!getLogin.IsLogin())
-            {
-                Frame.Navigate(typeof(LoginPage));
-            }
-            else
-            {
-                Frame.Navigate(typeof(UserInfoPage));
-            }
+            Frame.Navigate(!getLogin.IsLogin() ? typeof(LoginPage) : typeof(UserInfoPage));
         }
 
         private void BtnOpenMenu_Click(object sender, RoutedEventArgs e)

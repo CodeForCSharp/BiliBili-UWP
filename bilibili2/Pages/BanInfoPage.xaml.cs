@@ -165,10 +165,12 @@ namespace bilibili2.Pages
                     Grid_tag.Children.Clear();
                     foreach (BangumiInfoModel item in list_Tag)
                     {
-                        HyperlinkButton btn = new HyperlinkButton();
-                        btn.DataContext = item;
-                        btn.Margin = new Thickness(0, 0, 10, 0);
-                        btn.Content = item.tag_name;
+                        HyperlinkButton btn = new HyperlinkButton
+                        {
+                            DataContext = item,
+                            Margin = new Thickness(0, 0, 10, 0),
+                            Content = item.tag_name
+                        };
                         btn.Click += Btn_Click;
                         Grid_tag.Children.Add(btn);
                     }
@@ -418,14 +420,7 @@ namespace bilibili2.Pages
                 string results = await wc.GetResults(new Uri("http://www.bilibili.com/api_proxy?app=bangumi&action=/user_season_status&season_id=" + sid + new Random().Next(1, 9999)));
 
                 JObject json = JObject.Parse(results);
-                if ((int)json["result"]["attention"] == 0)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+                return (int)json["result"]["attention"] != 0;
             }
             catch (Exception)
             {
@@ -450,7 +445,7 @@ namespace bilibili2.Pages
 
         private async void btn_OK_Click(object sender, RoutedEventArgs e)
         {
-            using (DownloadManage wc = new DownloadManage())
+            using (var wc = new DownloadManage())
             {
                 if (list_E.SelectedItems.Count != 0)
                 {
@@ -458,15 +453,15 @@ namespace bilibili2.Pages
                     foreach (BangumiInfoModel item in list_E.SelectedItems)
                     {
                         int quality = cb_Qu.SelectedIndex + 1;//清晰度1-3
-                        string Downurl = await wc.GetVideoUri(item.danmaku.ToString(), quality);//取得视频URL
-                        if (Downurl != null)
+                        string downurl = await wc.GetVideoUri(item.danmaku.ToString(), quality);//取得视频URL
+                        if (downurl != null)
                         {
-                            DownloadManage.DownModel model = new DownloadManage.DownModel()
+                            var model = new DownloadManage.DownModel
                             {
                                 mid = item.danmaku.ToString(),
                                 title = "【番剧】"+txt_Name.Text,
                                 part = item.index,
-                                url = Downurl,
+                                url = downurl,
                                 aid = banID,
                                 danmuUrl = "http://comment.bilibili.com/" + item.danmaku + ".xml",
                                 quality = quality,

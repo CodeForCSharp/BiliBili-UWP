@@ -368,11 +368,11 @@ namespace bilibili2.Controls
         /// <summary>
         /// 弹幕可见
         /// </summary>
-        /// <param name="IsVisible">是否可见</param>
+        /// <param name="isVisible">是否可见</param>
         /// <param name="mode">模式</param>
-        public void SetDanmuVisibility(bool IsVisible, DanmakuMode mode)
+        public void SetDanmuVisibility(bool isVisible, DanmakuMode mode)
         {
-            if (IsVisible)
+            if (isVisible)
             {
                 switch (mode)
                 {

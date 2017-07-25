@@ -974,6 +974,7 @@ namespace bilibili2
 
     public class VideoPageViewModel
     {
+        public int Aid { get; set; }
         public int Cid { get; set; }
         public int Page { get; set; }
         public string Part { get; set; }
@@ -1175,7 +1176,7 @@ namespace bilibili2
         {
             get
             {
-                if (silver==null|| silver==string.Empty)
+                if (string.IsNullOrEmpty(silver))
                 {
                     return "金瓜子:"+price;
                 }

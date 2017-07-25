@@ -187,7 +187,8 @@ namespace bilibili2.Pages
             {
                 pr_Load.Visibility = Visibility.Visible;
                 wc = new WebClientClass();
-                string url = string.Format("http://live.bilibili.com/AppRoom/index?_device=wp&appkey={0}&build=434000&access_key={1}&platform=android&room_id={2}&ts={3}", ApiHelper._appKey, ApiHelper.access_key, room_id, ApiHelper.GetTimeSpen);
+                string url =
+                    $"http://live.bilibili.com/AppRoom/index?_device=wp&appkey={ApiHelper._appKey}&build=434000&access_key={ApiHelper.access_key}&platform=android&room_id={room_id}&ts={ApiHelper.GetTimeSpen}";
                 url += "&sign=" + ApiHelper.GetSign(url);
                 string results = await wc.GetResults(new Uri(url));
                 LiveInfoModel model = JsonConvert.DeserializeObject<LiveInfoModel>(results);
@@ -207,14 +208,7 @@ namespace bilibili2.Pages
                     string b = @"<head><style>p{font-family:""微软雅黑"";}</style></head>";
                     web_Desc.NavigateToString(b+meta.description);
                     GetSliver();
-                    if (info.is_attention == 1)
-                    {
-                        txt_guanzhu.Text = "已关注";
-                    }
-                    else
-                    {
-                        txt_guanzhu.Text = "关注";
-                    }
+                    txt_guanzhu.Text = info.is_attention == 1 ? "已关注" : "关注";
                     if (info.status == "LIVE")
                     {
                         GetLiveUrl();
@@ -250,7 +244,8 @@ namespace bilibili2.Pages
             {
                 list_Gift_Top.Items.Clear();
                 wc = new WebClientClass();
-                string url = string.Format("http://live.bilibili.com/AppRoom/getGiftTop?_device=wp&appkey={0}&build=434000&access_key={1}&platform=android&room_id={2}&ts={3}", ApiHelper._appKey, ApiHelper.access_key, room_id, ApiHelper.GetTimeSpen);
+                string url =
+                    $"http://live.bilibili.com/AppRoom/getGiftTop?_device=wp&appkey={ApiHelper._appKey}&build=434000&access_key={ApiHelper.access_key}&platform=android&room_id={room_id}&ts={ApiHelper.GetTimeSpen}";
                 url += "&sign=" + ApiHelper.GetSign(url);
                 string results = await wc.GetResults(new Uri(url));
                 LiveRankModel model = JsonConvert.DeserializeObject<LiveRankModel>(results);
@@ -301,7 +296,8 @@ namespace bilibili2.Pages
             {
                 list_Fans_Top.Items.Clear();
                 wc = new WebClientClass();
-                string url = string.Format("http://live.bilibili.com/AppRoom/medalRankList?_device=wp&appkey={0}&build=434000&access_key={1}&platform=android&room_id={2}&ts={3}", ApiHelper._appKey, ApiHelper.access_key, room_id, ApiHelper.GetTimeSpen);
+                string url =
+                    $"http://live.bilibili.com/AppRoom/medalRankList?_device=wp&appkey={ApiHelper._appKey}&build=434000&access_key={ApiHelper.access_key}&platform=android&room_id={room_id}&ts={ApiHelper.GetTimeSpen}";
                 url += "&sign=" + ApiHelper.GetSign(url);
                 string results = await wc.GetResults(new Uri(url));
                 LiveRankModel model = JsonConvert.DeserializeObject<LiveRankModel>(results);
@@ -356,14 +352,7 @@ namespace bilibili2.Pages
             {
                 Uri ReUri = new Uri("http://live.bilibili.com/liveact/attention");
                 int types;
-                if (txt_guanzhu.Text == "关注")
-                {
-                    types = 1;
-                }
-                else
-                {
-                    types = 0;
-                }
+                types = txt_guanzhu.Text == "关注" ? 1 : 0;
                 HttpClient hc = new HttpClient();
                 hc.DefaultRequestHeaders.Referer = new Uri("http://live.bilibili.com/");
                 var response = await hc.PostAsync(ReUri, new HttpStringContent("uid=" + (Video_UP.DataContext as LiveInfoModel).mid + "&type=" + types, Windows.Storage.Streams.UnicodeEncoding.Utf8, "application/x-www-form-urlencoded"));
@@ -372,14 +361,7 @@ namespace bilibili2.Pages
                 JObject json = JObject.Parse(result);
                 if ((int)json["code"] == 0)
                 {
-                    if (txt_guanzhu.Text == "关注")
-                    {
-                        txt_guanzhu.Text = "已关注";
-                    }
-                    else
-                    {
-                        txt_guanzhu.Text = "关注";
-                    }
+                    txt_guanzhu.Text = txt_guanzhu.Text == "关注" ? "已关注" : "关注";
                 }
                 else
                 {
@@ -612,7 +594,8 @@ namespace bilibili2.Pages
             {
                 //http://live.bilibili.com/AppRoom/msg?_device=android&_hwid=68fc5d795c256cd1&appkey=c1b107428d337928&build=414000&platform=android&room_id=23058&sign=4bf8088300d9f4c90b62264c4a87585d
                 wc = new WebClientClass();
-                string url = string.Format("http://live.bilibili.com/AppRoom/msg?_device=wp&appkey={0}&build=434000&access_key={1}&platform=android&room_id={2}&ts={3}", ApiHelper._appKey, ApiHelper.access_key, rommID, ApiHelper.GetTimeSpen);
+                string url =
+                    $"http://live.bilibili.com/AppRoom/msg?_device=wp&appkey={ApiHelper._appKey}&build=434000&access_key={ApiHelper.access_key}&platform=android&room_id={rommID}&ts={ApiHelper.GetTimeSpen}";
                 url += "&sign=" + ApiHelper.GetSign(url);
                 string results = await wc.GetResults(new Uri(url));
                 Model models = JsonConvert.DeserializeObject<Model>(results);
@@ -895,14 +878,7 @@ namespace bilibili2.Pages
             }
             else
             {
-                if (device == "Windows.Mobile")
-                {
-                    slider_DanmuSize.Value = 14;
-                }
-                else
-                {
-                    slider_DanmuSize.Value = 18;
-                }
+                slider_DanmuSize.Value = device == "Windows.Mobile" ? 14 : 18;
             }
         }
 
@@ -1073,18 +1049,9 @@ namespace bilibili2.Pages
                 //请求一直失败，不知道timestamp及token参数具体信息
                 //POST giftId=1&roomid=5269&ruid=1998535&num=1&coinType=silver&Bag_id=0&timestamp=1461739448&rnd=1461739410&token=829848ca3f1a4aa620d2a4b54db59490a8149fe5
                 LiveInfoModel model = (LiveInfoModel)grid_SendGift.DataContext;
-                string coinType = "gold";
-                if (rb_Gold.IsChecked.Value)
-                {
-                    coinType = "gold";
-                }
-                else
-                {
-                    coinType = "silver";
-                }
-                string postContent = string.Format(
-                    "giftId={0}&roomid={1}&ruid={2}&num={3}&coinType={4}&Bag_id=0&rnd={5}",
-                    model.id, rommID, (Video_UP.DataContext as LiveInfoModel).mid, int.Parse(txt_Num.Text), coinType, ApiHelper.GetTimeSpen);
+                var coinType = rb_Gold.IsChecked.Value ? "gold" : "silver";
+                string postContent =
+                    $"giftId={model.id}&roomid={rommID}&ruid={(Video_UP.DataContext as LiveInfoModel).mid}&num={int.Parse(txt_Num.Text)}&coinType={coinType}&Bag_id=0&rnd={ApiHelper.GetTimeSpen}";
                 //postContent += "&token=" + ApiHelper.GetSign(postContent);
                 HttpClient hc = new HttpClient();
                 hc.DefaultRequestHeaders.Referer = new Uri("http://live.bilibili.com/");

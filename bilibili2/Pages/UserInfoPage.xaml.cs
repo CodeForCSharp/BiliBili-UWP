@@ -54,7 +54,7 @@ namespace bilibili2.Pages
             }
         }
         string Uid = string.Empty;
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             Uid = "";
             btn_Attention.Visibility = Visibility.Collapsed;
@@ -127,15 +127,7 @@ namespace bilibili2.Pages
             }
             finally
             {
-                if (user_GridView_Submit.Items.Count == 0)
-                {
-                    DT_SUB.Visibility =  Visibility.Visible;
-                }
-                else
-                {
-                    DT_SUB.Visibility = Visibility.Collapsed;
-                }
-
+                DT_SUB.Visibility = user_GridView_Submit.Items.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
@@ -152,14 +144,7 @@ namespace bilibili2.Pages
             {
                 model = await getUser.GetUserInfo();
             }
-            if (model.approve)
-            {
-                txt_RZ.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                txt_RZ.Visibility = Visibility.Collapsed;
-            }
+            txt_RZ.Visibility = model.approve ? Visibility.Visible : Visibility.Collapsed;
             grid_Info.DataContext = model;
             if (model.current_level <= 3)
             {
@@ -167,14 +152,7 @@ namespace bilibili2.Pages
             }
             else
             {
-                if (model.current_level <= 6)
-                {
-                    bor_Level.Background = new SolidColorBrush(new Windows.UI.Color() { R = 255, G = 48, B = 48, A = 200 });
-                }
-                else
-                {
-                    bor_Level.Background = new SolidColorBrush(new Windows.UI.Color() { R = 255, G = 199, B = 45, A = 200 });
-                }
+                bor_Level.Background = model.current_level <= 6 ? new SolidColorBrush(new Windows.UI.Color() { R = 255, G = 48, B = 48, A = 200 }) : new SolidColorBrush(new Windows.UI.Color() { R = 255, G = 199, B = 45, A = 200 });
             }
         }
 
@@ -223,14 +201,7 @@ namespace bilibili2.Pages
 
         private void btn_AttBangumi_Click(object sender, RoutedEventArgs e)
         {
-            if (Uid.Length != 0)
-            {
-                this.Frame.Navigate(typeof(UserBangumiPage), Uid);
-            }
-            else
-            {
-                this.Frame.Navigate(typeof(UserBangumiPage), UserClass.Uid);
-            }
+            this.Frame.Navigate(typeof(UserBangumiPage), Uid.Length != 0 ? Uid : UserClass.Uid);
         }
 
         bool IsLoading = false;
@@ -257,14 +228,7 @@ namespace bilibili2.Pages
                 IsLoading = true;
                 WebClientClass wc = new WebClientClass();
                 string mid = "";
-                if (Uid.Length == 0)
-                {
-                    mid = UserClass.Uid;
-                }
-                else
-                {
-                    mid = Uid;
-                }
+                mid = Uid.Length == 0 ? UserClass.Uid : Uid;
                 string results = await wc.GetResults(new Uri("http://space.bilibili.com/ajax/friend/GetAttentionList?mid=" + mid + "&pagesize=20&page=" + pageNum));
                 //一层
                 GetUserFovBox model1 = JsonConvert.DeserializeObject<GetUserFovBox>(results);
@@ -511,13 +475,15 @@ namespace bilibili2.Pages
 
         private async void btn_Exit_Click(object sender, RoutedEventArgs e)
         {
-            List<HttpCookie> listCookies = new List<HttpCookie>();
-            listCookies.Add(new HttpCookie("sid", ".bilibili.com", "/"));
-            listCookies.Add(new HttpCookie("DedeUserID", ".bilibili.com", "/"));
-            listCookies.Add(new HttpCookie("DedeUserID__ckMd5", ".bilibili.com", "/"));
-            listCookies.Add(new HttpCookie("SESSDATA", ".bilibili.com", "/"));
-            listCookies.Add(new HttpCookie("LIVE_LOGIN_DATA", ".bilibili.com", "/"));
-            listCookies.Add(new HttpCookie("LIVE_LOGIN_DATA__ckMd5", ".bilibili.com", "/"));
+            List<HttpCookie> listCookies = new List<HttpCookie>
+            {
+                new HttpCookie("sid", ".bilibili.com", "/"),
+                new HttpCookie("DedeUserID", ".bilibili.com", "/"),
+                new HttpCookie("DedeUserID__ckMd5", ".bilibili.com", "/"),
+                new HttpCookie("SESSDATA", ".bilibili.com", "/"),
+                new HttpCookie("LIVE_LOGIN_DATA", ".bilibili.com", "/"),
+                new HttpCookie("LIVE_LOGIN_DATA__ckMd5", ".bilibili.com", "/")
+            };
             HttpBaseProtocolFilter filter = new HttpBaseProtocolFilter();
             foreach (HttpCookie cookie in listCookies)
             {
@@ -548,15 +514,7 @@ namespace bilibili2.Pages
 
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (this.ActualWidth <= 500)
-            {
-                sp.OpenPaneLength = this.ActualWidth;
-            }
-            else
-            {
-                sp.OpenPaneLength = 350;
-
-            }
+            sp.OpenPaneLength = this.ActualWidth <= 500 ? this.ActualWidth : 350;
         }
     }
 }

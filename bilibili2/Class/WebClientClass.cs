@@ -71,25 +71,4 @@ namespace bilibili2
             }
         }
     }
-
-    public class DHModel
-    {
-        public object result { get; set; }
-        public object list { get; set; }
-
-        public object recommends { get; set; }
-        public string aid { get; set; }
-        public string title { get; set; }
-        public string play { get; set; }
-        public string video_review { get; set; }
-        public string mid { get; set; }
-        public string pic { get; set; }
-        public string author { get; set; }
-
-        public object banners { get; set; }
-        public string img { get; set; }
-
-        public object news { get; set; }
-
-    }
 }

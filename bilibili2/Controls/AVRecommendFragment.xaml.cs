@@ -109,7 +109,7 @@ namespace bilibili2
                             Param = token["param"].Value<string>()
                         });
                     var topics = model["data"]
-                        .Where(token => token["banner"] != null&&token["banner"]["bottom"]!=null)
+                        .Where(token => token["banner"]?["bottom"] != null)
                         .Select(token => token["banner"]["bottom"].Select(item => new RegionBannerViewModel
                         {
                             Image = item["image"].Value<string>(),

@@ -54,13 +54,18 @@ namespace bilibili2.Pages
             player.MediaEnded += MediaEnded;
         }
         MediaPlayer player = new MediaPlayer();
-        uint videoLength = 0;
-        HttpClient client = new HttpClient();
         private async void InitializeAdaptiveMediaSourceAsync(Uri uri)
         {
-            var stream = await HttpStreamingStream.CreateAsync(new Windows.Web.Http.HttpClient(), uri);
-            var ams = MediaSource.CreateFromStream(stream, stream.ContentType);
-            player.Source = ams;
+            var stream = await HttpStreamingStream.CreateAsync(new Windows.Web.Http.HttpClient
+            {
+                DefaultRequestHeaders =
+                {
+                    { "Host",uri.Host},
+                    {"UserAgent","Mozilla/5.0(Windows NT 10.0; Win64; x64) AppleWebKit/537.36(KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36 Edge/15.15063"},
+                    {"Referer", $"http://www.bilibili.com/video/av{aid}/"+(PlayP>1?$"_index{PlayP}":"") }
+                }
+            }, uri);
+            player.Source = MediaSource.CreateFromStream(stream, stream.ContentType);
             mediaElement.SetMediaPlayer(player);
         }
 
@@ -128,8 +133,8 @@ namespace bilibili2.Pages
         int PlayP = 0;//播放第几P
         bool LoadDanmu = true;
         private bool Is = false;
-        string Cid = string.Empty;
-        string Aid = string.Empty;
+        string cid = string.Empty;
+        string aid = string.Empty;
         private DisplayRequest dispRequest = null;//保持屏幕常亮
         SqlHelper sql = new SqlHelper();
        
@@ -177,8 +182,8 @@ namespace bilibili2.Pages
             progress.Visibility = Visibility.Visible;
             top_Title.Text = model.Part + " " + model.Page;
             pro_Num.Text = "填充弹幕中...";
-            Cid = model.Cid.ToString();
-            //Aid = model.aid;
+            cid = model.Cid.ToString();
+            aid = model.Aid.ToString();
             //if (sql.ValuesExists(Cid))
             //{
             //    menu_LastPost.IsEnabled = true;
@@ -190,16 +195,16 @@ namespace bilibili2.Pages
             //    sql.InsertValue(Cid);
             //}
             lastPostVIs = false;
-            DanMuPool = await GetDM(Cid,false,false,string.Empty);
+            DanMuPool = await GetDM(cid,false,false,string.Empty);
             pro_Num.Text = "读取视频信息...";
-            await GetPlayInfo(Cid,top_cb_Quality.SelectedIndex+1);
+            await GetPlayInfo(cid,top_cb_Quality.SelectedIndex+1);
         }
 
         private async void PlayLocalOld(VideoModel model)
         {
             try
             {
-                Cid = model.cid;
+                cid = model.cid;
                 //if (sql.ValuesExists(Cid))
                 //{
                 //    menu_LastPost.IsEnabled = true;
@@ -242,6 +247,8 @@ namespace bilibili2.Pages
                     case InternetConnectionType.WlanConnection:
                         top_txt_NetType.Text = "WIFI";
                         top_txt_NetType.Foreground = new SolidColorBrush(Colors.White);
+                        break;
+                    case InternetConnectionType.NoConnection:
                         break;
                     default:
                         break;
@@ -468,14 +475,7 @@ namespace bilibili2.Pages
             }
             else
             {
-                if (device == "Windows.Mobile")
-                {
-                    slider_DanmuSize.Value = 16;
-                }
-                else
-                {
-                    slider_DanmuSize.Value = 22;
-                }
+                slider_DanmuSize.Value = device == "Windows.Mobile" ? 16 : 22;
             }
         }
 
@@ -485,12 +485,11 @@ namespace bilibili2.Pages
             {
                 pro_Num.Text = "读取视频地址...";
                 WebClientClass wc = new WebClientClass();
-                string url = $"https://interface.bilibili.com/playurl?platform=pc&cid={mid}&quality={quality}&otype=json&appkey=84956560bc028eb7&type=flv";
+                string url = $"https://interface.bilibili.com/playurl?platform=pc&cid={mid}&quality={quality}&otype=json&appkey={ApiHelper._appKey}&type=flv";
                 url += "&sign=" + ApiHelper.GetSign(url);
                 string results = await wc.GetResults(new Uri(url));
                 var model = JObject.Parse(results);
                 var playurl = model["durl"].First["url"].Value<string>();
-                videoLength = model["durl"].First["size"].Value<uint>();
                 InitializeAdaptiveMediaSourceAsync(new Uri(playurl));
                 pro_Num.Text = "开始缓冲视频...";
             }
@@ -527,19 +526,19 @@ namespace bilibili2.Pages
                 }
                 else
                 {
-                    StorageFolder DownFolder = await StorageFolder.GetFolderFromPathAsync(path);
-                    StorageFile file = await DownFolder.CreateFileAsync(cid + ".xml", CreationCollisionOption.OpenIfExists);
+                    StorageFolder downFolder = await StorageFolder.GetFolderFromPathAsync(path);
+                    StorageFile file = await downFolder.CreateFileAsync(cid + ".xml", CreationCollisionOption.OpenIfExists);
                     string files = await FileIO.ReadTextAsync(file);
                     a = files;
                 }
-                Windows.Data.Xml.Dom.XmlDocument xdoc = new Windows.Data.Xml.Dom.XmlDocument();
+                var xdoc = new Windows.Data.Xml.Dom.XmlDocument();
                 xdoc.LoadXml(a);
                 var ps = xdoc.DocumentElement.ChildNodes.Where(node => node.NodeName == "d");
-                foreach(var p in ps)
-                {
-                    string attribute = p.Attributes.GetNamedItem("p").InnerText;
-                    string[] parts = attribute.Split(',');
-                    ls.Add(new DanmakuViewModel
+                ls.AddRange(
+                    from p in ps
+                    let attribute = p.Attributes.GetNamedItem("p").InnerText
+                    let parts = attribute.Split(',')
+                    select new DanmakuViewModel
                     {
                         Time = TimeSpan.FromSeconds(double.Parse(parts[0])),
                         Mode = int.Parse(parts[1]),
@@ -551,7 +550,6 @@ namespace bilibili2.Pages
                         RowId = parts[7],
                         Text = p.InnerText
                     });
-                }
                 return ls;
             }
             catch (Exception)
@@ -573,7 +571,6 @@ namespace bilibili2.Pages
                 txt_Post.Text = $"{position.Hours:00}:{position.Minutes:00}:{position.Seconds:00}/{naturalDuration.Hours:00}:{ naturalDuration.Minutes:00}:{naturalDuration.Seconds:00}";
                 //sql.UpdateValue(Cid,Convert.ToInt32(mediaElement.Position.TotalSeconds));
             });
-            List<DanmakuViewModel> removed = new List<DanmakuViewModel>();
             if (player.PlaybackSession.PlaybackState == MediaPlaybackState.Playing && LoadDanmu)
             {
                 if (DanMuPool != null)
@@ -583,17 +580,17 @@ namespace bilibili2.Pages
                         .Where(item => !DanDis_Dis(item.Text));
                     foreach (var item in send)
                     {
-                        if (item.Mode == 5)
+                        switch (item.Mode)
                         {
-                            danmu.AddTopButtomDanmaku(item, true, false);
-                        }
-                        else if (item.Mode == 4)
-                        {
-                            danmu.AddTopButtomDanmaku(item, false, false);
-                        }
-                        else
-                        {
-                            danmu.AddFloatDanmaku(item, false);
+                            case 5:
+                                danmu.AddTopButtomDanmaku(item, true, false);
+                                break;
+                            case 4:
+                                danmu.AddTopButtomDanmaku(item, false, false);
+                                break;
+                            default:
+                                danmu.AddFloatDanmaku(item, false);
+                                break;
                         }
                     }
                     send.ToList().ForEach(item => DanMuPool.Remove(item));
@@ -609,7 +606,7 @@ namespace bilibili2.Pages
             }
             else
             {
-                BackEvent();
+                BackEvent?.Invoke();
             }
         }
 
@@ -731,11 +728,11 @@ namespace bilibili2.Pages
              {
                  switch (player.PlaybackSession.PlaybackState)
                  {
-                    //case  MediaPlaybackState.None:
-                    //    btn_Play.Visibility = Visibility.Visible;
-                    //    btn_Pause.Visibility = Visibility.Collapsed;
-                    //    break;
-                    case MediaPlaybackState.Opening:
+                     case MediaPlaybackState.None:
+                         btn_Play.Visibility = Visibility.Visible;
+                         btn_Pause.Visibility = Visibility.Collapsed;
+                         break;
+                     case MediaPlaybackState.Opening:
                          danmu.IsPlaying = false;
                          btn_Play.Visibility = Visibility.Visible;
                          btn_Pause.Visibility = Visibility.Collapsed;
@@ -755,7 +752,7 @@ namespace bilibili2.Pages
                          timer.Start();
                          if (!lastPostVIs && LastPost != 0)
                          {
-                             TimeSpan ts = new TimeSpan(0, 0, Convert.ToInt32(LastPost));
+                             var ts = new TimeSpan(0, 0, Convert.ToInt32(LastPost));
                              txt_LastPo.Text = "上次播放到" + ts.Hours.ToString("00") + ":" + ts.Minutes.ToString("00") + ":" + ts.Seconds.ToString("00");
                              btn_LastPost.Visibility = Visibility.Visible;
                              lastPostVIs = true;
@@ -770,14 +767,7 @@ namespace bilibili2.Pages
                          progress.Visibility = Visibility.Collapsed;
                          timer.Stop();
                          break;
-                    //case  MediaPlaybackState.Paused:
-                    //    btn_Play.Visibility = Visibility.Visible;
-                    //    btn_Pause.Visibility = Visibility.Collapsed;
-                    //    danmu.IsPlaying = false;
-                    //    progress.Visibility = Visibility.Collapsed;
-                    //    timer.Stop();
-                    //break;
-                    default:
+                     default:
                          break;
                  }
              });
@@ -871,7 +861,7 @@ namespace bilibili2.Pages
             }
             try
             {
-                Uri ReUri = new Uri("http://interface.bilibili.com/dmpost?cid=" + Cid + "&aid=" + Aid + "&pid=1");
+                Uri ReUri = new Uri("http://interface.bilibili.com/dmpost?cid=" + cid + "&aid=" + aid + "&pid=1");
                 int modeInt = 1;
                 if (Send_cb_Mode.SelectedIndex == 2)
                 {
@@ -881,7 +871,7 @@ namespace bilibili2.Pages
                 {
                     modeInt = 5;
                 }
-                string Canshu = "message=" + Send_text_Comment.Text + "&pool=0&playTime=" + player.PlaybackSession.Position.TotalSeconds.ToString() + "&cid=" + Cid + "&date=" + DateTime.Now.ToString() + "&fontsize=25&mode=" + modeInt + "&rnd=933253860&color=" + ((ComboBoxItem)Send_cb_Color.SelectedItem).Tag;
+                string Canshu = "message=" + Send_text_Comment.Text + "&pool=0&playTime=" + player.PlaybackSession.Position.TotalSeconds + "&cid=" + cid + "&date=" + DateTime.Now + "&fontsize=25&mode=" + modeInt + "&rnd=933253860&color=" + ((ComboBoxItem)Send_cb_Color.SelectedItem).Tag;
                 string result = await new WebClientClass().PostResults(ReUri, Canshu);
                 long code = long.Parse(result);
 
@@ -1049,14 +1039,7 @@ namespace bilibili2.Pages
         }
         private void tw_AutoFull_Toggled(object sender, RoutedEventArgs e)
         {
-            if (tw_AutoFull.IsOn)
-            {
-                setting.SetSettingValue("Full", true);
-            }
-            else
-            {
-                setting.SetSettingValue("Full", false);
-            }
+            setting.SetSettingValue("Full", tw_AutoFull.IsOn);
         }
         private void slider_DanmuTran_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
@@ -1232,14 +1215,7 @@ namespace bilibili2.Pages
        
         private void tw_Background_Toggled(object sender, RoutedEventArgs e)
         {
-            if (tw_AutoFull.IsOn)
-            {
-                player.AudioCategory = MediaPlayerAudioCategory.Media;
-            }
-            else
-            {
-                player.AudioCategory = MediaPlayerAudioCategory.Movie;
-            }
+            player.AudioCategory = tw_AutoFull.IsOn ? MediaPlayerAudioCategory.Media : MediaPlayerAudioCategory.Movie;
         }
 
         private void Send_text_Comment_KeyDown(object sender, KeyRoutedEventArgs e)
@@ -1270,7 +1246,7 @@ namespace bilibili2.Pages
                 {
                     WebClientClass wc = new WebClientClass();
                     Uri ReUri = new Uri("http://www.bilibili.com/plus/comment.php");
-                    string QuStr = "aid=" + Aid + "&rating=100&player=1&multiply=" + num;
+                    string QuStr = "aid=" + aid + "&rating=100&player=1&multiply=" + num;
                     string result = await wc.PostResults(ReUri, QuStr);
                     if (result == "OK")
                     {

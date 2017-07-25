@@ -84,8 +84,7 @@ namespace bilibili2.Controls
 
         private void Gridview_Hot_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var frame = Window.Current.Content as Frame;
-            if (e.ClickedItem is LiveItemViewModel model)
+            if (e.ClickedItem is LiveItemViewModel model && Window.Current.Content is Frame frame)
             {
                 frame.Navigate(typeof(LiveInfoPage), model.RoomId);
             }
@@ -98,9 +97,7 @@ namespace bilibili2.Controls
 
         private void BannerPanel_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
-            var frame = Window.Current.Content as Frame;
-            var image = e.OriginalSource as Image;
-            if( image.DataContext is LiveBannerViewModel model)
+            if(e.OriginalSource is Image image && image.DataContext is LiveBannerViewModel model && Window.Current.Content is Frame frame)
             {
                 frame.Navigate(typeof(WebViewPage),model.Link);
             }
@@ -108,8 +105,7 @@ namespace bilibili2.Controls
 
         private void AdaptiveGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var frame = Window.Current.Content as Frame;
-            if(e.ClickedItem is LiveNavigationViewModel model)
+            if(e.ClickedItem is LiveNavigationViewModel model&& Window.Current.Content is Frame frame)
             {
                 switch(model.Index)
                 {

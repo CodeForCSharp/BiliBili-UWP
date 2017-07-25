@@ -54,10 +54,7 @@ namespace bilibili2.Controls
                     });
                     return Tuple.Create(items,items.Any());
                 }
-                else
-                {
-                    throw new Exception("Vaild Parameter");
-                }
+                throw new Exception("Vaild Parameter");
             };
             this.InitializeComponent();
         }
@@ -70,12 +67,9 @@ namespace bilibili2.Controls
 
         private void AdaptiveGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            if(e.ClickedItem is RegionItemViewModel model)
+            if (e.ClickedItem is RegionItemViewModel model && Window.Current.Content is Frame frame)
             {
-                if(Window.Current.Content is Frame frame)
-                {
-                    frame.Navigate(typeof(VideoInfoPage), model.Param);
-                }
+                frame.Navigate(typeof(VideoInfoPage), model.Param);
             }
         }
     }

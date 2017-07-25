@@ -10,38 +10,23 @@ namespace bilibili2.Class
 {
     class SettingHelper
     {
-
-        ApplicationDataContainer container = ApplicationData.Current.LocalSettings;
-        PackageId pack = (Package.Current).Id;
-        public object GetSettingValue(string SettingName)
+        private readonly ApplicationDataContainer _container = ApplicationData.Current.LocalSettings;
+        private readonly PackageId _pack = (Package.Current).Id;
+        public object GetSettingValue(string settingName)
         {
-            if (container.Values[SettingName] != null)
-            {
-                return container.Values[SettingName];
-            }
-            else
-            {
-                return null;
-            }
+            return _container.Values[settingName];
         }
-        public void SetSettingValue(string SettingName,object value)
+        public void SetSettingValue(string settingName,object value)
         {
-            container.Values[SettingName] = value;
+            _container.Values[settingName] = value;
         }
-        public bool SettingContains(string SettingName)
+        public bool SettingContains(string settingName)
         {
-            if (container.Values[SettingName]!=null)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return _container.Values[settingName]!=null;
         }
         public string GetVersion()
         {
-            return  string.Format("{0}.{1}.{2}.{3}", pack.Version.Major, pack.Version.Minor, pack.Version.Build, pack.Version.Revision);
+            return $"{_pack.Version.Major}.{_pack.Version.Minor}.{_pack.Version.Build}.{_pack.Version.Revision}";
         }
 
     }

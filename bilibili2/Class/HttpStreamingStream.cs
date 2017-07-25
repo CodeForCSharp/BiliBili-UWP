@@ -21,14 +21,14 @@ namespace bilibili2.Class
         private readonly ulong _size;
         public ulong Size
         {
-            get { return _size; }
-            set { throw new NotSupportedException(); }
+            get => _size;
+            set => throw new NotSupportedException();
         }
 
         public string ContentType { get; }
 
-        readonly HttpClient _client;
-        readonly Uri _uri;
+        private readonly HttpClient _client;
+        private readonly Uri _uri;
 
         private HttpStreamingStream(HttpClient client, Uri uri, ulong size, string contentType)
         {
